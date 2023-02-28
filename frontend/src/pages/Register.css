@@ -1,11 +1,11 @@
 .card {
   margin: 0 auto;
-  width: 400px;
-  height: 300px;
+  width: 500px;
+  height: 700px;
   background-color: #ffffff;
   border-radius: 5px;
   padding: 20px;
-  box-shadow: 0 4px 8px 0 rgba(117, 115, 115, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .card-content {
@@ -18,10 +18,19 @@
 h2 {
   margin-bottom: 20px;
   color: green;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 53px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  resize: none;
 }
 
 .form-control {
@@ -44,7 +53,7 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
   height: 42px;
-  width: 176px;
+  width: 352px;
   border-radius: 12px;
 }
 
