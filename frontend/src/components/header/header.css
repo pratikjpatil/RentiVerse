@@ -1,0 +1,63 @@
+Header{
+    position:fixed !important;
+    width: 100%;
+    top:0;
+    left:0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    box-shadow: 0rem 0.1rem 5rem 0.5rem;
+}
+
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.search{
+    width: 30rem;
+    gap: 1rem;
+    padding: 0.2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0.1rem 0.1rem 0.6rem;
+}
+.search-logo{
+    padding-left: 0.5rem;
+}
+.search input{
+    border:none;
+}
+.search-button{
+    border: none;
+    background: #50A060;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    color: white;
+}
+.profile-cart{
+    flex-direction: column;
+    gap:0.2rem;
+}
+.profile-logo{
+    display: flex;
+    align-items: center;
+    background-color: #2b2620;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 1.25rem;
+    justify-content: center;
+    color: white;
+}
+.profile{
+    gap:2rem;
+    padding-right: 0.5rem;
+}
+.profile-menu{
+    gap:0.2rem;
+    cursor:pointer;
+}
+.profile-menu>div>svg{
+    height: 1rem;
+    stroke-width: 0.12rem;
+}
