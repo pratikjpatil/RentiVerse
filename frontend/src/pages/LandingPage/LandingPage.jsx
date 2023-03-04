@@ -1,11 +1,12 @@
 import React from 'react';
-import Header from '../../components/header/Header';
+import { Header, Sidebar } from '../../components';
 import './landingpage.css';
 
 const LandingPage = () => {
   return (
     <div className='landing-page'>
-      <Header/>
+      <Header />
+      <Sidebar/>
     </div>
   )
 }
