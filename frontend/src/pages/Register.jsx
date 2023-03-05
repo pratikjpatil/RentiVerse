@@ -19,8 +19,6 @@ const Register = () => {
           </div>
           <div className="form-group">
             <textarea
-              cols="2"
-              rows="3"
               style={{ height: "76px", width: " 352px" }}
               type="text"
               placeholder="Address"
@@ -70,6 +68,9 @@ const Register = () => {
           </div>
           <button type="submit" className="btn">
             Register
+          </button>
+          <button type="submit" className="btn">
+            Have account? Login
           </button>
         </div>
       </div>
