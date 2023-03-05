@@ -5,7 +5,7 @@ Header{
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
-    box-shadow: 0rem 0.1rem 5rem 0.5rem;
+    box-shadow: 0rem 0.1rem 3rem 0.2rem rgb(38, 65, 38);
     background: white; 
 }
 
@@ -47,6 +47,7 @@ Header{
     border-radius: 1.25rem;
     justify-content: center;
     color: white;
+    font-weight: 500;
 }
 .profile{
     gap:2rem;
