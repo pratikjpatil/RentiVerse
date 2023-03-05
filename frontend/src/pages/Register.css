@@ -1,7 +1,7 @@
 .card {
   margin: 0 auto;
   width: 500px;
-  height: 700px;
+  height: 650px;
   background-color: #ffffff;
   border-radius: 5px;
   padding: 20px;
@@ -31,13 +31,14 @@ h2 {
 
 textarea {
   resize: none;
+  
 }
 
 .form-control {
   width: 352px;
   height: 42px;
   padding: 10px 20px;
-  margin: 8px 0;
+  margin: 4px 0;
   box-sizing: border-box;
   border: 2px solid green;
   border-radius: 20px;

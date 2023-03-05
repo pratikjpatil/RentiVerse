@@ -4,71 +4,71 @@ import Image from "../assets/logo.png";
 
 const Register = () => {
   return (
-    <form action="">
-      <img src={Image} alt="Logo" class="logo" />
-      <div class="card">
-        <div class="card-content">
+    <form>
+      <img src={Image} alt="Logo" className="logo" />
+      <div className="card">
+        <div className="card-content">
           <h2>Register</h2>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="text"
               placeholder="Full Name"
-              class="form-control"
+              className="form-control"
               required
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <textarea
               cols="2"
               rows="3"
               style={{ height: "76px", width: " 352px" }}
               type="text"
               placeholder="Address"
-              class="form-control address"
+              className="form-control address"
               required
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="pincode"
               placeholder="Pincode"
-              class="form-control"
+              className="form-control"
               required
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="email"
               placeholder="E-mail"
-              class="form-control"
+              className="form-control"
               required
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="tel"
               placeholder="Phone"
-              class="form-control"
+              className="form-control"
               required
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="password"
               placeholder="Password"
-              class="form-control"
+              className="form-control"
               required
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="password"
               placeholder="Confirm Password"
-              class="form-control"
+              className="form-control"
               required
             />
           </div>
-          <button type="submit" class="btn">
+          <button type="submit" className="btn">
             Register
           </button>
         </div>
