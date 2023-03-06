@@ -1,5 +1,6 @@
 .landing-page-content{
     position: absolute;
+    display: flex;
     height: 84%;
     width: 77%;
     top:6rem;
@@ -7,7 +8,10 @@
     padding: 2rem;
     overflow-y: scroll;
 }
+.landing-page-content-card{
+    margin: 96px;
 
+}
 .landing-page-content-card{
     width: 25rem;
     background-color: white;

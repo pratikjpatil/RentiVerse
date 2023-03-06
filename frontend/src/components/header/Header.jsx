@@ -4,7 +4,7 @@ import "./header.css";
 
 const Header = () => {
   return (
-    <header style={{ position: "fixed", width: "100%" }}>
+    <header style={{ position: "fixed", width: "100%" ,zIndex: 2 }}>
       <div className="logo flex-center">
         <img src={logop} alt="logos" />
       </div>

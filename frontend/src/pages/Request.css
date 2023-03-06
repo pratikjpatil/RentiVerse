@@ -1,0 +1,82 @@
+.product-card {
+  z-index: 1;
+  position: absolute;
+  width: 900px;
+  height: 600px;
+  margin-top: 150px;
+  margin-left: 439px;
+  margin-bottom: 20px;
+  border: 0.5px solid gray;
+  margin-bottom: 20px;
+  background: #ffffff;
+  border-radius: 25px;
+}
+
+/* .product-card {
+    z-index: ;
+  position: absolute;
+  width: 900px;
+  height: 600px;
+  left: 439px;
+  top: 272px;
+
+  background: #ffffff;
+  border-radius: 25px;
+} */
+/* .color1 {
+  position: absolute;
+  width: 1664.68px;
+  height: 811.81px;
+  left: 0px;
+  top: 110px;
+
+  background: rgba(0, 240, 255, 0.15);
+  filter: blur(32px);
+}
+.color2 {
+  position: absolute;
+  width: 728.38px;
+  height: 704.54px;
+  left: 468.81px;
+  top: 728.46px;
+
+  background: rgba(97, 255, 0, 0.15);
+  filter: blur(32px);
+}
+color3 {
+  position: absolute;
+  width: 605.22px;
+  height: 505.89px;
+  left: 953.51px;
+  top: 573.51px;
+
+  background: rgba(255, 66, 66, 0.15);
+  filter: blur(32px);
+}
+
+.gradiants-background {
+  z-index: -1;
+}
+
+.gradinat1 {
+  position: absolute;
+  width: 1664.68px;
+  height: 1323px;
+  left: 0px;
+  top: 110px;
+}
+
+.gradinat2 {
+  position: absolute;
+  width: 1257px;
+  height: 999px;
+  left: -499px;
+  top: -269px;
+}
+.gradinat3 {
+  position: absolute;
+  width: 1257px;
+  height: 999px;
+  left: -499px;
+  top: -382px;
+} */
