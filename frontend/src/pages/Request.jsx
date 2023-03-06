@@ -6,6 +6,9 @@ const Request = () => {
         <div className='main'>
         <Header />
         <Sidebar/>
+        <div className='heading-content'>
+        <h1>Request owner</h1>
+        </div>
             <div className='product-card'>
 
             </div>
