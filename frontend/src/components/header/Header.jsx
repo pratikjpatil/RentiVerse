@@ -4,7 +4,7 @@ import "./header.css";
 
 const Header = () => {
   return (
-    <header>
+    <header style={{ position: "fixed", width: "100%" }}>
       <div className="logo flex-center">
         <img src={logop} alt="logos" />
       </div>
@@ -25,7 +25,7 @@ const Header = () => {
             />
           </svg>
         </div>
-        <input type="text" name="input" placeholder="Search what you want" />
+        <input id="input_search" type="text" name="input" placeholder="Search what you want" />
         <button className="search-button">Search</button>
       </div>
       <div className="profile flex-center">

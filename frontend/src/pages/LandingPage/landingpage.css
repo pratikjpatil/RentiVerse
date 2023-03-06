@@ -13,7 +13,8 @@
     background-color: white;
     padding: 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0.1rem 0.05rem 0.8rem 0.04rem;
+    /* box-shadow: 0.1rem 0.05rem 0.8rem 0.04rem; */
+    border: 0.5px solid gray;
 }
 
 .landing-page-content-card-header{
