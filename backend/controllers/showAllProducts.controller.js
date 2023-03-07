@@ -1,7 +1,10 @@
-const showAllProds = async (req, res) => {
-   
-        res.status(500).json("OK");
-    
-}
+const mongoose = require("mongoose");
+const Tool = require("../models/schemas/tools");
 
-module.exports={showAllProds};
+const showAllProds = async (req, res) => {
+  Tool.find({})
+    .then((tools) => res.send(tools))
+    .catch((err) => console.error(err));
+};
+
+module.exports = { showAllProds };

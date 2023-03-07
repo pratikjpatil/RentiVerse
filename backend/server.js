@@ -28,6 +28,9 @@ app.get('/', (req,res)=>{
     res.send('<h1>Welcome to AgroRent</h1>');
 })
 
-app.listen(PORT, () => {
-    console.log(`Server Succesfully running on http://localhost:${PORT}`);
+
+app.listen(5000, () => {
+    console.log(`Server Succesfully running on http://localhost:5000`);
 });
+
+
