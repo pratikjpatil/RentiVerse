@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Sidebar,Card } from "../../components";
+import { Header, Sidebar,CardD } from "../../components";
 import "./dashboard.css";
 
 const Dashboard = () => {
@@ -90,7 +90,7 @@ const Dashboard = () => {
               <button>Owned</button>
             </div>
           </div>
-          <div className="dashboard-page-content-main-content-cards"><Card/></div>
+          <div className="dashboard-page-content-main-content-cards"><CardD/></div>
         </div>
       </div>
     </>

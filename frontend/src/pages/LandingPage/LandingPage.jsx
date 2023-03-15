@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Sidebar, Card } from "../../components";
+import { Header, Sidebar, CardLP } from "../../components";
 import "./landingpage.css";
 
 const LandingPage = () => {
@@ -8,7 +8,7 @@ const LandingPage = () => {
       <Header />
       <Sidebar />
       <div className="landing-page-content">
-        <Card />
+        <CardLP/>
       </div>
     </div>
   );

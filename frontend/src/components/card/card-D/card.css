@@ -1,0 +1,49 @@
+
+.card{
+    width:20rem;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border:0.015rem solid black;
+}
+
+.card-header{
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap:1rem;
+    justify-content: space-between;
+    border: 0.0125rem solid grey;
+    border-radius: 0.5rem;
+}
+.card-header img{
+    height: 3rem;
+    border-radius: 0.2rem;
+}
+.name-heading{
+    display: flex;
+    flex-direction: column;
+}
+.name-heading .heading{
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.category{
+    font-size: 0.6rem;
+}
+.pricing{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #FF5F52;
+}
+.discription{
+    padding: 0.5rem;
+}
+.discription-header{
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.discription p{
+    font-size: 0.7rem;
+    padding-top: 0.5rem;
+}

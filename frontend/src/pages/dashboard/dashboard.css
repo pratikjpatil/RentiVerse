@@ -64,4 +64,24 @@
 
 .dashboard-page-content-main-content{
     display: flex;
+    align-items: center;
+    gap:20rem;
+    padding-bottom: 1rem;
+}
+
+.dashboard-page-content-main-content-header span{
+    font-size: 2rem;
+    font-weight: 500;
+}
+.dashboard-page-content-main-content-header p{
+    font-size: 0.8rem;
+    color: grey;
+}
+.dashboard-page-content-main-content-button button{
+    padding: 0.5rem 1.5rem;
+    border-radius: 1.2rem;    
+    background: linear-gradient(321.69deg, #50A060 0%, #4F4A48 100%);
+    border:none;
+    font-weight: 500;
+    color:white;
 }

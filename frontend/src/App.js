@@ -1,5 +1,4 @@
-import Dashboard from "./pages/dashboard/Dashboard";
-import LandingPage from "./pages/LandingPage/LandingPage";
+import { LandingPage,Dashboard,Login,Register } from "./pages";
 
 function App() {
   return (
