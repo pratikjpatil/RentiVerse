@@ -5,15 +5,22 @@ const Card = () => {
   return (
     <div className="card">
       <div className="card-header">
-        <img
-          src="https://fmexim.com/images/asset-agri-tools-sickle.jpg"
-          alt="img"
-        />
-        <div className="name-heading">
-          <span className="heading">Tool Name</span>
-          <span className="category">Category: Harvesting</span>
+        <div className="card-header-main">
+          <div className="card-header-main-img">
+            <img
+              src="https://fmexim.com/images/asset-agri-tools-sickle.jpg"
+              alt="img"
+            />
+          </div>
+          <div className="name-heading">
+            <div>
+              <span className="heading">Tool Name</span>
+              <span className="category">Category: Harvesting</span>
+            </div>
+          
+            <span className="pricing">₹230/day</span>
+          </div>
         </div>
-        <span className="pricing">₹230/day</span>
       </div>
       <div className="discription">
         <span className="discription-header">Discription</span>

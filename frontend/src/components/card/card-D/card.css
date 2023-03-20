@@ -2,12 +2,16 @@
 .card{
     width:20rem;
     background-color: white;
-    padding: 1rem;
+    padding: 0.3rem;
     border-radius: 0.5rem;
     border:0.015rem solid black;
 }
 
 .card-header{
+    background: url(	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQguB7vWBJiC67_WiKqLO1pq0jzjl0YMbi2EQ&usqp=CAU);
+}   
+.card-header-main{
+    
     padding: 0.5rem;
     display: flex;
     align-items: center;
@@ -16,10 +20,12 @@
     border: 0.0125rem solid grey;
     border-radius: 0.5rem;
 }
-.card-header img{
+.card-header-main-img img{
     height: 3rem;
     border-radius: 0.2rem;
+    
 }
+
 .name-heading{
     display: flex;
     flex-direction: column;
