@@ -1,6 +1,7 @@
-import { Dashboard, Login, Register } from "./pages";
+import Dashboard from "./pages/dashboard/Dashboard";
 
-// import LandingPage from "./pages/LandingPage/LandingPage";
+import LandingPage from "./pages/LandingPage/LandingPage";
+
 
 
 import Request from "./pages/Request";

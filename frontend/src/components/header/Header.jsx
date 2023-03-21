@@ -1,8 +1,21 @@
-import React from "react";
+import React,{useState} from "react";
 import logop from "../../assets/logop.png";
 import "./header.css";
 
-const Header = () => {
+const Header = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+    onSearch(searchTerm);
+    console.log(searchTerm);
+  };
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    onSearch(searchTerm);
+  };
+ 
   return (
     <header style={{ position: "fixed", width: "100%" ,zIndex: 2 }}>
       <div className="logo flex-center">
@@ -25,8 +38,10 @@ const Header = () => {
             />
           </svg>
         </div>
-        <input id="input_search" type="text" name="input" placeholder="Search what you want" />
-        <button className="search-button">Search</button>
+        <form onSubmit={handleSearch}>
+        <input id="input_search" type="text" name="input" placeholder="Search what you want" value={searchTerm} onChange={handleInputChange} />
+        <button className="search-button" type="submit">Search</button>
+        </form>
       </div>
       <div className="profile flex-center">
         <div className="profile-cart flex-center">
