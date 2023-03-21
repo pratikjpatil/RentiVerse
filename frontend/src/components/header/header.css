@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
-    box-shadow: 0rem 0.1rem 3rem 0.2rem rgb(38, 65, 38);
+    box-shadow: 0rem 0.1rem 3rem 0.2rem rgb(58, 97, 58);
     background: white; 
 }
 
@@ -26,6 +26,7 @@
 }
 .search input{
     border:none;
+    outline: none;
 }
 .search-button{
     border: none;
@@ -60,4 +61,8 @@
 .profile-menu>div>svg{
     height: 1rem;
     stroke-width: 0.12rem;
+}
+
+#input_search{
+    width: inherit;
 }

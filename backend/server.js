@@ -1,16 +1,36 @@
-// import { ConnectDB } from './src/utils/connectDB';
-import * as dotenv from 'dotenv';
-import express from 'express';
-import colors from 'colors';
-import ConnectDB from './src/utils/connect.js';
-dotenv.config();
-ConnectDB();
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+
 const app = express();
+const PORT = process.env.PORT || 5000;
+dotenv.config();
 
-// console.log(process.env.PORT)
+const connectDB = require("./config/db");
+connectDB();
 
-app.listen(5000, () => {
-    console.log(colors.yellow.underline(`Server Succesfully running on http://localhost:5000`));
+
+const showAllProducts = require("./routes/showAllProducts");
+
+
+
+app.use(express.json());
+app.use(cors());
+
+
+
+app.use('/showallproducts', showAllProducts);
+
+
+
+
+app.get('/', (req,res)=>{
+    res.send('<h1>Welcome to AgroRent</h1>');
+})
+
+
+app.listen(PORT, () => {
+    console.log(`Server Succesfully running on http://localhost:5000`);
 });
 
 
