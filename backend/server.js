@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5500;
 dotenv.config();
 
 const connectDB = require("./config/db");
@@ -30,7 +30,7 @@ app.get('/', (req,res)=>{
 
 
 app.listen(PORT, () => {
-    console.log(`Server Succesfully running on http://localhost:5000`);
+    console.log(`Server Succesfully running on http://localhost:${PORT}`);
 });
 
 
