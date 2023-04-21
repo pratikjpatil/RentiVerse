@@ -3,6 +3,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    min-height: 20rem;
+    max-height: 25rem;
 }
 .dashboard-page-content-main-content-cards-card{
     width: 22rem;
