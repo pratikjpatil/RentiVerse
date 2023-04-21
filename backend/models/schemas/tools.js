@@ -20,6 +20,14 @@ const toolSchema = new mongoose.Schema({
     toolDesc: {
         type: String,
         required: true
+    },
+    toolbgImg:{
+        type: String,
+        required: true
+    },
+    toolImg:{
+        type: String,
+        required: true
     }
 
 });     

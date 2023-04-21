@@ -2,14 +2,14 @@ import React from "react";
 import "./ToolCard.css";
 // import db from "../../db/db.json";
 
-const ToolCard = ({ data }) => {
+const ToolCard = ({ data, index }) => {
   console.log(data.toolname);
   return (
     <div className="dashboard-page-content-main-content-cards">
       <>
         <div
-          key={data.id}
-          className="dashboard-page-content-main-content-cards-card"
+          key={data.toolId}
+          className="dashboard-page-content-main-content-cards-card" style={{float:"left"}}
         >
           <div
             style={{
@@ -24,15 +24,15 @@ const ToolCard = ({ data }) => {
             </div>
             <div className="dashboard-page-content-main-content-cards-card-header-title">
               <div>
-                <h4>{data.toolname}</h4>
-                <h5>Category:{data.category}</h5>
+                <h4>{data.toolName}</h4>
+                <h5>Category:{data.toolCategory}</h5>
               </div>
-              <h3>{data.price}</h3>
+              <h3>{data.toolPrice}</h3>
             </div>
           </div>
           <div className="dashboard-page-content-main-content-cards-card-discription">
             <h5>Discription</h5>
-            <p>{data.description}</p>
+            <p>{data.toolDesc}</p>
           </div>
         </div>
       </>
