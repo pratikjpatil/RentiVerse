@@ -10,7 +10,7 @@ const LandingPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5500/showallproducts/allproducts")
+      .get("http://localhost:4500/showallproducts/allproducts")
       .then((response) => {
         setTools(response.data);
       });
@@ -26,10 +26,11 @@ const LandingPage = () => {
       <Sidebar />
       <div className="landing-page-content">
         {tools
-          .filter(
-            (tool) =>
-              tool.toolName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              tool.toolCategory.toLowerCase().includes(searchTerm.toLowerCase())
+          .filter((tool) =>
+            searchTerm === ""
+              ? true
+              : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                tool.category?.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((tool, index) => (
             <ToolCard data={tool} index={index} />
