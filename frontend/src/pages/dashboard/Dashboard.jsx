@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Header, Sidebar } from "../../components";
+import axios from "axios";
 import "./dashboard.css";
-import db from "../../db/db.json";
 import ToolCard from "../../components/card/ToolCard";
 
 const Dashboard = () => {
-  const Alldata = db.Data;
+  const [tools, setTools] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4500/showallproducts/allproducts")
+      .then((response) => {
+        setTools(response.data);
+      });
+  }, []);
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
   return (
     <>
-      <Header />
+      <Header onSearch={handleSearch}/>
       <Sidebar />
       <div className="dashboard-page-content">
         <div className="dashboard-page-content-heading">
@@ -92,13 +106,19 @@ const Dashboard = () => {
             <div className="dashboard-page-content-main-content-button">
               <button>Owned</button>
             </div>
-          </div>
-          {Alldata
-            ? Alldata.map((data) => {
-              console.log(data.toolname);
-                return <ToolCard key={data.id} data={data} />;
-              })
-            : ""}
+          </div><br /> <br />
+          {tools
+            .filter((tool) =>
+              searchTerm === ""
+                ? true
+                : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  tool.category
+                    ?.toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+            )
+            .map((tool, index) => (
+              <ToolCard data={tool} index={index}  />
+            ))}
         </div>
       </div>
     </>
