@@ -1,12 +1,15 @@
-import Dashboard from "./pages/dashboard/Dashboard";
+// import Dashboard from "./pages/dashboard/Dashboard";
 
-import LandingPage from "./pages/LandingPage/LandingPage";
+import AddOnRent from "./pages/AddOnRent/AddOnRent";
+
+// import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
   return (
     <div className="App">
-      <Dashboard  />
+      {/* <Dashboard  /> */}
       {/* <LandingPage /> */}
+      <AddOnRent />
     </div>
   );
 }
