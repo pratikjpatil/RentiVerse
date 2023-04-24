@@ -50,12 +50,12 @@
   /* margin-bottom: 10px; */
 }
 .imageadd {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-size: 20px;
   margin-left: 3.6rem;
   margin-right: -4rem;
-  color: #ABABAB;
+  color: #ababab;
 }
 
 .form-box {
@@ -78,7 +78,7 @@ form textarea {
   width: 120%;
   /* margin-bottom: 20px; */
   padding: 10px;
-  /* border: 1px solid #cccccc; */
+  border: 1px solid #cccccc;
   border-radius: 5px;
   font-size: 16px;
   /* color: #555555; */
@@ -87,11 +87,12 @@ form input[type="number"],
 form input[type="date"] {
   width: 40%;
   font-size: 16px;
+  border: 1px solid #cccccc;
   border-radius: 5px;
 }
 
 form input[type="submit"] {
-  background-color: #3EAEFF;
+  background-color: #3eaeff;
   color: white;
   width: 40%;
   margin-left: 17rem;
@@ -120,4 +121,20 @@ form textarea {
     margin-left: 0;
     max-width: 100%;
   }
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper .input-same {
+  padding-right: 100px;
+}
+
+.input-wrapper .input-fixed-text {
+  position: absolute;
+  top: 71%;
+  right: -58px;
+  transform: translateY(-50%);
+  color: #828282;
 }

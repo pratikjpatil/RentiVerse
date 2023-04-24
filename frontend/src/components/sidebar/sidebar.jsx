@@ -3,8 +3,8 @@ import "./sidebar.css";
 
 const Sidebar = () => {
   return (
-    <aside style={{zIndex:1}}>
-      <div className="sidebar" >
+    <aside style={{ zIndex: 1 }}>
+      <div className="sidebar">
         <ul>
           <li>
             <a href="#Home">Home</a>
