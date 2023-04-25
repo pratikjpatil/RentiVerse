@@ -152,7 +152,7 @@ const AddOnRent = () => {
                   onInput={handleDescription}
                   placeholder="This has sharp blades and can be used for cutting grass, maize. And wants to give this on rent for 2 days and with some conditions..."
                 ></textarea>
-                <span class="input-fixed-text">{descriptionCount}</span>
+                <span class="input-fixed-textarea">{descriptionCount}</span>
               </div>
               <input type="submit" value="Post" />
             </form>

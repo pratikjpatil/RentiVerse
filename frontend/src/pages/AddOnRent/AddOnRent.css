@@ -108,8 +108,8 @@ form input[type="submit"]:hover {
 }
 
 form textarea {
-  resize: vertical;
-  height: 150px;
+  resize: none;
+  height: 130px;
 }
 
 @media screen and (max-width: 768px) {
@@ -139,3 +139,12 @@ form textarea {
   transform: translateY(-50%);
   color: #828282;
 }
+
+.input-wrapper .input-fixed-textarea {
+  position: absolute;
+  top: 82%;
+  right: -58px;
+  transform: translateY(-50%);
+  color: #828282;
+}
+
