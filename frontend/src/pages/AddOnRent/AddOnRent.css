@@ -5,9 +5,9 @@
   display: flex;
   flex-wrap: wrap;
   width: 100vw;
-  margin-left: 3rem;
+  margin-left: 6rem;
   margin-top: 2rem;
-  padding: 30px;
+  padding: 20px;
 }
 
 .container {
@@ -130,6 +130,7 @@ form textarea {
 .input-wrapper .input-same {
   padding-right: 100px;
 }
+
 
 .input-wrapper .input-fixed-text {
   position: absolute;

@@ -124,7 +124,7 @@ const AddOnRent = () => {
                   maxLength={30}
                   value={tags}
                   onInput={handleTags}
-                  placeholder="cutting, digging, etc. (max 180 characters)"
+                  placeholder="cutting, digging, etc."
                 />
                 <span class="input-fixed-text">{toolTagsCount}</span>
               </div>
