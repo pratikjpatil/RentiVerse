@@ -1,5 +1,5 @@
 import React,{Fragment, useState} from "react";
-import Image from "../assets/logo.png";
+import Image from "../../assets/logo.png";
 
 import "./Login.css";
 const Login = () => {
@@ -25,24 +25,24 @@ const Login = () => {
 
   return (
     <Fragment>
-    <div className="container">
-      <img src={Image} alt="Logo" className="logo" />
-      <div className="card" onSubmit={submissionHandler}>
-        <div className="card-content">
+    <div className="container-login">
+      <img src={Image} alt="Logo" className="logo-login" />
+      <div className="card-main-login" onSubmit={submissionHandler}>
+        <div className="card-content-login">
           <h2>Login</h2>
           <form>
-            <div className="form-group">
-              <input type="text" className="form-control" placeholder="Username" onChange={usernameInputHandler}/>
+            <div className="form-group-login-page">
+              <input type="text" className="form-control-login-page" placeholder="Username" onChange={usernameInputHandler}/>
             </div>
-            <div className="form-group">
+            <div className="form-group-login-page">
               <input
                 type="password"
-                className="form-control"
+                className="form-control-login-page"
                 placeholder="Password"
                 onChange={passwordInputHandler}
               />
             </div>
-            <button type="submit" className="btn btn-primary" onClick={btnSubmitHandler}>
+            <button type="submit" className="btn btn-primary button-login" onClick={btnSubmitHandler}>
               Login
             </button>
           </form>

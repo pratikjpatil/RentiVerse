@@ -1,21 +1,21 @@
-.container {
+.container-login {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh; /* Set the height of the container to full viewport height */
 }
-.card {
+.card-main-login {
   margin: 0 auto;
   width: 400px;
   height: 300px;
   background-color: #ffffff;
-  border-radius: 5px;
+  border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 8px 0 rgba(117, 115, 115, 0.2);
 }
 
-.card-content {
+.card-content-login {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,11 +27,11 @@ h2 {
   color: green;
 }
 
-.form-group {
+.form-group-login-page {
   margin-bottom: 20px;
 }
 
-.form-control {
+.form-control-login-page {
   width: 352px;
   height: 42px;
   padding: 10px 20px;
@@ -42,7 +42,7 @@ h2 {
   background-color: #f5f5f5;
 }
 
-.btn {
+.button-login {
   background-color: #4caf50;
   color: white;
   padding: 14px 20px;
@@ -55,16 +55,16 @@ h2 {
   border-radius: 12px;
 }
 
-.btn:hover {
+.button-login:hover {
   background-color: #45a049;
 }
 
-button[type="submit"] {
+.button-login {
   display: block;
   margin: 0 auto;
 }
 
-.logo {
+.logo-login {
   display: block;
   margin: 20px auto;
   height: 50px;
