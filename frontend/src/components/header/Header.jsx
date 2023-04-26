@@ -1,9 +1,9 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import logop from "../../assets/logop.png";
 import "./header.css";
 
 const Header = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -15,34 +15,47 @@ const Header = ({ onSearch }) => {
     event.preventDefault();
     onSearch(searchTerm);
   };
- 
+
   return (
-    <header style={{ position: "fixed", width: "100%" ,zIndex: 2 }}>
+    <header style={{ position: "fixed", width: "100%", zIndex: 2 }}>
       <div className="logo flex-center">
         <img src={logop} alt="logos" />
       </div>
-      <div className="search flex-center">
-        <div className="search-logo flex-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+      {window.location.href !== "http://localhost:3000/addonrent" && (
+        <div className="search flex-center">
+          <div className="search-logo flex-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+            </svg>
+          </div>
+
+          <form onSubmit={handleSearch}>
+            <input
+              id="input_search"
+              type="text"
+              name="input"
+              placeholder="Search what you want"
+              value={searchTerm}
+              onChange={handleInputChange}
             />
-          </svg>
+            <button className="search-button" type="submit">
+              Search
+            </button>
+          </form>
         </div>
-        <form onSubmit={handleSearch}>
-        <input id="input_search" type="text" name="input" placeholder="Search what you want" value={searchTerm} onChange={handleInputChange} />
-        <button className="search-button" type="submit">Search</button>
-        </form>
-      </div>
+      )}
+
       <div className="profile flex-center">
         <div className="profile-cart flex-center">
           <svg
