@@ -7,16 +7,19 @@ const Sidebar = () => {
       <div className="sidebar">
         <ul>
           <li>
-            <a href="#Home">Home</a>
+            <a href="/">Home</a>
           </li>
           <li>
             <a href="#Posts">Posts</a>
           </li>
           <li>
+            <a href="/addonrent">Add On Rent</a>
+          </li>
+          <li>
             <a href="#Users">Users</a>
           </li>
           <li>
-            <a href="#dashboard">Dashboard</a>
+            <a href="/dashboard">Dashboard</a>
           </li>
         </ul>
       </div>
