@@ -16,6 +16,9 @@ const Sidebar = () => {
             <a href="/addonrent">Add On Rent</a>
           </li>
           <li>
+            <a href="/productpage">Product Page</a>
+          </li>
+          <li>
             <a href="#Users">Users</a>
           </li>
           <li>
