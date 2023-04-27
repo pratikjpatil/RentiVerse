@@ -72,7 +72,9 @@
 .right-box{
     margin-top: 3rem;
 }
-
+.heading-productpage{
+	color: black;
+}
 .right-box .subheading {
 	margin-top: 30px;
 	font-size: 12px;

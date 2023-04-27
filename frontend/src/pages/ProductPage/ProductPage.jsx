@@ -16,7 +16,7 @@ function ProductPage() {
       </React.Fragment>
       <div className="container-productpage" id="white-box">
         <div className="left-box">
-          <h2 className="heading">Sickle</h2>
+          <h2 className="heading-productpage">Sickle</h2>
           <div className="gallery-productpage">
             <img className="big-image image" src={Image} alt="Sickle" />
             <div className="small-images">
