@@ -1,10 +1,25 @@
-import React from "react";
+import React, {useState} from "react";
 import { Header, Sidebar } from "../../components";
 import "./ProductPage.css";
 import Image from "../../assets/Stickle.png";
 import Image1 from "../../assets/Stickle1.png";
 
 function ProductPage() {
+  const [count, setCount] = useState(0);
+
+const formSubmissionHandler = (e) => {
+  e.preventDefault();
+}
+
+  const handleIncrease = () => {
+    setCount(count + 1);
+  };
+
+  const handleDecrease = () => {
+    if (count > 0) {
+      setCount(count - 1);
+    }
+  };
   return (
     <div className="body-productpage">
       <Header />
@@ -48,9 +63,9 @@ function ProductPage() {
             be distracted by the readable content of a page when looking at its
             layout.
           </p>
-          <form>
+          <form onSubmit={formSubmissionHandler}>
             <label className="label-productpage" htmlFor="till-date">
-            Available Quantity:
+              Available Quantity:
             </label>
             <button className="grey-button">4</button>
             <label className="label-productpage" htmlFor="till-date">
@@ -66,9 +81,11 @@ function ProductPage() {
             <label className="label-productpage" htmlFor="message">
               Quantity:
             </label>
-            <div className="value-button">-</div>
-            <input className="input-productpage-quantity" id="number" type="number" />
-            <div className="value-button">+</div>
+            <div class="input-group">
+              <button class="btn-minus" onClick={handleDecrease}>-</button>
+              <input type="text" class="input-number" value={count} />
+              <button class="btn-plus" onClick={handleIncrease}>+</button>
+            </div>
             <input
               className="submit-button-productpage"
               type="submit"
