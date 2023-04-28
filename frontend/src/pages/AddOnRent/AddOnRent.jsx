@@ -114,6 +114,13 @@ const AddOnRent = () => {
                 name="price"
                 placeholder="350Rs/day"
               />
+              <label for="quantity">Quantity</label>
+              <input
+                type="number"
+                id="quantity"
+                name="price"
+                placeholder="4"
+              />
               <div class="input-wrapper">
                 <label for="tags">Tags </label>
                 <input

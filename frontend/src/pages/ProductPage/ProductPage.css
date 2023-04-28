@@ -108,8 +108,7 @@
 	margin-bottom: 5px;
 }
 
-.input-productpage-date, 
-.textarea-productpage {
+.input-productpage-date {
 	padding: 10px;
 	font-size: 16px;
 	border-radius: 4px;
@@ -124,9 +123,6 @@
 	margin-bottom: 5px;
 }
 
-.textarea-box {
-	height: 120px;
-}
 
 @media only screen and (max-width: 768px) {
 	.container-productpage {
@@ -153,15 +149,11 @@
 		padding: 8px 16px;
 	}
 
-	.input-productpage-date, 
-	.textarea-productpage {
+	.input-productpage-date {
 		font-size: 14px;
 		padding: 8px;
 	}
 
-	.textarea-box {
-		height: 80px;
-	}
 
 	.submit-button-productpage {
 		background-color:rgb(11, 85, 247);
@@ -173,3 +165,5 @@
 		cursor: pointer;
 	}
 }
+
+
