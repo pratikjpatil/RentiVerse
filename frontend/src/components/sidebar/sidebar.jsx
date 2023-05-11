@@ -13,6 +13,9 @@ const Sidebar = () => {
             <a href="#Posts">Posts</a>
           </li>
           <li>
+            <a href="/requestPage">Requests</a>
+          </li>
+          <li>
             <a href="/addonrent">Add On Rent</a>
           </li>
           <li>
