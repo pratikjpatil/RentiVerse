@@ -1,45 +1,45 @@
-Header{
-    top:0;
-    left:0;
+Header {
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
     box-shadow: 0rem 0.1rem 3rem 0.2rem rgb(58, 97, 58);
-    background: white; 
-}
-
-.flex-center{
+    background: white;
+  }
+  
+  .flex-center {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-.search{
+  }
+  .search {
     width: 30rem;
     gap: 1rem;
     padding: 0.2rem;
     border-radius: 1.5rem;
     box-shadow: 0.1rem 0.1rem 0.6rem;
-}
-.search-logo{
+  }
+  .search-logo {
     padding-left: 0.5rem;
-}
-.search input{
-    border:none;
-    outline: none;
-}
-.search-button{
+  }
+  .search input {
     border: none;
-    background: #50A060;
+    outline: none;
+  }
+  .search-button {
+    border: none;
+    background: #50a060;
     padding: 0.5rem 1rem;
     border-radius: 1rem;
     color: white;
-}
-.profile-cart{
+  }
+  .profile-cart {
     flex-direction: column;
-    gap:0.2rem;
-}
-.profile-logo{
+    gap: 0.2rem;
+  }
+  .profile-logo {
     display: flex;
     align-items: center;
     background-color: #2b2620;
@@ -49,20 +49,21 @@ Header{
     justify-content: center;
     color: white;
     font-weight: 500;
-}
-.profile{
-    gap:2rem;
+  }
+  .profile {
+    gap: 2rem;
     padding-right: 0.5rem;
-}
-.profile-menu{
-    gap:0.2rem;
-    cursor:pointer;
-}
-.profile-menu>div>svg{
+  }
+  .profile-menu {
+    gap: 0.2rem;
+    cursor: pointer;
+  }
+  .profile-menu > div > svg {
     height: 1rem;
     stroke-width: 0.12rem;
-}
+  }
+  
+  #input_search {
+    width: 21.5rem;
+  }
 
-#input_search{
-    width: inherit;
-}

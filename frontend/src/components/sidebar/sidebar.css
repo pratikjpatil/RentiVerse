@@ -4,6 +4,9 @@ aside div ul li a{
     font-size: 1.3rem;
     font-weight: 500;
 }
+aside div ul li a:hover{
+    font-weight:900;
+}
 
 aside div ul li{
     list-style: none;

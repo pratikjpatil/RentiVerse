@@ -3,34 +3,35 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4500;
 dotenv.config();
 
 const connectDB = require("./config/db");
 connectDB();
 
-
-const showAllProducts = require("./routes/showAllProducts");
-
-
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
 
-
-app.use('/showallproducts', showAllProducts);
-
-
-
-
-app.get('/', (req,res)=>{
-    res.send('<h1>Welcome to AgroRent</h1>');
-})
+const showAllProducts = require("./routes/showAllProducts");
+const user = require("./routes/user");
+const getMyTools = require("./routes/getMyTools");
+const addOnRent = require("./routes/addOnRent");
 
 
-app.listen(PORT, () => {
-    console.log(`Server Succesfully running on http://localhost:5000`);
+
+app.use("/api/products", showAllProducts);
+app.use("/api/user", user);
+app.use("/api/tools", getMyTools);
+app.use("/api/rent", addOnRent);
+
+
+
+app.get("/", (req, res) => {
+  return res.send("<h1>Welcome to AgroRent</h1>");
 });
 
-
+app.listen(PORT, () => {
+  console.log(`Server Succesfully running on http://localhost:${PORT}`);
+});

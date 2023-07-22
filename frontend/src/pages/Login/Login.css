@@ -1,14 +1,21 @@
-.card {
+.container-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Set the height of the container to full viewport height */
+}
+.card-main-login {
   margin: 0 auto;
   width: 400px;
-  height: 691px;
+  height: 300px;
   background-color: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(117, 115, 115, 0.2);
 }
 
-.card-content {
+.card-content-login {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,38 +25,24 @@
 h2 {
   margin-bottom: 20px;
   color: green;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 44px;
-  line-height: 53px;
 }
 
-.form-group {
-  margin-bottom: 10px;
+.form-group-login-page {
+  margin-bottom: 20px;
 }
 
-textarea {
-  resize: none;
-  overflow: hidden;
-}
-input,
-textarea {
-  font-family: Arial, sans-serif;
-}
-
-.form-control {
+.form-control-login-page {
   width: 352px;
   height: 42px;
   padding: 10px 20px;
-  margin: 4px 0;
+  margin: 8px 0;
   box-sizing: border-box;
   border: 2px solid green;
-  border-radius: 7px;
+  border-radius: 20px;
   background-color: #f5f5f5;
 }
 
-.btn {
+.button-login {
   background-color: #4caf50;
   color: white;
   padding: 14px 20px;
@@ -58,20 +51,20 @@ textarea {
   border-radius: 4px;
   cursor: pointer;
   height: 42px;
-  width: 352px;
+  width: 176px;
   border-radius: 12px;
 }
 
-.btn:hover {
+.button-login:hover {
   background-color: #45a049;
 }
 
-button[type="submit"] {
+.button-login {
   display: block;
-  margin: 5px auto;
+  margin: 0 auto;
 }
 
-.logo {
+.logo-login {
   display: block;
   margin: 20px auto;
   height: 50px;

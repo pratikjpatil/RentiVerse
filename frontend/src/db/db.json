@@ -1,0 +1,49 @@
+{
+    "Data":[
+        {
+            "toolId":0,
+            "bg":"https://s3-alpha-sig.figma.com/img/21cc/7815/b64de686df927401b9fad5079fbf652f?Expires=1680480000&Signature=L~Y0JBOw7mllQtRQB0r7R5oQpYMBUqKivljQ1o~0-hcPyw~3Z~LzuaiUuS-wo5VzNv1KOIp2MMtMNg8~udne2U-hG~~a84S0D84p3L15SuJMf5sQXTEdC5rRMz5r9gTtRoIwNgf0Jx-gjsTghRqSMr6VIZxpt7FID3eAMBKKfBEg30O2w-0RyKFQhnZV~Ylj7GnbImnk-OUx-TVSCENELpJNTeY~Re6K8uVWS53qhiJK7FjaTSmg5uIzSioh7X7qo9tNCOoV2cHNVeXbbqYi4WoRq4Beeq-qjI7gTfkeFoLtQFB2CRVRz2tnd~HRWl-NMLwKGqRTsto1f4lbPVCC0w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolimg":"https://s3-alpha-sig.figma.com/img/e5fb/dc7b/bd4b6205e847d0ab1e0a6865111e2937?Expires=1680480000&Signature=pDbRe2jwGEgG58BJ7hmxN5qWDzsoIeYL6TcIDJ4nabT8h5f-JNLDCBl9u0n7~pFFc4KL5uPtm6rh6NMteQoU4vKe0JTZUNNJVqNi5Ld7dXhPZdWDxngi6NzF8znfPvPG2q5eas~BDl13uWrKY7G13zbx13DUFitoolIdgVFxMJP82fiZDD5FneEFdYehSS7ZQAiZt5O9unlndyCb3iUxe3m8gmiAfTHRBfY~UlvA9cu3vDZJ4Bg2WaDZp3gUhaB2G2ViT6z7YZ0Yn-v0AE0NFYdeqNGhYphX45lFGdVh7NPKN9tBMxRRZ0l7SsSp9~0pzHYgACLfjdONa71lz1a0u6lUcg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolName":"Sickle",
+            "toolCategory":"Harvesting",
+            "toolPrice":"₹230/day",
+            "toolDesc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tristique placerat ligula, in dapibus turpis. Cras vel nunc nec arcu hendrerit euismod. Lorem ipsum dolor sit amet, "
+        },
+        {
+            "toolId":1,
+            "bg":"https://s3-alpha-sig.figma.com/img/21cc/7815/b64de686df927401b9fad5079fbf652f?Expires=1680480000&Signature=L~Y0JBOw7mllQtRQB0r7R5oQpYMBUqKivljQ1o~0-hcPyw~3Z~LzuaiUuS-wo5VzNv1KOIp2MMtMNg8~udne2U-hG~~a84S0D84p3L15SuJMf5sQXTEdC5rRMz5r9gTtRoIwNgf0Jx-gjsTghRqSMr6VIZxpt7FID3eAMBKKfBEg30O2w-0RyKFQhnZV~Ylj7GnbImnk-OUx-TVSCENELpJNTeY~Re6K8uVWS53qhiJK7FjaTSmg5uIzSioh7X7qo9tNCOoV2cHNVeXbbqYi4WoRq4Beeq-qjI7gTfkeFoLtQFB2CRVRz2tnd~HRWl-NMLwKGqRTsto1f4lbPVCC0w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolimg":"https://s3-alpha-sig.figma.com/img/e5fb/dc7b/bd4b6205e847d0ab1e0a6865111e2937?Expires=1680480000&Signature=pDbRe2jwGEgG58BJ7hmxN5qWDzsoIeYL6TcIDJ4nabT8h5f-JNLDCBl9u0n7~pFFc4KL5uPtm6rh6NMteQoU4vKe0JTZUNNJVqNi5Ld7dXhPZdWDxngi6NzF8znfPvPG2q5eas~BDl13uWrKY7G13zbx13DUFitoolIdgVFxMJP82fiZDD5FneEFdYehSS7ZQAiZt5O9unlndyCb3iUxe3m8gmiAfTHRBfY~UlvA9cu3vDZJ4Bg2WaDZp3gUhaB2G2ViT6z7YZ0Yn-v0AE0NFYdeqNGhYphX45lFGdVh7NPKN9tBMxRRZ0l7SsSp9~0pzHYgACLfjdONa71lz1a0u6lUcg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolName":"Sickle",
+            "toolCategory":"Harvesting",
+            "toolPrice":"₹230/day",
+            "toolDesc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tristique placerat ligula, in dapibus turpis. Cras vel nunc nec arcu hendrerit euismod. Lorem ipsum dolor sit amet, "
+        },
+        {
+            "toolId":2,
+            "bg":"https://s3-alpha-sig.figma.com/img/21cc/7815/b64de686df927401b9fad5079fbf652f?Expires=1680480000&Signature=L~Y0JBOw7mllQtRQB0r7R5oQpYMBUqKivljQ1o~0-hcPyw~3Z~LzuaiUuS-wo5VzNv1KOIp2MMtMNg8~udne2U-hG~~a84S0D84p3L15SuJMf5sQXTEdC5rRMz5r9gTtRoIwNgf0Jx-gjsTghRqSMr6VIZxpt7FID3eAMBKKfBEg30O2w-0RyKFQhnZV~Ylj7GnbImnk-OUx-TVSCENELpJNTeY~Re6K8uVWS53qhiJK7FjaTSmg5uIzSioh7X7qo9tNCOoV2cHNVeXbbqYi4WoRq4Beeq-qjI7gTfkeFoLtQFB2CRVRz2tnd~HRWl-NMLwKGqRTsto1f4lbPVCC0w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolimg":"https://s3-alpha-sig.figma.com/img/e5fb/dc7b/bd4b6205e847d0ab1e0a6865111e2937?Expires=1680480000&Signature=pDbRe2jwGEgG58BJ7hmxN5qWDzsoIeYL6TcIDJ4nabT8h5f-JNLDCBl9u0n7~pFFc4KL5uPtm6rh6NMteQoU4vKe0JTZUNNJVqNi5Ld7dXhPZdWDxngi6NzF8znfPvPG2q5eas~BDl13uWrKY7G13zbx13DUFitoolIdgVFxMJP82fiZDD5FneEFdYehSS7ZQAiZt5O9unlndyCb3iUxe3m8gmiAfTHRBfY~UlvA9cu3vDZJ4Bg2WaDZp3gUhaB2G2ViT6z7YZ0Yn-v0AE0NFYdeqNGhYphX45lFGdVh7NPKN9tBMxRRZ0l7SsSp9~0pzHYgACLfjdONa71lz1a0u6lUcg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolName":"Sickle",
+            "toolCategory":"Harvesting",
+            "toolPrice":"₹230/day",
+            "toolDesc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tristique placerat ligula, in dapibus turpis. Cras vel nunc nec arcu hendrerit euismod. Lorem ipsum dolor sit amet, "
+        },
+        {
+            "toolId":3,
+            "bg":"https://s3-alpha-sig.figma.com/img/21cc/7815/b64de686df927401b9fad5079fbf652f?Expires=1680480000&Signature=L~Y0JBOw7mllQtRQB0r7R5oQpYMBUqKivljQ1o~0-hcPyw~3Z~LzuaiUuS-wo5VzNv1KOIp2MMtMNg8~udne2U-hG~~a84S0D84p3L15SuJMf5sQXTEdC5rRMz5r9gTtRoIwNgf0Jx-gjsTghRqSMr6VIZxpt7FID3eAMBKKfBEg30O2w-0RyKFQhnZV~Ylj7GnbImnk-OUx-TVSCENELpJNTeY~Re6K8uVWS53qhiJK7FjaTSmg5uIzSioh7X7qo9tNCOoV2cHNVeXbbqYi4WoRq4Beeq-qjI7gTfkeFoLtQFB2CRVRz2tnd~HRWl-NMLwKGqRTsto1f4lbPVCC0w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolimg":"https://s3-alpha-sig.figma.com/img/e5fb/dc7b/bd4b6205e847d0ab1e0a6865111e2937?Expires=1680480000&Signature=pDbRe2jwGEgG58BJ7hmxN5qWDzsoIeYL6TcIDJ4nabT8h5f-JNLDCBl9u0n7~pFFc4KL5uPtm6rh6NMteQoU4vKe0JTZUNNJVqNi5Ld7dXhPZdWDxngi6NzF8znfPvPG2q5eas~BDl13uWrKY7G13zbx13DUFitoolIdgVFxMJP82fiZDD5FneEFdYehSS7ZQAiZt5O9unlndyCb3iUxe3m8gmiAfTHRBfY~UlvA9cu3vDZJ4Bg2WaDZp3gUhaB2G2ViT6z7YZ0Yn-v0AE0NFYdeqNGhYphX45lFGdVh7NPKN9tBMxRRZ0l7SsSp9~0pzHYgACLfjdONa71lz1a0u6lUcg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolName":"Sickle",
+            "toolCategory":"Harvesting",
+            "toolPrice":"₹230/day",
+            "toolDesc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tristique placerat ligula, in dapibus turpis. Cras vel nunc nec arcu hendrerit euismod. Lorem ipsum dolor sit amet, "
+        },
+        {
+            "toolId":4,
+            "bg":"https://s3-alpha-sig.figma.com/img/21cc/7815/b64de686df927401b9fad5079fbf652f?Expires=1680480000&Signature=L~Y0JBOw7mllQtRQB0r7R5oQpYMBUqKivljQ1o~0-hcPyw~3Z~LzuaiUuS-wo5VzNv1KOIp2MMtMNg8~udne2U-hG~~a84S0D84p3L15SuJMf5sQXTEdC5rRMz5r9gTtRoIwNgf0Jx-gjsTghRqSMr6VIZxpt7FID3eAMBKKfBEg30O2w-0RyKFQhnZV~Ylj7GnbImnk-OUx-TVSCENELpJNTeY~Re6K8uVWS53qhiJK7FjaTSmg5uIzSioh7X7qo9tNCOoV2cHNVeXbbqYi4WoRq4Beeq-qjI7gTfkeFoLtQFB2CRVRz2tnd~HRWl-NMLwKGqRTsto1f4lbPVCC0w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolimg":"https://s3-alpha-sig.figma.com/img/e5fb/dc7b/bd4b6205e847d0ab1e0a6865111e2937?Expires=1680480000&Signature=pDbRe2jwGEgG58BJ7hmxN5qWDzsoIeYL6TcIDJ4nabT8h5f-JNLDCBl9u0n7~pFFc4KL5uPtm6rh6NMteQoU4vKe0JTZUNNJVqNi5Ld7dXhPZdWDxngi6NzF8znfPvPG2q5eas~BDl13uWrKY7G13zbx13DUFitoolIdgVFxMJP82fiZDD5FneEFdYehSS7ZQAiZt5O9unlndyCb3iUxe3m8gmiAfTHRBfY~UlvA9cu3vDZJ4Bg2WaDZp3gUhaB2G2ViT6z7YZ0Yn-v0AE0NFYdeqNGhYphX45lFGdVh7NPKN9tBMxRRZ0l7SsSp9~0pzHYgACLfjdONa71lz1a0u6lUcg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+            "toolName":"Sickle",
+            "toolCategory":"Harvesting",
+            "toolPrice":"₹230/day",
+            "toolDesc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tristique placerat ligula, in dapibus turpis. Cras vel nunc nec arcu hendrerit euismod. Lorem ipsum dolor sit amet, "
+        }
+    ]
+}
