@@ -21,6 +21,9 @@ const Sidebar = () => {
           <li>
             <a href="/productpage">Product Page</a>
           </li>
+          <li>
+            <a href="/profile">Profile</a>
+          </li>
           {/* <li>
             <a href="#Users">Users</a>
           </li> */}

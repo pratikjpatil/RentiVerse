@@ -1,0 +1,117 @@
+.body {
+    background-color: #f5f5f5;
+    height: 110vh;
+  }
+  .header-content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    margin-left: 6rem;
+    margin-top: 1rem;
+    padding: 5px;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  .container h1 {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 960px;
+    padding: 30px;
+    margin-top: 0.5rem;
+  }  
+  
+  .form-box {
+    flex: 1 1 100%;
+    max-width: 450px;
+    margin-left: 30px;
+  }
+  .form-group {
+    margin-left: 7rem;
+  }
+  
+  form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .input-same,
+  form textarea {
+    /* display: block; */
+    width: 120%;
+    /* margin-bottom: 20px; */
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 16px;
+    /* color: #555555; */
+  }
+  form input[type="number"] {
+    width: 40%;
+    font-size: 16px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+  }
+  
+  .button-change {
+    background-color: #3eaeff;
+    color: white;
+    width: 50%;
+    margin-left: 15rem;
+    border: none;
+    border-radius: 5px;
+    margin-top: 2rem;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  form input[type="submit"]:hover {
+    background-color: #4caf50;
+  }
+
+  
+  @media screen and (max-width: 768px) {
+    .gallery {
+      margin-right: 30px;
+    }
+  
+    .form-box {
+      margin-left: 0;
+      max-width: 100%;
+    }
+  }
+  
+  .input-wrapper {
+    position: relative;
+  }
+  
+  .input-wrapper .input-same {
+    padding-right: 100px;
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .input-wrapper .input-fixed-text {
+    position: absolute;
+    top: 71%;
+    right: -58px;
+    transform: translateY(-50%);
+    color: #828282;
+  }
+  
+  .input-wrapper .input-fixed-textarea {
+    position: absolute;
+    top: 82%;
+    right: -58px;
+    transform: translateY(-50%);
+    color: #828282;
+  }
+  
