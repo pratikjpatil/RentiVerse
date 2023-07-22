@@ -9,8 +9,9 @@ const LandingPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     axios
-      .get("http://localhost:4500/showallproducts/allproducts")
+      .get(`${backendUrl}/api/products/`)
       .then((response) => {
         setTools(response.data);
       });

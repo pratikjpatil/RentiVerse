@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
     },
     profilePicture: {
-
+        type: String
     },  
     firstName: {
         type: String,
@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+    },
+    password: {
+        type: String,
+        required: true
     },
     address: {
         city: {
@@ -44,12 +48,14 @@ const userSchema = new mongoose.Schema({
             required: true,
         },
     },
-    givenOnRent:[givenOnRent],
-    takenOnRent:[takenOnRent],
-    wishlist:[wishlist]
+    listed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools listed for rent
+
+    givenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools which are given on rent
+    takenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools which are taken on rent
+    wishlist:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }],
 
 });     
 
-const User = new mongoose.model("user", userSchema);
+const User = new mongoose.model("User", userSchema);
 
 module.exports = User;
