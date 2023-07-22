@@ -9,8 +9,9 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     axios
-      .get("http://localhost:4500/showallproducts/allproducts")
+      .get(`${backendUrl}/api/products/`)
       .then((response) => {
         setTools(response.data);
       });
@@ -32,7 +33,7 @@ const Dashboard = () => {
         <div className="dashboard-page-content-acivity-cards">
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
-              <span>Posts</span>
+              <span>Listed</span>
               <p>10</p>
             </div>
             <div className="dashboard-page-content-acivity-cards-card-icon">
@@ -54,7 +55,7 @@ const Dashboard = () => {
           </div>
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
-              <span>My Rentals</span>
+              <span>Given on rent</span>
               <p>3</p>
             </div>
             <div className="dashboard-page-content-acivity-cards-card-icon">
@@ -76,7 +77,7 @@ const Dashboard = () => {
           </div>
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
-              <span>My Rented</span>
+              <span>Taken on rent</span>
               <p>2</p>
             </div>
             <div className="dashboard-page-content-acivity-cards-card-icon">

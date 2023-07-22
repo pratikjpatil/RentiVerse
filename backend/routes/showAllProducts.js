@@ -1,6 +1,9 @@
-const {showAllProds}=require('../controllers/showAllProducts.controller');
-const router=require('express').Router();
+const router = require('express').Router();
+const {showAllProds} = require('../controllers/showAllProducts.controller');
 
-router.get('/allproducts',showAllProds);
+router.get('/',showAllProds);
 
 module.exports=router;
+
+
+//landing page

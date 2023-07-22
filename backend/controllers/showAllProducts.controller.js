@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
-const Tool = require("../models/schemas/tools");
+const Tool = require("../models/tool");
 
 const showAllProds = async (req, res) => {
-  Tool.find({})
-    .then((tools) => res.send(tools))
-    .catch((err) => console.error(err));
+
+  try {
+
+    const tools = await Tool.find({});
+    return res.status(200).json(tools);
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({message: "Internal server error"});
+  }
+  
 };
 
 module.exports = { showAllProds };

@@ -10,20 +10,20 @@ const Sidebar = () => {
             <a href="/">Home</a>
           </li>
           <li>
-            <a href="#Posts">Posts</a>
+            <a href="#Posts">My Listings</a>
           </li>
           <li>
             <a href="/requestPage">Requests</a>
           </li>
           <li>
-            <a href="/addonrent">Add On Rent</a>
+            <a href="/addonrent">Add on Rent</a>
           </li>
           <li>
             <a href="/productpage">Product Page</a>
           </li>
-          <li>
+          {/* <li>
             <a href="#Users">Users</a>
-          </li>
+          </li> */}
           <li>
             <a href="/dashboard">Dashboard</a>
           </li>
