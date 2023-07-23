@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom"
 import "./Register.css";
 import Image from "../../assets/logo.png";
 
@@ -70,7 +71,9 @@ const Register = () => {
             Register
           </button>
           <button type="submit" className="btn-regsiter-login">
+            <Link to="/login">
             Have account? Login
+            </Link>
           </button>
         </div>
       </div>
