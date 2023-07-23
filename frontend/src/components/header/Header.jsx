@@ -23,7 +23,7 @@ const Header = ({ onSearch }) => {
       </div>
       {window.location.href !== "http://localhost:3000/addonrent" &&
         window.location.href !== "http://localhost:3000/productpage" &&
-        window.location.href !== "http://localhost:3000/requestPage" && (
+        window.location.href !== "http://localhost:3000/request" && (
           <div className="search flex-center">
             <div className="search-logo flex-center">
               <svg
