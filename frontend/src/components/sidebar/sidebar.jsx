@@ -13,13 +13,13 @@ const Sidebar = () => {
             <a href="#Posts">My Listings</a>
           </li>
           <li>
-            <a href="/requestPage">Requests</a>
+            <a href="/request">Requests</a>
           </li>
           <li>
             <a href="/addonrent">Add on Rent</a>
           </li>
           <li>
-            <a href="/productpage">Product Page</a>
+            <a href="/product">Product Page</a>
           </li>
           <li>
             <a href="/profile">Profile</a>
