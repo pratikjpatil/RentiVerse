@@ -1,79 +1,114 @@
-.card-register-page {
-  margin: 0 auto;
-  width: 400px;
-  height: 680px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+.register{
+  background-image: url("../../assets/bgimg.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 95vh; 
+}
+.register-header {
+  font-size: 2rem;
+  color: black;
+  text-align: center;
+  padding: 1rem;
 }
 
-.card-content-register {
+.register-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 90vh;
 }
 
-h2 {
-  margin-bottom: 20px;
-  color: green;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 44px;
-  line-height: 53px;
+.register-form {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
-.form-group-register-page {
+.row {
+  display: flex;
+  flex-basis: 100%;
   margin-bottom: 10px;
 }
 
-.form-control-register-address {
-  resize: none;
-  overflow: hidden;
-}
-.form-control-register,
-.form-control-register-address {
-  font-family: Arial, sans-serif;
+.col {
+  flex: 1;
+  margin-right: 10px;
 }
 
-.form-control-register {
-  width: 352px;
-  height: 42px;
-  padding: 10px 20px;
-  margin: 4px 0;
-  box-sizing: border-box;
-  border: 2px solid green;
-  border-radius: 7px;
-  background-color: #f5f5f5;
+.col:last-child {
+  margin-right: 0;
 }
 
-.btn-register,.btn-regsiter-login {
-  background-color: #4caf50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
+.register-lable {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #4a3794;
+  font-family: Poppins;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+input,
+button.transparent-blue {
+  width: 100%; /* Make input and gender buttons the same width */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.gender-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.transparent-blue {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid #6764ff;
+  color: #4a3794;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+button.transparent-blue img {
+  width: 20px;
+  margin-right: 5px;
+}
+.transparent-register {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid #6764ff;
+  color: #4a3794;
+  padding: 6px 45px;
   border-radius: 4px;
   cursor: pointer;
-  height: 42px;
-  width: 352px;
-  border-radius: 12px;
+  margin-left: 25rem;
+  height: 45px;
+  width: 200px;
+  font-size: 15px;
 }
 
-.btn-register:hover, .btn-regsiter-login:hover {
-  background-color: #45a049;
+.transparent-register:hover {
+  background-color: #6764ff;
+  color: white;
 }
 
-.btn-register {
-  display: block;
-  margin: 5px auto;
-}
-
-.logo-regsiter {
-  display: block;
-  margin: 20px auto;
-  height: 50px;
-  width: auto;
+/* Additional styling for mobile responsiveness */
+@media (max-width: 600px) {
+  .col {
+    flex-basis: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
 }

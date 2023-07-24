@@ -1,117 +1,122 @@
-.body {
-    background-color: #f5f5f5;
-    height: 110vh;
-  }
-  .header-content {
+.header-content{
+  font-size: medium;
+  margin-left: 3rem;
+}
+
+.profile-header{
+  margin-top: 6rem;
+  margin-left: 22rem;
+}
+
+
+.profile-container {
     display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
-    margin-left: 6rem;
-    margin-top: 1rem;
-    padding: 5px;
-  }
-  
-  .container {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 30px;
+    align-items: center;
+    height: 80vh;
+    margin-left: 16rem;
   }
-  .container h1 {
+  
+  .profile-form {
     display: flex;
     flex-wrap: wrap;
-    max-width: 960px;
-    padding: 30px;
-    margin-top: 0.5rem;
-  }  
-  
-  .form-box {
-    flex: 1 1 100%;
-    max-width: 450px;
-    margin-left: 30px;
-  }
-  .form-group {
-    margin-left: 7rem;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
   }
   
-  form label {
-    display: block;
+  .row {
+    display: flex;
+    flex-basis: 140%;
     margin-bottom: 10px;
   }
   
-  .input-same,
-  form textarea {
-    /* display: block; */
-    width: 120%;
-    /* margin-bottom: 20px; */
-    padding: 10px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    font-size: 16px;
-    /* color: #555555; */
-  }
-  form input[type="number"] {
-    width: 40%;
-    font-size: 16px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
+  .col {
+    flex: 1;
+    margin-right: 10px;
   }
   
-  .button-change {
-    background-color: #3eaeff;
-    color: white;
-    width: 50%;
-    margin-left: 15rem;
-    border: none;
-    border-radius: 5px;
-    margin-top: 2rem;
-    padding: 10px 20px;
-    font-size: 16px;
+  .col:last-child {
+    margin-right: 0;
+  }
+  
+  .profile-lable {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #4a3794;
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+  }
+  
+  input,
+  button.transparent-blue {
+    width: 100%; /* Make input and gender buttons the same width */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .gender-buttons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .transparent-blue {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid #6764ff;
+    color: #4a3794;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-right: 5px;
     cursor: pointer;
   }
   
-  form input[type="submit"]:hover {
-    background-color: #4caf50;
+  button.transparent-blue img {
+    width: 20px;
+    margin-right: 5px;
   }
-
+  .transparent-profile {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid #6764ff;
+    color: #4a3794;
+    padding: 6px 45px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 15rem;
+    height: 45px;
+    width: 200px;
+    font-size: 15px;
+  }
   
-  @media screen and (max-width: 768px) {
-    .gallery {
-      margin-right: 30px;
+  .transparent-profile:hover,.edit-button:hover {
+    background-color: #6764ff;
+    color: white;
+  }
+  
+  .edit-button{
+    background-color: transparent;
+    border: 1px solid #6764ff;
+    color: #4a3794;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 4rem;
+    height: 28px;
+    width: 60px;
+    font-size: 15px;
+  }
+  /* Additional styling for mobile responsiveness */
+  @media (max-width: 600px) {
+    .col {
+      flex-basis: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
     }
-  
-    .form-box {
-      margin-left: 0;
-      max-width: 100%;
-    }
-  }
-  
-  .input-wrapper {
-    position: relative;
-  }
-  
-  .input-wrapper .input-same {
-    padding-right: 100px;
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
-  }
-  
-  .input-wrapper .input-fixed-text {
-    position: absolute;
-    top: 71%;
-    right: -58px;
-    transform: translateY(-50%);
-    color: #828282;
-  }
-  
-  .input-wrapper .input-fixed-textarea {
-    position: absolute;
-    top: 82%;
-    right: -58px;
-    transform: translateY(-50%);
-    color: #828282;
   }
   
