@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 import logop from "../../assets/logop.png";
 import "./header.css";
 
 const Header = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to manage dropdown open/close
+
+  const navigate = useNavigate();
+  const { isLoggedIn } = useContext(AuthContext);
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
-    onSearch(searchTerm);
-    console.log(searchTerm);
+    onSearch(event.target.value);
   };
 
   const handleSearch = (event) => {
@@ -16,48 +22,65 @@ const Header = ({ onSearch }) => {
     onSearch(searchTerm);
   };
 
+  const handleProfileClick = () => {
+    setIsDropdownOpen((prevState) => !prevState);
+  };
+
+  const handleLogout = async() => {
+    try {
+      // Send an HTTP DELETE request to invalidate the token on the server
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/user/logout`, { withCredentials: true });
+
+      // Clear any client-side storage of the token (if applicable)
+      // For example, if using localStorage:
+      // localStorage.removeItem("token");
+
+      // Clear the dropdown menu and navigate to the login page
+      setIsDropdownOpen(false);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      window.alert("Failed to logout. Please try again.");
+    }
+  };
+
   return (
     <header style={{ position: "fixed", width: "100%", zIndex: 2 }}>
       <div className="logo flex-center">
         <img src={logop} alt="logos" />
       </div>
-      {window.location.href !== "http://localhost:3000/addonrent" &&
-        window.location.href !== "http://localhost:3000/productpage" &&
-        window.location.href !== "http://localhost:3000/requestPage" && (
-          <div className="search flex-center">
-            <div className="search-logo flex-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
-              </svg>
-            </div>
+      <div className="search flex-center">
+        <div className="search-logo flex-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+        </div>
 
-            <form onSubmit={handleSearch}>
-              <input
-                id="input_search"
-                type="text"
-                name="input"
-                placeholder="Search what you want"
-                value={searchTerm}
-                onChange={handleInputChange}
-              />
-              <button className="search-button" type="submit">
-                Search
-              </button>
-            </form>
-          </div>
-        )}
-
+        <form onSubmit={handleSearch}>
+          <input
+            id="input_search"
+            type="text"
+            name="input"
+            placeholder="Search what you want"
+            value={searchTerm}
+            onChange={handleInputChange}
+          />
+          <button className="search-button" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
       <div className="profile flex-center">
         <div className="profile-cart flex-center">
           <svg
@@ -76,7 +99,7 @@ const Header = ({ onSearch }) => {
           </svg>
           <span>Cart</span>
         </div>
-        <div className="profile-menu flex-center">
+        <div className="profile-menu flex-center" onClick={handleProfileClick}>
           <div className="profile-logo">G</div>
           <div className="flex-center">
             <svg
@@ -95,6 +118,20 @@ const Header = ({ onSearch }) => {
             </svg>
           </div>
         </div>
+        {/* Render the dropdown menu when isDropdownOpen is true */}
+        {isDropdownOpen && (
+          <div className="dropdown-menu">
+            <ul>
+              <li>Profile</li>
+              {
+                isLoggedIn ? <li onClick={handleLogout}>Logout</li>
+                :
+                <li onClick={()=>navigate('/login')}>Login</li>
+              }
+              
+            </ul>
+          </div>
+        )}
       </div>
     </header>
   );
