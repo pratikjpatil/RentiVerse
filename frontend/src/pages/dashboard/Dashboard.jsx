@@ -1,29 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Header, Sidebar } from "../../components";
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "./dashboard.css";
 import ToolCard from "../../components/card/ToolCard";
+axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
   const [tools, setTools] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  
+  const [isUnmounting, setIsUnmounting] = useState(false); // New state for unmounting flag
+
+  const navigate = useNavigate();
+  const { isLoggedIn } = useContext(AuthContext);
+
 
   useEffect(() => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    axios
-      .get(`${backendUrl}/api/products/`)
-      .then((response) => {
-        setTools(response.data);
-      });
+    
+    // Fetch tools if user is authenticated
+    const fetchTools = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/tools/listed`, { withCredentials: true });
+        if (response.status === 201) {
+          setTools(response.data);
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          if (!isUnmounting) {
+            window.alert("Oops! you are not logged in.")
+           
+            // Redirect to login page when unauthenticated
+            navigate("/login");
+          }
+        } else {
+          console.log(error);
+          window.alert("Error");
+        }
+      }
+    };
+
+    fetchTools(); // Fetch tools
+
+    return () => {
+      // Set isUnmounting to true when unmounting
+      setIsUnmounting(true);
+    };
   }, []);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
   };
 
+  // If user is not logged in, redirect to login page
+  if (!isLoggedIn) {
+    // Render a loading state or a message while waiting for the redirect
+    return <div>Loading...</div>;
+  }
+
+
   return (
     <>
-      <Header onSearch={handleSearch}/>
+      <Header onSearch={handleSearch} />
       <Sidebar />
       <div className="dashboard-page-content">
         <div className="dashboard-page-content-heading">
@@ -108,18 +148,23 @@ const Dashboard = () => {
               <button>Owned</button>
             </div>
           </div><br /> <br />
-          {tools
-            .filter((tool) =>
-              searchTerm === ""
-                ? true
-                : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  tool.category
-                    ?.toLowerCase()
-                    .includes(searchTerm.toLowerCase())
+          {
+            tools.length === 0 ? (
+              <h1>No tools found</h1>
+            ) : (
+              tools
+                .filter((tool) =>
+                  searchTerm === ""
+                    ? true
+                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    tool.category
+                      ?.toLowerCase()
+                      .includes(searchTerm.toLowerCase())
+                )
+                .map((tool, index) => <ToolCard data={tool} index={index} />)
             )
-            .map((tool, index) => (
-              <ToolCard data={tool} index={index}  />
-            ))}
+          }
+
         </div>
       </div>
     </>
