@@ -67,3 +67,51 @@ Header {
     width: 21.5rem;
   }
 
+
+  /* Dropdown Menu Styles */
+.profile {
+  position: relative; /* Add this to create a stacking context */
+  gap: 2rem;
+  padding-right: 0.5rem;
+}
+
+.profile-menu {
+  gap: 0.2rem;
+  cursor: pointer;
+}
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 3;
+  min-width: 8rem;
+  padding: 0.5rem 0;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 0.5rem 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f7f7f7;
+}
+
+.dropdown-menu li:last-child {
+  border-top: 1px solid #ccc;
+}
+

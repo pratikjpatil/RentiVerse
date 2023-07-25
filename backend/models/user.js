@@ -33,19 +33,19 @@ const userSchema = new mongoose.Schema({
     address: {
         city: {
             type: String,
-            required: true,
+            // required: true,
         },
         state: {
             type: String,
-            required: true,
+            // required: true,
         },
         pincode: {
             type: Number,
-            required: true,
+            // required: true,
         },
         country: {
             type: String,
-            required: true,
+            //required: true,
         },
     },
     listed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools listed for rent
