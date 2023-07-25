@@ -24,7 +24,7 @@ const Login = () => {
 
 
   return (
-    <Fragment>
+    <div className="fragment">
     <div className="container-login">
       <img src={Image} alt="Logo" className="logo-login" />
       <div className="card-main-login" onSubmit={submissionHandler}>
@@ -49,7 +49,7 @@ const Login = () => {
         </div>
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

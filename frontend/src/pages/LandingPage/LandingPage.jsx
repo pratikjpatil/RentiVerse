@@ -30,8 +30,8 @@ const LandingPage = () => {
           .filter((tool) =>
             searchTerm === ""
               ? true
-              : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                tool.category?.toLowerCase().includes(searchTerm.toLowerCase())
+              : tool.toolName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                tool.toolCategory?.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((tool, index) => (
             <ToolCard data={tool} index={index} />

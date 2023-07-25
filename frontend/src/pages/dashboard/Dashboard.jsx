@@ -112,8 +112,8 @@ const Dashboard = () => {
             .filter((tool) =>
               searchTerm === ""
                 ? true
-                : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  tool.category
+                : tool.toolName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  tool.toolCategory
                     ?.toLowerCase()
                     .includes(searchTerm.toLowerCase())
             )

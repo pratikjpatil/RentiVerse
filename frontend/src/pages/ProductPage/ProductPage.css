@@ -55,6 +55,10 @@
 .big-image {
 	margin-bottom: 20px;
 	margin-left: 65px;
+	min-width: 20rem;
+	max-width: 21rem;
+	min-height: 18rem;
+	max-height: 19rem;
 }
 
 .small-images .small-images-productpage {
@@ -62,6 +66,10 @@
 	margin-right: 10px;
 	margin-bottom: 10px;
 	float: left;
+	min-width: 7rem;
+	max-width: 8rem;
+	min-height: 7rem;
+	max-height: 8rem;
 }
 
 .left-box .heading {
