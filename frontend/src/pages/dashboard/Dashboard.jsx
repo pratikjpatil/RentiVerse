@@ -148,6 +148,7 @@ const Dashboard = () => {
               <button>Owned</button>
             </div>
           </div><br /> <br />
+
           {
             tools.length === 0 ? (
               <h1>No tools found</h1>
@@ -162,6 +163,7 @@ const Dashboard = () => {
                       .includes(searchTerm.toLowerCase())
                 )
                 .map((tool, index) => <ToolCard data={tool} index={index} />)
+
             )
           }
 

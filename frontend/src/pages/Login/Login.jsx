@@ -48,7 +48,7 @@ const Login = () => {
 
 
   return (
-    <Fragment>
+    <div className="fragment">
     <div className="container-login">
       <img src={Image} alt="Logo" className="logo-login" onClick={()=>navigate('/')}/>
       <div className="card-main-login" onSubmit={submissionHandler}>
@@ -78,7 +78,7 @@ const Login = () => {
         </div>
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
