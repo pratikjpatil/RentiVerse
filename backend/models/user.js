@@ -31,9 +31,17 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     address: {
+        village: {
+            type: String,
+            // required: true
+        },
         city: {
             type: String,
             // required: true,
+        },
+        district: {
+            type: String,
+            // required: true
         },
         state: {
             type: String,
@@ -43,8 +51,10 @@ const userSchema = new mongoose.Schema({
             type: Number,
             // required: true,
         },
+
         country: {
             type: String,
+            default: 'India'
             //required: true,
         },
     },

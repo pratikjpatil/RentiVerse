@@ -28,14 +28,7 @@ const Header = ({ onSearch }) => {
 
   const handleLogout = async() => {
     try {
-      // Send an HTTP DELETE request to invalidate the token on the server
       await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/user/logout`, { withCredentials: true });
-
-      // Clear any client-side storage of the token (if applicable)
-      // For example, if using localStorage:
-      // localStorage.removeItem("token");
-
-      // Clear the dropdown menu and navigate to the login page
       setIsDropdownOpen(false);
       navigate("/login");
     } catch (error) {
@@ -45,6 +38,7 @@ const Header = ({ onSearch }) => {
   };
 
   return (
+    <>
     <header style={{ position: "fixed", width: "100%", zIndex: 2 }}>
       <div className="logo flex-center">
         <img src={logop} alt="logos" />
@@ -88,21 +82,7 @@ const Header = ({ onSearch }) => {
           </div>
         )}
 
-
-        <form onSubmit={handleSearch}>
-          <input
-            id="input_search"
-            type="text"
-            name="input"
-            placeholder="Search what you want"
-            value={searchTerm}
-            onChange={handleInputChange}
-          />
-          <button className="search-button" type="submit">
-            Search
-          </button>
-        </form>
-      </div>
+      
       <div className="profile flex-center">
         <div className="profile-cart flex-center">
           <svg
@@ -144,7 +124,7 @@ const Header = ({ onSearch }) => {
         {isDropdownOpen && (
           <div className="dropdown-menu">
             <ul>
-              <li>Profile</li>
+              <li onClick={()=>navigate('/profile')}>Profile</li>
               {
                 isLoggedIn ? <li onClick={handleLogout}>Logout</li>
                 :
@@ -156,6 +136,7 @@ const Header = ({ onSearch }) => {
         )}
       </div>
     </header>
+    </>
   );
 };
 

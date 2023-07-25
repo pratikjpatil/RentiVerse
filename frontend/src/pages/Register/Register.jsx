@@ -47,14 +47,14 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleRegistration}>
+    <>
 
     <div className="register">
       <div className="reegister-heading-content">
       <h1 className="register-header">Register on RentiVerse</h1>
       </div>
       <div className="register-container">
-        <form className="register-form">
+        <form className="register-form" onSubmit={handleRegistration}>
           <div className="row">
             <div className="col">
               <label htmlFor="firstName" className="register-lable">
@@ -228,6 +228,7 @@ const Register = () => {
 
       </div>
     </div>
+    </>
   );
 };
 
