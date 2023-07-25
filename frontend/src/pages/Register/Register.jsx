@@ -42,7 +42,13 @@ const Register = () => {
       }
     } catch (error) {
       console.log(error);
-      window.alert("There was an error");
+      if(error.response && error.response.status===400){
+        window.alert("User already exist");
+      }
+      else{
+        window.alert("There was an error");
+      }
+      
     }
   };
 
@@ -88,17 +94,17 @@ const Register = () => {
             <div className="col">
               <label className="register-lable">Gender</label>
               <div className="gender-buttons">
-                <button className="transparent-blue" 
+                <button type="button" className="transparent-blue" 
                   onClick={(e) => setUser({ ...user, gender: "male" })}>
                   <img src={maleImage} alt="Male" className="gender-icon" />
                   Male
                 </button>
-                <button className="transparent-blue" 
+                <button type="button" className="transparent-blue" 
                   onClick={(e) => setUser({ ...user, gender: "female" })}>
                   <img src={femaleImage} alt="Female" className="gender-icon" />
                   Female
                 </button>
-                <button className="transparent-blue"
+                <button type="button" className="transparent-blue"
                   onClick={(e) => setUser({ ...user, gender: "other" })}>
                   Other
                 </button>
