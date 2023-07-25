@@ -4,21 +4,21 @@ const jwt = require("jsonwebtoken");
 const auth = app.use((req,res,next)=>{
     
     try {
-
-        let token = req.headers.authorization;
-
+        const token = req.cookies.token;
+        
         if(token){
 
-            token = token.split(" ")[1];
             const user = jwt.verify(token, process.env.SECRET_KEY);
-            req.user = user;  
+            req.user = user; 
             
-            //if the token is incorrect then the catch block will execute
         }
         else{
+            console.log("Unauthorized user");
             return res.status(401).json({message: "Unauthorized user"});
         }
+
         next();
+        
 
     } catch (error) {
 

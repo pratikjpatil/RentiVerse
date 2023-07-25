@@ -4,9 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
 
-    const { firstName, lastName, phone, email, address, password } = req.body;
-
-
+    const {pincode, phone, email, gender, password, firstname, lastname, state, village, district, city} = req.body;
+    
     try {
         const existingUser = await User.findOne({ email: email});
 
@@ -17,17 +16,27 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await User.create({
-            firstName: firstName,
-            lastName: lastName,
+            firstName: firstname,
+            lastName: lastname,
             phone: phone,
             email: email,
-            address: address,
+            gender: gender,
+            address: {
+                village: village,
+                city: city,
+                district: district,
+                state: state,
+                pincode: pincode
+            },
             password: hashedPassword
         });
 
-        const token = jwt.sign({ email: result.email, id: result._id }, process.env.SECRET_KEY);
+        const token = jwt.sign({ email: result.email, id: result._id }, process.env.SECRET_KEY, {expiresIn: "2d"});
 
-        return res.status(200).json({ result, token });
+        const cookieExpiration = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days in milliseconds
+        
+        res.cookie("token", token, { httpOnly: true, expires: cookieExpiration});
+        return res.status(200).json({ message: "Registration successfull" });
 
 
     } catch (error) {
@@ -51,9 +60,12 @@ const userLogin = async (req, res) => {
 
         if (match) {
 
-            const token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY);
+            const token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY, {expiresIn: "2d"});
 
-            return res.status(200).json({ user: user, token: token });
+            const cookieExpiration = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days in milliseconds
+            console.log(token)
+            res.cookie("token", token, {httpOnly: true, expires: cookieExpiration});
+            res.status(200).json({message: "Authenticated" });
 
         }
         else {
@@ -68,4 +80,21 @@ const userLogin = async (req, res) => {
     }
 }
 
-module.exports = { registerUser, userLogin };
+const userLogout = async(req, res) => {
+
+    try {
+        res.clearCookie("token", { httpOnly: true });
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'error' });
+    }
+
+}
+
+const checkIfLoggedIn = (req,res)=>{
+    return res.status(200).json({message: "User is logged in" });
+}
+
+
+module.exports = { registerUser, userLogin, userLogout, checkIfLoggedIn };

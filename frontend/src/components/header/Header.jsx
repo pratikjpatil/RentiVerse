@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 import logop from "../../assets/logop.png";
 import "./header.css";
 
 const Header = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to manage dropdown open/close
+
+  const navigate = useNavigate();
+  const { isLoggedIn } = useContext(AuthContext);
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
-    onSearch(searchTerm);
-    console.log(searchTerm);
+    onSearch(event.target.value);
   };
 
   const handleSearch = (event) => {
@@ -16,11 +22,28 @@ const Header = ({ onSearch }) => {
     onSearch(searchTerm);
   };
 
+  const handleProfileClick = () => {
+    setIsDropdownOpen((prevState) => !prevState);
+  };
+
+  const handleLogout = async() => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/user/logout`, { withCredentials: true });
+      setIsDropdownOpen(false);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      window.alert("Failed to logout. Please try again.");
+    }
+  };
+
   return (
+    <>
     <header style={{ position: "fixed", width: "100%", zIndex: 2 }}>
       <div className="logo flex-center">
         <img src={logop} alt="logos" />
       </div>
+
       {window.location.href !== "http://localhost:3000/addonrent" &&
         window.location.href !== "http://localhost:3000/product" &&
         window.location.href !== "http://localhost:3000/request" &&
@@ -59,6 +82,7 @@ const Header = ({ onSearch }) => {
           </div>
         )}
 
+      
       <div className="profile flex-center">
         <div className="profile-cart flex-center">
           <svg
@@ -77,8 +101,8 @@ const Header = ({ onSearch }) => {
           </svg>
           <span>Cart</span>
         </div>
-        <div className="profile-menu flex-center">
-          <div className="profile-logo">G</div>
+        <div className="profile-menu flex-center" onClick={handleProfileClick}>
+          <div className="profile-logo">P</div>
           <div className="flex-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -96,8 +120,23 @@ const Header = ({ onSearch }) => {
             </svg>
           </div>
         </div>
+        {/* Render the dropdown menu when isDropdownOpen is true */}
+        {isDropdownOpen && (
+          <div className="dropdown-menu">
+            <ul>
+              <li onClick={()=>navigate('/profile')}>Profile</li>
+              {
+                isLoggedIn ? <li onClick={handleLogout}>Logout</li>
+                :
+                <li onClick={()=>navigate('/login')}>Login</li>
+              }
+              
+            </ul>
+          </div>
+        )}
       </div>
     </header>
+    </>
   );
 };
 

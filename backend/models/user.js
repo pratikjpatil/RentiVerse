@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    gender: {
+        type: String,
+        //required: true
+    },
     phone: {
         type: Number,
         required: true,
@@ -31,21 +35,31 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     address: {
+        village: {
+            type: String,
+            // required: true
+        },
         city: {
             type: String,
-            required: true,
+            // required: true,
+        },
+        district: {
+            type: String,
+            // required: true
         },
         state: {
             type: String,
-            required: true,
+            // required: true,
         },
         pincode: {
             type: Number,
-            required: true,
+            // required: true,
         },
+
         country: {
             type: String,
-            required: true,
+            default: 'India'
+            //required: true,
         },
     },
     listed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools listed for rent

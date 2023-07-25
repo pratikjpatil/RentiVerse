@@ -1,34 +1,36 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import "./sidebar.css";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <aside style={{ zIndex: 1 }}>
       <div className="sidebar">
         <ul>
           <li>
-            <a href="/">Home</a>
+            <a onClick={()=>{navigate('/')}}>Home</a>
           </li>
           <li>
-            <a href="#Posts">My Listings</a>
+            <a onClick={()=>{navigate('/dashboard')}}>My Listings</a>
           </li>
           <li>
-            <a href="/request">Requests</a>
+            <a onClick={()=>{navigate('/requests')}}>Requests</a>
           </li>
           <li>
-            <a href="/addonrent">Add on Rent</a>
+            <a onClick={()=>{navigate('/addonrent')}}>Add on Rent</a>
           </li>
           <li>
-            <a href="/product">Product Page</a>
+            <a onClick={()=>{navigate('/product')}}>Product Page</a>
           </li>
           <li>
-            <a href="/profile">Profile</a>
+            <a onClick={()=>{navigate('/profile')}}>Profile</a>
           </li>
           {/* <li>
             <a href="#Users">Users</a>
           </li> */}
           <li>
-            <a href="/dashboard">Dashboard</a>
+            <a onClick={()=>{navigate('/dashboard')}}>Dashboard</a>
           </li>
         </ul>
       </div>
