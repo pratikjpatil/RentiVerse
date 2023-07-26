@@ -7,6 +7,8 @@ import RequestPage from "./pages/RequestPage/RequestPage";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import OTPPage from "./pages/OTP/OTP";
+
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/otp" element={<OTPPage />} />
+
         </Routes>
       </BrowserRouter>
     </div>

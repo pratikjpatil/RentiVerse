@@ -60,7 +60,6 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
-
   return (
     <>
       <Header onSearch={handleSearch} />
@@ -141,7 +140,37 @@ const Dashboard = () => {
         <div className="dashboard-page-content-main">
           <div className="dashboard-page-content-main-content">
             <div className="dashboard-page-content-main-content-header">
-              <span>My Tools</span>
+              <span>Listed</span>
+              <p>Overall Information</p>
+            </div>
+            <div className="dashboard-page-content-main-content-button">
+              <button className="owned-button-listed">Owned</button>
+            </div>
+          </div><br /> <br />
+
+          {
+            tools.length === 0 ? (
+              <p>No tools found</p>
+            ) : (
+              tools
+                .filter((tool) =>
+                  searchTerm === ""
+                    ? true
+                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    tool.category
+                      ?.toLowerCase()
+                      .includes(searchTerm.toLowerCase())
+                )
+                .map((tool, index) => <ToolCard data={tool} index={index} />)
+
+            )
+          }
+
+        </div>
+        <div className="dashboard-page-content-main">
+          <div className="dashboard-page-content-main-content">
+            <div className="dashboard-page-content-main-content-header">
+              <span>Give On Rent</span>
               <p>Overall Information</p>
             </div>
             <div className="dashboard-page-content-main-content-button">
@@ -151,7 +180,40 @@ const Dashboard = () => {
 
           {
             tools.length === 0 ? (
-              <h1>No tools found</h1>
+
+              <p>No tools found</p>
+
+            ) : (
+              tools
+                .filter((tool) =>
+                  searchTerm === ""
+                    ? true
+                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    tool.category
+                      ?.toLowerCase()
+                      .includes(searchTerm.toLowerCase())
+                )
+                .map((tool, index) => <ToolCard data={tool} index={index} />)
+
+            )
+          }
+
+
+        </div>
+        <div className="dashboard-page-content-main">
+          <div className="dashboard-page-content-main-content">
+            <div className="dashboard-page-content-main-content-header">
+              <span>Take On Rent</span>
+              <p>Overall Information</p>
+            </div>
+            <div className="dashboard-page-content-main-content-button">
+              <button>Owned</button>
+            </div>
+          </div><br /> <br />
+
+          {
+            tools.length === 0 ? (
+              <p>No tools found</p>
             ) : (
               tools
                 .filter((tool) =>
