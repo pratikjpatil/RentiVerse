@@ -60,11 +60,9 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
-
-
   return (
     <>
-      <Header onSearch={handleSearch}/>
+      <Header onSearch={handleSearch} />
       <Sidebar />
       <div className="dashboard-page-content">
         <div className="dashboard-page-content-heading">
@@ -182,7 +180,9 @@ const Dashboard = () => {
 
           {
             tools.length === 0 ? (
+
               <p>No tools found</p>
+
             ) : (
               tools
                 .filter((tool) =>
@@ -197,6 +197,7 @@ const Dashboard = () => {
 
             )
           }
+
 
         </div>
         <div className="dashboard-page-content-main">

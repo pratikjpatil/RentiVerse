@@ -10,6 +10,7 @@ import ProfilePage from "./pages/Profile/ProfilePage";
 import OTPPage from "./pages/OTP/OTP";
 
 
+
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/otp" element={<OTPPage />} />
+
         </Routes>
       </BrowserRouter>
     </div>
