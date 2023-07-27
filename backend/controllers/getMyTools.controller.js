@@ -9,7 +9,7 @@ const listed = async (req, res) => {
             return res.status(404).json({message: "No tools are listed"});
         }
 
-        return res.status(201).json(tools.listed);
+        return res.status(200).json(tools.listed);
     } catch (error) {
         console.log(error);
         return res.status(500).json({message: "Internal Server Error"});
@@ -23,7 +23,7 @@ const takenOnrent = async (req, res) => {
         if(!tools){
             return res.status(404).json({message: "No tools are taken on rent"});
         }
-        return res.status(201).json(tools.takenOnRent);
+        return res.status(200).json(tools.takenOnRent);
     } catch (error) {
         console.log(error);
         return res.status(500).json({message: "Internal Server Error"});
@@ -37,7 +37,7 @@ const givenOnRent = async (req, res) => {
         if(!tools){
             return res.status(404).json({message: "No tools are given on rent"});
         }
-        return res.status(201).json(tools.givenOnRent);
+        return res.status(200).json(tools.givenOnRent);
     } catch (error) {
         console.log(error);
         return res.status(500).json({message: "Internal Server Error"});

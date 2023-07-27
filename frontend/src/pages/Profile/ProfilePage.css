@@ -52,7 +52,7 @@
   }
   
   input,
-  button.transparent-blue {
+  button.transparent-blue-profile {
     width: 100%; /* Make input and gender buttons the same width */
     padding: 8px;
     border: 1px solid #ccc;
@@ -64,7 +64,7 @@
     align-items: center;
   }
   
-  .transparent-blue {
+  .transparent-blue-profile {
     display: flex;
     align-items: center;
     background-color: transparent;
@@ -73,10 +73,9 @@
     padding: 6px 10px;
     border-radius: 4px;
     margin-right: 5px;
-    cursor: pointer;
   }
   
-  button.transparent-blue img {
+  button.transparent-blue-profile img {
     width: 20px;
     margin-right: 5px;
   }

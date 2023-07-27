@@ -34,10 +34,12 @@ app.use(function(req, res, next) {
 
 
 
-const showAllProducts = require("./routes/showAllProducts");
-const user = require("./routes/user");
-const getMyTools = require("./routes/getMyTools");
-const addOnRent = require("./routes/addOnRent");
+const showAllProducts = require("./routes/showAllProducts"); //landing page
+const user = require("./routes/user");  //user registration, login, check if logged in
+const getMyTools = require("./routes/getMyTools");  //dashboard page
+const addOnRent = require("./routes/addOnRent");    //add on rent page
+const profile = require("./routes/userProfile");
+
 
 
 
@@ -45,6 +47,7 @@ app.use("/api/products", showAllProducts);
 app.use("/api/user", user);
 app.use("/api/tools", getMyTools);
 app.use("/api/rent", addOnRent);
+app.use("/api/profile", profile);
 
 
 

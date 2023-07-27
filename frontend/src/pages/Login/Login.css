@@ -79,7 +79,11 @@ h2 {
   width: auto;
 }
 
-.register-here-text{
+.register-here-div{
   text-align: center;
   padding-top: 25px;
+}
+
+.register-here-span{
+  cursor: pointer;
 }

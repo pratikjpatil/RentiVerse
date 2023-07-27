@@ -8,57 +8,64 @@ import ToolCard from "../../components/card/ToolCard";
 axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
-  const [tools, setTools] = useState([]);
+  const [listedTools, setListedTools] = useState([]);
+  const [givenTools, setGivenTools] = useState([]);
+  const [takenTools, setTakenTools] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
-  
-  const [isUnmounting, setIsUnmounting] = useState(false); // New state for unmounting flag
 
   const navigate = useNavigate();
   const { isLoggedIn } = useContext(AuthContext);
 
 
+
   useEffect(() => {
+
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     
     // Fetch tools if user is authenticated
-    const fetchTools = async () => {
+    const fetchListedTools = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/tools/listed`, { withCredentials: true });
-        if (response.status === 201) {
-          setTools(response.data);
+
+        const listed = await axios.get(`${backendUrl}/api/tools/listed`, { withCredentials: true });
+        const given = await axios.get(`${backendUrl}/api/tools/givenonrent`, { withCredentials: true });
+        const taken = await axios.get(`${backendUrl}/api/tools/takenonrent`, { withCredentials: true });
+
+        if (listed.status === 200) {
+          setListedTools(listed.data);
+        }
+        if (given.status === 200) {
+          setGivenTools(given.data);
+        }
+        if (taken.status === 200) {
+          setTakenTools(taken.data);
         }
       } catch (error) {
-        if (error.response && error.response.status === 401) {
-          if (!isUnmounting) {
-            window.alert("Oops! you are not logged in.")
-           
-            // Redirect to login page when unauthenticated
-            navigate("/login");
+        
+        if(!isLoggedIn){
+          window.alert("You are not logged in!");
+          navigate('/');
           }
-        } else {
+        else{
           console.log(error);
           window.alert("Error");
-        }
+        }  
+        
       }
     };
 
-    fetchTools(); // Fetch tools
+    fetchListedTools(); // Fetch tools
 
-    return () => {
-      // Set isUnmounting to true when unmounting
-      setIsUnmounting(true);
-    };
-  }, []);
+  }, [isLoggedIn]);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
   };
 
-  // If user is not logged in, redirect to login page
-  if (!isLoggedIn) {
-    // Render a loading state or a message while waiting for the redirect
-    return <div>Loading...</div>;
+  if(!isLoggedIn){
+    return <div>Loading...</div>
   }
+
 
   return (
     <>
@@ -73,9 +80,9 @@ const Dashboard = () => {
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
               <span>Listed</span>
-              <p>10</p>
+              <p>{listedTools.length}</p>
             </div>
-            <div className="dashboard-page-content-acivity-cards-card-icon">
+            <div className="dashboard-page-content-acivity-cards-card-icon" onClick={()=>navigate('/addonrent')}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -95,7 +102,7 @@ const Dashboard = () => {
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
               <span>Given on rent</span>
-              <p>3</p>
+              <p>{givenTools.length}</p>
             </div>
             <div className="dashboard-page-content-acivity-cards-card-icon">
               <svg
@@ -117,7 +124,7 @@ const Dashboard = () => {
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
               <span>Taken on rent</span>
-              <p>2</p>
+              <p>{takenTools.length}</p>
             </div>
             <div className="dashboard-page-content-acivity-cards-card-icon">
               <svg
@@ -149,10 +156,10 @@ const Dashboard = () => {
           </div><br /> <br />
 
           {
-            tools.length === 0 ? (
-              <p>No tools found</p>
+            listedTools.length === 0 ? (
+              <p>No items found</p>
             ) : (
-              tools
+              listedTools
                 .filter((tool) =>
                   searchTerm === ""
                     ? true
@@ -170,21 +177,21 @@ const Dashboard = () => {
         <div className="dashboard-page-content-main">
           <div className="dashboard-page-content-main-content">
             <div className="dashboard-page-content-main-content-header">
-              <span>Give On Rent</span>
+              <span>Given on Rent</span>
               <p>Overall Information</p>
             </div>
             <div className="dashboard-page-content-main-content-button">
-              <button>Owned</button>
+              <button>Given</button>
             </div>
           </div><br /> <br />
 
           {
-            tools.length === 0 ? (
+            givenTools.length === 0 ? (
 
-              <p>No tools found</p>
+              <p>No items found</p>
 
             ) : (
-              tools
+              givenTools
                 .filter((tool) =>
                   searchTerm === ""
                     ? true
@@ -203,19 +210,19 @@ const Dashboard = () => {
         <div className="dashboard-page-content-main">
           <div className="dashboard-page-content-main-content">
             <div className="dashboard-page-content-main-content-header">
-              <span>Take On Rent</span>
+              <span>Taken on Rent</span>
               <p>Overall Information</p>
             </div>
             <div className="dashboard-page-content-main-content-button">
-              <button>Owned</button>
+              <button>Taken</button>
             </div>
           </div><br /> <br />
 
           {
-            tools.length === 0 ? (
-              <p>No tools found</p>
+            takenTools.length === 0 ? (
+              <p>No items found</p>
             ) : (
-              tools
+              takenTools
                 .filter((tool) =>
                   searchTerm === ""
                     ? true

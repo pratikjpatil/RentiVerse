@@ -16,20 +16,22 @@ const AuthProvider = ({ children }) => {
           `${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`,
           { withCredentials: true }
         );
-
         // If the server returns a successful response, it means the user is logged in
         setIsLoggedIn(true);
       } catch (error) {
         // If the server returns an error (e.g., 401 Unauthorized), it means the user is not logged in
         setIsLoggedIn(false);
       }
+      
     };
 
     // Check if the user is logged in when the component mounts
     checkLoggedInStatus();
   }, []);
 
-  
+  useEffect(() => {
+    console.log("isLoggedIn:", isLoggedIn);
+  }, [isLoggedIn]);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>

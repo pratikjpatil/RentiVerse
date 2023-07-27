@@ -13,7 +13,6 @@ const auth = app.use((req,res,next)=>{
             
         }
         else{
-            console.log("Unauthorized user");
             return res.status(401).json({message: "Unauthorized user"});
         }
 

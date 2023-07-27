@@ -230,7 +230,12 @@ const Register = () => {
           <button type="submit" className="transparent-register">
             Register
           </button>
+          <div onClick={()=>navigate('/login')}>
+          Already registered? click here.
+        </div>
         </form>
+
+        
 
       </div>
     </div>
