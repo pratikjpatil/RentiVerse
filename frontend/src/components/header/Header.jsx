@@ -10,7 +10,7 @@ const Header = ({ onSearch }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to manage dropdown open/close
 
   const navigate = useNavigate();
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -28,9 +28,15 @@ const Header = ({ onSearch }) => {
 
   const handleLogout = async() => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/user/logout`, { withCredentials: true });
+      const result = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/user/logout`, { withCredentials: true });
+      if(result.status===200){
       setIsDropdownOpen(false);
+      setIsLoggedIn(false);
       navigate("/login");
+    }
+    else{
+      window.alert("Failed to logout.");
+    }
     } catch (error) {
       console.error("Logout error:", error);
       window.alert("Failed to logout. Please try again.");
@@ -41,7 +47,7 @@ const Header = ({ onSearch }) => {
     <>
     <header style={{ position: "fixed", width: "100%", zIndex: 2 }}>
       <div className="logo flex-center">
-        <img src={logop} alt="logos" />
+        <img src={logop} alt="logos" onClick={()=>{navigate('/')}}/>
       </div>
 
       {window.location.href !== "http://localhost:3000/addonrent" &&

@@ -10,6 +10,12 @@ const Login = () => {
   const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn} = useContext(AuthContext);
 
+  if(isLoggedIn){
+    window.alert("You are already logged in!");
+    navigate('/profile')
+  }
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -32,9 +38,7 @@ const Login = () => {
   };
 
   const handleRegisterRedirect = () => {
-    if (!isLoggedIn) {
       navigate('/register');
-    }
   };
   const [input, setInput] = useState({
     email: '',
@@ -56,14 +60,14 @@ const Login = () => {
           <h2>Login</h2>
           <form method="POST" onSubmit={handleLogin}>
             <div className="form-group-login-page">
-              <input type="text" className="form-control-login-page" placeholder="Email" required autocomplete="on" onChange={(e)=>setInput({ ...input, email: e.target.value })}/>
+              <input type="text" className="form-control-login-page" placeholder="Email" required autoComplete="on" onChange={(e)=>setInput({ ...input, email: e.target.value })}/>
             </div>
             <div className="form-group-login-page">
               <input
                 type="password"
                 className="form-control-login-page"
                 placeholder="Password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 required
                 onChange={(e)=>setInput({ ...input, password: e.target.value })}
               />
@@ -71,8 +75,8 @@ const Login = () => {
             <button type="submit" className="btn btn-primary button-login">
               Login
             </button>
-            <div className="register-here-text">
-              <span onClick={handleRegisterRedirect}>or register here.</span>
+            <div className="register-here-div">
+              <span className="register-here-span" onClick={handleRegisterRedirect}>or register here.</span>
             </div>
           </form>
         </div>

@@ -81,10 +81,10 @@ const formSubmissionHandler = (e) => {
             <label className="label-productpage" htmlFor="message">
               Quantity:
             </label>
-            <div class="input-group">
-              <button class="btn-minus" onClick={handleDecrease}>-</button>
-              <input type="text" class="input-number" value={count} />
-              <button class="btn-plus" onClick={handleIncrease}>+</button>
+            <div className="input-group">
+              <button className="btn-minus" onClick={handleDecrease}>-</button>
+              <input type="text" className="input-number" value={count} />
+              <button className="btn-plus" onClick={handleIncrease}>+</button>
             </div>
             <input
               className="submit-button-productpage"

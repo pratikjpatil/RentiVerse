@@ -7,4 +7,5 @@ router.post("/register", registerUser);
 router.post("/login", userLogin);
 router.delete("/logout",auth, userLogout);
 router.get('/loginstatus',auth, checkIfLoggedIn);
+
 module.exports=router;

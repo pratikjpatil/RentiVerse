@@ -1,25 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import maleImage from "../../assets/male.png";
+import femaleImage from "../../assets/female.png"
 
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    gender: "Male",
-    mobile: "+91 9595729100",
-    email: "example@email.com",
-    village: "Your Village",
-    district: "Your District",
-    city: "Your City",
-    state: "Your State",
-    pincode: "Your Pincode",
+    firstName: "",
+    lastName: "",
+    gender: "",
+    phone: "",
+    email: "",
     password: "",
+    village: "",
+    district: "",
+    city: "",
+    state: "",
+    pincode: "",
   });
+  const navigate = useNavigate();
+
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+      try {
+        const profile = await axios.get(backendUrl + "/api/profile/me", { withCredentials: true });
+        setFormData(profile.data);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          window.alert("Oops! you are not logged in.")
+
+          // Redirect to login page when unauthenticated
+          navigate("/login");
+
+        } else {
+          console.log(error);
+          window.alert("Error");
+          navigate('/');
+        }
+      }
+    }
+
+    fetchProfile();
+  }, []);
+
+
+
 
   const handleEditClick = () => {
     setIsEditMode(!isEditMode);
@@ -32,6 +66,36 @@ const ProfilePage = () => {
       [name]: value,
     });
   };
+
+  const handleFormSubmit = async () => {
+
+    try {
+      const response = await axios.put(backendUrl + "/api/profile/edit", formData, { withCredentials: true });
+      if (response.status === 200) {
+        window.alert("Profile updated successfully!");
+      }
+      else {
+        window.alert("Something went wrong.\nProfile not updated.");
+        console.log(response);
+      }
+    } catch (error) {
+
+      if (error.response && error.response.status === 401) {
+        window.alert("Oops! you are not logged in.")
+
+        // Redirect to login page when unauthenticated
+        navigate("/login");
+
+      } else {
+        console.log(error);
+        window.alert("Error");
+        navigate('/');
+      }
+    }
+
+  }
+
+
 
   return (
     <>
@@ -52,9 +116,10 @@ const ProfilePage = () => {
             )}
           </h1>
         </div>
+
         <div className="profile-container">
           <div className="form-box">
-            <form className="profile-form">
+            <form className="profile-form" onSubmit={handleFormSubmit}>
               <div className="row">
                 <div className="col">
                   <label htmlFor="firstName" className="profile-label">
@@ -65,7 +130,7 @@ const ProfilePage = () => {
                     id="firstName"
                     name="firstName"
                     placeholder="Type your First name"
-                    disabled={!isEditMode}
+                    disabled="true"
                     value={formData.firstName}
                     onChange={handleInputChange}
                   />
@@ -79,7 +144,7 @@ const ProfilePage = () => {
                     id="lastName"
                     name="lastName"
                     placeholder="Type your Last name"
-                    disabled={!isEditMode}
+                    disabled="true"
                     value={formData.lastName}
                     onChange={handleInputChange}
                   />
@@ -90,24 +155,36 @@ const ProfilePage = () => {
                 <div className="col">
                   <label className="profile-label">Gender</label>
                   <div className="gender-buttons">
-                    <button className="transparent-blue">
-                      <img src={maleImage} alt="Male" className="gender-icon" />
-                      Male
-                    </button>
+
+                    {
+                      formData.gender === "male" ?
+                        <div className="transparent-blue-profile">
+                          <img src={maleImage} alt="Male" className="gender-icon" />
+                          &nbsp; Male
+                        </div>
+                        :
+                        <div className="transparent-blue-profile">
+                          <img src={femaleImage} alt="Female" className="gender-icon" />
+                          &nbsp; Female
+                        </div>
+
+                    }
+
+
                     {/* Add more gender buttons here */}
                   </div>
                 </div>
                 <div className="col">
-                  <label htmlFor="mobile" className="profile-label">
+                  <label htmlFor="phone" className="profile-label">
                     Mobile Number
                   </label>
                   <input
                     type="tel"
-                    id="mobile"
-                    name="mobile"
-                    placeholder="+91 9595729100"
+                    id="phone"
+                    name="phone"
+                    placeholder="+91 0000000000"
                     disabled={!isEditMode}
-                    value={formData.mobile}
+                    value={formData.phone}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -132,13 +209,13 @@ const ProfilePage = () => {
 
               <div className="row">
                 <div className="col">
-                  <label htmlFor="town" className="profile-label">
+                  <label htmlFor="village" className="profile-label">
                     Village/Town
                   </label>
                   <input
                     type="text"
-                    id="town"
-                    name="town"
+                    id="village"
+                    name="village"
                     placeholder="Type your village"
                     disabled={!isEditMode}
                     value={formData.village}
@@ -208,18 +285,26 @@ const ProfilePage = () => {
                   />
                 </div>
                 <div className="col">
-                  <label htmlFor="password" className="profile-label">
-                    Set Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Type your password"
-                    disabled={!isEditMode}
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
+                  {
+                    isEditMode ?
+                      <>
+                        <label htmlFor="password" className="profile-label">
+                          Set Password
+                        </label>
+                        <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          placeholder="Type your password"
+                          disabled={!isEditMode}
+                          value={formData.password}
+                          onChange={handleInputChange}
+                        />
+                      </>
+                      :
+                      ""
+                  }
+
                 </div>
               </div>
 
