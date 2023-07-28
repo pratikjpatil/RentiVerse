@@ -1,20 +1,10 @@
 const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 
 const toolSchema = new mongoose.Schema({
-
-    ownerId: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "User",
-        required: true,    
-    }, //owner of this tool
-
-    renterId:{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "User",
-    }, //person who has taken this tool on rent
-
     toolId:{
         type: String,
+        default: uuidv4,
         required: true
     },
     toolName: {
@@ -52,7 +42,21 @@ const toolSchema = new mongoose.Schema({
     toolTags:{
         type: [String]
     },
+    ownerId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "User",
+        required: true,    
+    }, //owner of this tool
 
+    renterId:{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "User",
+    }, //person who has taken this tool on rent
+
+    receivedRequests: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "RentRequest",
+    },  //requests received for this product for renting
 
 });     
 
