@@ -38,7 +38,8 @@ const showAllProducts = require("./routes/showAllProducts"); //landing page
 const user = require("./routes/user");  //user registration, login, check if logged in
 const getMyTools = require("./routes/getMyTools");  //dashboard page
 const addOnRent = require("./routes/addOnRent");    //add on rent page
-const profile = require("./routes/userProfile");
+const profile = require("./routes/userProfile");    //profile page, show profile details and edit profile details
+const productRequest = require("./routes/productRequest")   //request feature, send product request to owner for rent, show received requests for your listed products, accept the request , reject the request
 
 
 
@@ -48,11 +49,13 @@ app.use("/api/user", user);
 app.use("/api/tools", getMyTools);
 app.use("/api/rent", addOnRent);
 app.use("/api/profile", profile);
+app.use("/api/request", productRequest);
+
 
 
 
 app.get("/", (req, res) => {
-  return res.send("<h1>Welcome to AgroRent</h1>");
+  return res.send("<h1>Welcome to RentiVerse</h1>");
 });
 
 app.listen(PORT, () => {

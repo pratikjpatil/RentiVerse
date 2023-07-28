@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
+        enum: ["male", "female", "other"],
         //required: true
     },
     phone: {
@@ -63,10 +64,11 @@ const userSchema = new mongoose.Schema({
         },
     },
     listed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools listed for rent
-
     givenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools which are given on rent
     takenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools which are taken on rent
     wishlist:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }],
+    sentRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests sent to item owners
+    receivedRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests received from others
 
 });     
 
