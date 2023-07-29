@@ -5,21 +5,11 @@ import Image from "../../assets/Stickle.png";
 import Image1 from "../../assets/Stickle1.png";
 
 function ProductPage() {
-  const [count, setCount] = useState(0);
 
 const formSubmissionHandler = (e) => {
   e.preventDefault();
 }
 
-  const handleIncrease = () => {
-    setCount(count + 1);
-  };
-
-  const handleDecrease = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    }
-  };
   return (
     <div className="body-productpage">
       <Header />
@@ -79,12 +69,12 @@ const formSubmissionHandler = (e) => {
               placeholder="DD/MM/YY"
             />
             <label className="label-productpage" htmlFor="message">
-              Quantity:
+              Message:
             </label>
             <div className="input-group">
-              <button className="btn-minus" onClick={handleDecrease}>-</button>
-              <input type="text" className="input-number" value={count} />
-              <button className="btn-plus" onClick={handleIncrease}>+</button>
+              
+              <input type="text" className="input-message" placeholder="Add message for owner here"/>
+              
             </div>
             <input
               className="submit-button-productpage"

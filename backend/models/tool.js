@@ -58,6 +58,10 @@ const toolSchema = new mongoose.Schema({
         ref: "RentRequest",
     },  //requests received for this product for renting
 
+    createdAt : {
+        type: Date,
+        default: Date.now,
+    }
 });     
 
 const Tool = new mongoose.model("Tool", toolSchema);

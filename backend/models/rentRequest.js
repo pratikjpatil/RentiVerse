@@ -43,7 +43,6 @@ const rentSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
-
     rejectedAt: {
         type: Date,
         default: null,

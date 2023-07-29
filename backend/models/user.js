@@ -63,6 +63,13 @@ const userSchema = new mongoose.Schema({
             //required: true,
         },
     },
+    createdAt : {
+        type: Date,
+        default: Date.now,
+    },
+    modifiedAt :{
+        type: Date,
+    },
     listed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools listed for rent
     givenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools which are given on rent
     takenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Tool" }], //tools which are taken on rent
