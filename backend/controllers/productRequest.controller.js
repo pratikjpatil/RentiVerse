@@ -274,8 +274,8 @@ const showRejectedRequests_sent = async (req, res) => {
         console.error("Error fetching accepted requests: ", error);
         return res.status(500).json({ message: "Error fetching accepted requests" });
     }
-
-}
+    
+}   
 
 
 

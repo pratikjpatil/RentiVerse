@@ -62,6 +62,8 @@ const updateUser = async (req, res) => {
             update.password = hashedPassword;
         }
 
+        update.modifiedAt = Date.now;
+
         const result = await User.findByIdAndUpdate(req.user.id, update, { new: true });
 
         if(email){

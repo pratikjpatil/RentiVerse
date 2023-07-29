@@ -24,11 +24,15 @@ const toolSchema = new mongoose.Schema({
         required: true
     },
     toolbgImg:{
-        type: String,
+        type: String,       //temp field used for testing purpose of frontend , contains https://picsum.photos/1500/1000/?blur url for all tools
        
     },
     toolImg:{
-        type: [String],
+        type: [String],         //temp field used for testing purpose of frontend , contains https://picsum.photos/200 url for all tools
+        required: true
+    },
+    toolImages:{
+        type: [String],             //main field for storing img urls uploaded from add-on-rent api
         required: true
     },
     dueDate:{
@@ -58,6 +62,10 @@ const toolSchema = new mongoose.Schema({
         ref: "RentRequest",
     },  //requests received for this product for renting
 
+    createdAt : {
+        type: Date,
+        default: Date.now,
+    }
 });     
 
 const Tool = new mongoose.model("Tool", toolSchema);
