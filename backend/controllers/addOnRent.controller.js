@@ -49,7 +49,7 @@ const addOnRent = async (req, res) => {
     );
 
     // Add the processed images to the newTool
-    newTool.toolImg = processedImages;
+    newTool.toolImages = processedImages;
 
     await newTool.save();
 
