@@ -7,13 +7,12 @@ const fs = require("fs");
 const addOnRent = async (req, res) => {
   const { toolName, dueDate, toolPrice, toolQuantity, toolTags, toolCategory, toolDesc } = req.body;
 
-  // Check if there are images in the request
   if (!req.files || req.files.length !== 4) {
     return res.status(400).json({ message: "Please upload 4 images." });
   }
 
   const newTool = new Tool({
-    ownerId : req.user.id,
+    ownerId: req.user.id,
     toolName,
     dueDate,
     toolPrice,
@@ -33,7 +32,10 @@ const addOnRent = async (req, res) => {
           throw new Error("Invalid image buffer.");
         }
 
-        const imagePath = `../public/images/tools/${Date.now()}-${req.user.id}-${toolName}-${imgCnt++}`;
+        // Extract the file extension from the original image file
+        const ext = path.extname(image.originalname);
+
+        const imagePath = `../public/images/items/${Date.now()}-${toolName}-${imgCnt++}-${req.user.id}${ext}`;
         const imageStream = sharp(image.buffer).resize({ width: 800 }).jpeg({ quality: 80 });
 
         // Save the processed image to disk
@@ -44,7 +46,7 @@ const addOnRent = async (req, res) => {
           writeStream.on("error", reject);
         });
 
-        processedImages.push(`${process.env.TOOL_IMG_PATH}/images/tools/${path.basename(imagePath)}`);
+        processedImages.push(`/public/images/items/${path.basename(imagePath)}`);
       })
     );
 

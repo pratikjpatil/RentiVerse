@@ -2,7 +2,7 @@ const multer = require("multer");
 
 const multerConfig = multer({
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2 MB limit per image
+    fileSize: 10 * 1024 * 1024, // 10 MB limit per image
     files: 4, // Allow up to 4 images
   },
   storage: multer.memoryStorage(),
@@ -13,7 +13,7 @@ const multerConfig = multer({
       cb(new Error("Only images are allowed."));
     }
   },
-  dest: '../public/images/tools/',
+  dest: './public/images/items/',
 });
 
 module.exports = multerConfig;
