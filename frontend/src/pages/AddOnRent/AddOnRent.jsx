@@ -1,45 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import Image from "../../assets/Upload.png";
 import "./AddOnRent.css";
+
 const AddOnRent = () => {
+
+  const navigate = useNavigate();
+  const { isLoggedIn } = useContext(AuthContext);
+
   const [images, setImages] = useState([]);
-  const [toolName, setToolName] = useState("");
-  const [tags, setTags] = useState("");
-  const [toolcategory, setToolCategory] = useState("");
-  const [description, setDescription] = useState("");
+  const [formData, setFormData] = useState({
+    toolName: "",
+    toolTags: "",
+    toolCategory: "",
+    toolDesc: "",
+    dueDate: "",
+    toolPrice: "",
+    toolQuantity: "",
+  });
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      window.alert("You are not logged in!");
+      navigate('/');
+      return;
+    }
+
+  }, []);
+
+
+
+  const { toolName, toolTags, toolCategory, toolDesc, dueDate, toolPrice, toolQuantity } = formData;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const backendUrl = process.env.REACT_APP_BACKEND_URL + "/api/item/add-item";
+    try {
+
+      const formDataToSend = new FormData();
+
+      // Append images to the formData
+      images.forEach((image, index) => {
+        formDataToSend.append(`images`, image);
+      });
+
+      // Append other form data to the formData
+      for (const key in formData) {
+        formDataToSend.append(key, formData[key]);
+      }
+
+      console.log(formDataToSend)
+
+      const result = await axios.post(backendUrl, formDataToSend, { headers: { 'content-type': 'multipart/form-data' }, withCredentials: true });
+
+      if (result.status === 201) {
+        window.alert("Item added successfully");
+      }
+    } catch (error) {
+      if (error.response.status === 400) {
+        window.alert("Not selected 4 images");
+        return;
+      }
+      console.log(error);
+      window.alert("Item not added.");
+    }
+  };
 
   const handleImageChange = (e) => {
     const selectedImages = Array.from(e.target.files);
-    if (selectedImages.length > 4) {
-      alert("Please select only 4 images.");
+    // Check the size of each selected image
+    const invalidImages = selectedImages.filter((image) => image.size > 6 * 1024 * 1024); // 6MB in bytes
+
+    if (invalidImages.length > 0) {
+      alert("Please select images less than 6MB in size.");
+      return;
+    }
+    if (selectedImages.length !== 4) {
+      alert("Please select 4 images.");
       return;
     }
     setImages(selectedImages);
   };
 
-  const handleToolNameChange = (e) => {
-    setToolName(e.target.value);
-  };
-  const toolNameCount = toolName.length;
-
-  const handleTags = (e) => {
-    setTags(e.target.value);
-  };
-  const toolTagsCount = tags.length;
-
-  const handleToolCategary = (e) => {
-    setToolCategory(e.target.value);
-  };
-
-  const toolToolsCategaryCount = toolcategory.length;
-
-  const handleDescription = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const descriptionCount = description.length;
+  const imagePreview = images.map((image, index) => (
+    <img
+      key={index}
+      src={URL.createObjectURL(image)}
+      style={{ height: "40px", width: "50px", marginLeft: "4rem", marginRight: "-3rem", marginTop: "2rem" }}
+      alt={`Selected image ${index + 1}`}
+    />
+  ));
 
   return (
     <>
@@ -65,103 +125,78 @@ const AddOnRent = () => {
               />
             </div>
             <p className="imageadd">Add 4 images of tool</p>
-            <div className="image-preview">
-              {images.map((image, index) => (
-                <img
-                  key={index}
-                  src={URL.createObjectURL(image)}
-                  style={{
-                    height: "40px",
-                    width: "50px",
-                    marginLeft: "4rem",
-                    marginRight: "-3rem",
-                    marginTop: "2rem",
-                  }}
-                  alt={`Selected image ${index + 1}`}
-                />
-              ))}
-            </div>
+            <div className="image-preview">{imagePreview}</div>
           </div>
 
           <div className="form-box">
-            <form className="form-group">
-              <div class="input-wrapper">
-                <label for="toolname"> Tool Name</label>
+            <form className="form-group" onSubmit={handleSubmit}>
+              <div className="input-wrapper">
+                <label htmlFor="toolName">Tool Name</label>
                 <input
                   className="input-same"
                   type="text"
-                  id="toolname"
-                  name="toolname"
+                  id="toolName"
+                  name="toolName"
                   maxLength={20}
                   value={toolName}
-                  onInput={handleToolNameChange}
-                  placeholder="Sickle"
+                  onChange={handleChange}
+                  placeholder="Asset Name"
                 />
-                <span class="input-fixed-text">{toolNameCount}</span>
+                <span className="input-fixed-text">{toolName.length}</span>
               </div>
 
-              <label for="tilldate">Till Date</label>
-              <input
-                type="date"
-                id="tilldate"
-                name="tilldate"
-                placeholder="DD/MM/YY"
-              />
-              <label for="price">Price</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                placeholder="350Rs/day"
-              />
-              <label for="quantity">Quantity</label>
-              <input
-                type="number"
-                id="quantity"
-                name="price"
-                placeholder="4"
-              />
-              <div class="input-wrapper">
-                <label for="tags">Tags </label>
+              <label htmlFor="dueDate">Till Date</label>
+              <input type="date" id="tillDate" name="dueDate" value={dueDate} onChange={handleChange} min={new Date().toISOString().split("T")[0]} /* Set min to today's date*/ />
+
+              <label htmlFor="toolPrice">Price</label>
+              <input type="number" id="price" name="toolPrice" value={toolPrice} onChange={handleChange} placeholder="350Rs/day" />
+
+              <label htmlFor="toolQuantity">Quantity</label>
+              <input type="number" id="quantity" name="toolQuantity" value={toolQuantity} onChange={handleChange} placeholder="4" />
+
+              <div className="input-wrapper">
+                <label htmlFor="tags">Tags</label>
                 <input
                   className="input-same"
                   type="text"
                   id="tags"
-                  name="tags"
+                  name="toolTags"
                   maxLength={30}
-                  value={tags}
-                  onInput={handleTags}
+                  value={toolTags}
+                  onChange={handleChange}
                   placeholder="cutting, digging, etc."
                 />
-                <span class="input-fixed-text">{toolTagsCount}</span>
+                <span className="input-fixed-text"></span>
               </div>
-              <div class="input-wrapper">
-                <label for="toolcategory">Tool Category</label>
+              <div className="input-wrapper">
+                <label htmlFor="toolCategory">Tool Category</label>
                 <input
                   className="input-same"
                   type="text"
-                  id="toolcategory"
-                  name="toolcategory"
+                  id="toolCategory"
+                  name="toolCategory"
                   maxLength={20}
-                  value={toolcategory}
-                  onInput={handleToolCategary}
+                  value={toolCategory}
+                  onChange={handleChange}
                   placeholder="Harvesting, watering, etc."
                 />
-                <span class="input-fixed-text">{toolToolsCategaryCount}</span>
+                <span className="input-fixed-text"></span>
               </div>
-              <div class="input-wrapper">
-                <label for="description">Description</label>
+              <div className="input-wrapper">
+                <label htmlFor="toolDesc">Description</label>
                 <textarea
                   id="description"
-                  name="description"
+                  name="toolDesc"
                   maxLength={180}
-                  value={description}
-                  onInput={handleDescription}
+                  value={toolDesc}
+                  onChange={handleChange}
                   placeholder="This has sharp blades and can be used for cutting grass, maize. And wants to give this on rent for 2 days and with some conditions..."
                 ></textarea>
-                <span class="input-fixed-textarea">{descriptionCount}</span>
+                <span className="input-fixed-textarea"></span>
               </div>
-              <input type="submit" value="Post" />
+              <button type="submit" className="add-button">
+                Add
+              </button>
             </form>
           </div>
         </div>
@@ -169,4 +204,5 @@ const AddOnRent = () => {
     </>
   );
 };
+
 export default AddOnRent;

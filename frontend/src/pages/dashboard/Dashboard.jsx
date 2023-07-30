@@ -17,6 +17,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useContext(AuthContext);
 
+  
 
 
   useEffect(() => {
@@ -26,7 +27,11 @@ const Dashboard = () => {
     // Fetch tools if user is authenticated
     const fetchListedTools = async () => {
       try {
-
+        if(!isLoggedIn){
+          window.alert("You are not logged in!");
+          navigate('/');
+          return;
+        }
         const listed = await axios.get(`${backendUrl}/api/tools/listed`, { withCredentials: true });
         const given = await axios.get(`${backendUrl}/api/tools/givenonrent`, { withCredentials: true });
         const taken = await axios.get(`${backendUrl}/api/tools/takenonrent`, { withCredentials: true });
@@ -42,14 +47,8 @@ const Dashboard = () => {
         }
       } catch (error) {
         
-        if(!isLoggedIn){
-          window.alert("You are not logged in!");
-          navigate('/');
-          }
-        else{
           console.log(error);
-          window.alert("Error");
-        }  
+          window.alert("Error"); 
         
       }
     };

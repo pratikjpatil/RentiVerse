@@ -10,7 +10,7 @@ const Header = ({ onSearch }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to manage dropdown open/close
 
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, firstName, setFirstName} = useContext(AuthContext);
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -31,6 +31,7 @@ const Header = ({ onSearch }) => {
       const result = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/user/logout`, { withCredentials: true });
       if(result.status===200){
       setIsDropdownOpen(false);
+      setFirstName("?");
       setIsLoggedIn(false);
       navigate("/login");
     }
@@ -108,7 +109,7 @@ const Header = ({ onSearch }) => {
           <span>Cart</span>
         </div>
         <div className="profile-menu flex-center" onClick={handleProfileClick}>
-          <div className="profile-logo">P</div>
+          <div className="profile-logo">{firstName.charAt(0)}</div>
           <div className="flex-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"

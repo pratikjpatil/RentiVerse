@@ -21,14 +21,8 @@ const Register = () => {
     password: '',
   });
 
-  const { isLoggedIn, setIsLoggedIn} = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, setFirstName} = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const handleLoginRedirect = () => {
-    if (!isLoggedIn) {
-      navigate('/login');
-    }
-  };
 
   const handleRegistration = async (e) => {
     e.preventDefault();
@@ -36,6 +30,7 @@ const Register = () => {
 
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/user/register', user); 
       if (response.status === 200) {
+        setFirstName(response.data.firstName);
         setIsLoggedIn(true);
         window.alert("Registration successful");
         navigate('/dashboard'); 

@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 const Tool = require("../models/tool");
+const User = require("../models/user");
 const sharp = require("sharp");
 const path = require("path");
 const fs = require("fs");
 
-const addOnRent = async (req, res) => {
+const addItems = async (req, res) => {
+
   const { toolName, dueDate, toolPrice, toolQuantity, toolTags, toolCategory, toolDesc } = req.body;
+
 
   if (!req.files || req.files.length !== 4) {
     return res.status(400).json({ message: "Please upload 4 images." });
@@ -36,7 +39,7 @@ const addOnRent = async (req, res) => {
         const ext = path.extname(image.originalname);
 
         const imagePath = `../public/images/items/${Date.now()}-${toolName}-${imgCnt++}-${req.user.id}${ext}`;
-        const imageStream = sharp(image.buffer).resize({ width: 800 }).jpeg({ quality: 80 });
+        const imageStream = sharp(image.buffer).resize({ width: 600 }).jpeg({ quality: 80 });
 
         // Save the processed image to disk
         await new Promise((resolve, reject) => {
@@ -55,11 +58,13 @@ const addOnRent = async (req, res) => {
 
     await newTool.save();
 
-    return res.status(201).json(newTool);
+    await User.findByIdAndUpdate(req.user.id, {$push:{listed: newTool._id}});
+    
+    return res.status(201).json({message: "Item added successfully"});
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
-module.exports = addOnRent;
+module.exports = {addItems};

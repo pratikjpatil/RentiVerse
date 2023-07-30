@@ -35,15 +35,21 @@ const registerUser = async (req, res) => {
         });
 
         const cookieExpiration = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days in milliseconds
+
         res.cookie("token", token, { httpOnly: true, expires: cookieExpiration });
-        return res.status(200).json({ message: "Registration successful" });
+
+        return res.status(200).json({ message: "Registration successful" ,firstName: result.firstName});
+
     } catch (error) {
+
         console.error("Error during registration:", error);
         return res.status(500).json({ message: "Registration failed" });
+
     }
 };
 
 const userLogin = async (req, res) => {
+
     const { email, password } = req.body;
 
     try {
@@ -58,29 +64,44 @@ const userLogin = async (req, res) => {
             });
 
             const cookieExpiration = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days in milliseconds
+
             res.cookie("token", token, { httpOnly: true, expires: cookieExpiration });
-            return res.status(200).json({ message: "Authenticated" });
+
+            return res.status(200).json({ message: "Authenticated" , firstName: user.firstName});
+
         } else {
+
             return res.status(400).json({ message: "Incorrect password" });
+
         }
     } catch (error) {
+
         console.error("Error during login:", error);
         return res.status(500).json({ message: "Login failed" });
+
     }
 };
 
 const userLogout = async (req, res) => {
     try {
+
         res.clearCookie("token", { httpOnly: true });
+
         return res.status(200).json({ message: "Logged out successfully" });
+
     } catch (error) {
+
         console.error("Error during logout:", error);
         return res.status(500).json({ message: "Logout failed" });
+
     }
 };
 
-const checkIfLoggedIn = (req, res) => {
-    return res.status(200).json({ message: "User is logged in" });
+const checkIfLoggedIn = async(req, res) => {
+
+    const user = await User.findById(req.user.id);
+    return res.status(200).json({ message: "User is logged in", firstName: user.firstName});
+
 };
 
 module.exports = { registerUser, userLogin, userLogout, checkIfLoggedIn };
