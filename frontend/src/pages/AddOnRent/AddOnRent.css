@@ -93,7 +93,7 @@ form input[type="date"] {
   border-radius: 5px;
 }
 
-form input[type="submit"] {
+.add-button {
   background-color: #3eaeff;
   color: white;
   width: 40%;
@@ -105,7 +105,7 @@ form input[type="submit"] {
   cursor: pointer;
 }
 
-form input[type="submit"]:hover {
+.add-button:hover {
   background-color: #4caf50;
 }
 

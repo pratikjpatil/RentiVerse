@@ -2,10 +2,10 @@ const router = require("express").Router();
 const multerConfig = require("../config/multerConfig");
 const auth = require("../middlewares/auth");
 
-const addOnRent = require("../controllers/addOnRent.controller");
+const {addItems} = require("../controllers/item.controller");
 
-router.post("/addonrent", auth, multerConfig.array("images", 4), addOnRent);
+router.post("/add-item", auth, multerConfig.array("images", 4), addItems);
 
 module.exports = router;
 
-//addOnRent page
+//addOnRent page    

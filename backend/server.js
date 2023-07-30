@@ -37,7 +37,7 @@ app.use(function(req, res, next) {
 const showAllProducts = require("./routes/showAllProducts"); //landing page
 const user = require("./routes/user");  //user registration, login, check if logged in
 const getMyTools = require("./routes/getMyTools");  //dashboard page
-const addOnRent = require("./routes/addOnRent");    //add on rent page
+const itemRoutes = require("./routes/itemRoutes");    //add on rent page
 const profile = require("./routes/userProfile");    //profile page, show profile details and edit profile details
 const productRequest = require("./routes/productRequest")   //request feature, send product request to owner for rent, show received requests for your listed products, accept the request , reject the request
 
@@ -47,7 +47,7 @@ const productRequest = require("./routes/productRequest")   //request feature, s
 app.use("/api/products", showAllProducts);
 app.use("/api/user", user);
 app.use("/api/tools", getMyTools);
-app.use("/api/rent", addOnRent);
+app.use("/api/item", itemRoutes);
 app.use("/api/profile", profile);
 app.use("/api/request", productRequest);
 

@@ -8,7 +8,7 @@ import "./Login.css";
 const Login = () => {
 
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn} = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, setFirstName} = useContext(AuthContext);
 
   if(isLoggedIn){
     window.alert("You are already logged in!");
@@ -21,6 +21,7 @@ const Login = () => {
     try {
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/user/login', input); 
       if (response.status === 200) {
+        setFirstName(response.data.firstName);
         setIsLoggedIn(true);
         window.alert("Login successful");
         navigate('/'); 
