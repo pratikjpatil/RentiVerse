@@ -13,7 +13,7 @@ const multerConfig = multer({
       cb(new Error("Only images are allowed."));
     }
   },
-  dest: './public/images/tools/',
+  dest: './public/images/items/',
 });
 
 module.exports = multerConfig;

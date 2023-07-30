@@ -35,8 +35,8 @@ const addOnRent = async (req, res) => {
         // Extract the file extension from the original image file
         const ext = path.extname(image.originalname);
 
-        const imagePath = `../public/images/tools/${Date.now()}-${toolName}-${imgCnt++}-${req.user.id}${ext}`;
-        const imageStream = sharp(image.buffer).resize({ width: 500 }).jpeg({ quality: 80 });
+        const imagePath = `../public/images/items/${Date.now()}-${toolName}-${imgCnt++}-${req.user.id}${ext}`;
+        const imageStream = sharp(image.buffer).resize({ width: 800 }).jpeg({ quality: 80 });
 
         // Save the processed image to disk
         await new Promise((resolve, reject) => {
@@ -46,7 +46,7 @@ const addOnRent = async (req, res) => {
           writeStream.on("error", reject);
         });
 
-        processedImages.push(`../public/images/tools/${path.basename(imagePath)}`);
+        processedImages.push(`/public/images/items/${path.basename(imagePath)}`);
       })
     );
 

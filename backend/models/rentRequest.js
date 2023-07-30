@@ -5,6 +5,7 @@ const rentSchema = new mongoose.Schema({
     requestId: {
         type: String,
         default: uuidv4,
+        unique: true,
         required: true,
     },
     toolId: {

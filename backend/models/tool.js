@@ -5,6 +5,7 @@ const toolSchema = new mongoose.Schema({
     itemId:{
         type: String,
         default: uuidv4,
+        unique: true,
         required: true
     },
     toolName: {
