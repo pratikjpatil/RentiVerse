@@ -23,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 #images
-/public/images/
+backend/public/images/
 
