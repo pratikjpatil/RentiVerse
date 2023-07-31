@@ -74,3 +74,9 @@
   font-size: 0.9rem;
   color: grey;
 }
+
+.cornerImg{
+  height: 5rem;
+  width: 5rem;
+  object-fit: cover;
+}
