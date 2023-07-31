@@ -15,13 +15,13 @@ const ToolCard = ({ data, index }) => {
           <div
             style={{
               background: `url(${data.toolImages[1].secure_url})`,
-              backgroundSize: "contain",
+              backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
             className="dashboard-page-content-main-content-cards-card-header-bg"
           >
             <div className="dashboard-page-content-main-content-cards-card-header-img">
-              <img src={data.toolImages[0].secure_url} alt="" />
+              <img src={data.toolImages[0].secure_url} alt="Error loading image" className="cornerImg"/>
             </div>
             <div className="dashboard-page-content-main-content-cards-card-header-title">
               <div>
