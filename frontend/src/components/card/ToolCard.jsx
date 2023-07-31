@@ -3,6 +3,7 @@ import "./ToolCard.css";
 
 const ToolCard = ({ data, index }) => {
 
+
   return (
     <div className="dashboard-page-content-main-content-cards">
       <>
@@ -13,14 +14,14 @@ const ToolCard = ({ data, index }) => {
         >
           <div
             style={{
-              background: `url(${data.toolbgImg})`,
+              background: `url(${data.toolImages[1].secure_url})`,
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
             }}
             className="dashboard-page-content-main-content-cards-card-header-bg"
           >
             <div className="dashboard-page-content-main-content-cards-card-header-img">
-              <img src={data.toolImg} alt="" />
+              <img src={data.toolImages[0].secure_url} alt="" />
             </div>
             <div className="dashboard-page-content-main-content-cards-card-header-title">
               <div>

@@ -148,3 +148,16 @@ form textarea {
   transform: translateY(-50%);
   color: #828282;
 }
+
+.loading-gif {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  /* margin: 0 auto; */
+  margin-top: 150px;
+  margin-left: 250px;
+  position: fixed;
+  mix-blend-mode: multiply;
+}

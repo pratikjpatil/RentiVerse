@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const cloudinary = require("../config/cloudinaryConfig");
 const Tool = require("../models/tool");
 const User = require("../models/user");
-const sharp = require("sharp");
-const path = require("path");
 const fs = require("fs");
+// const sharp = require("sharp");
+// const path = require("path");
+
 
 const addItems = async (req, res) => {
 
@@ -26,45 +28,70 @@ const addItems = async (req, res) => {
   });
 
   try {
-    const processedImages = [];
-    let imgCnt = 1;
-    // Process and save the images using streams in parallel
-    await Promise.all(
-      req.files.map(async (image) => {
-        if (!image.buffer) {
-          throw new Error("Invalid image buffer.");
-        }
 
-        // Extract the file extension from the original image file
-        const ext = path.extname(image.originalname);
+    //This code is to compress and store images in local-storage but for this the multer storage should be memoryStorage
 
-        const imagePath = `../public/images/items/${Date.now()}-${toolName}-${imgCnt++}-${req.user.id}${ext}`;
-        const imageStream = sharp(image.buffer).resize({ width: 600 }).jpeg({ quality: 80 });
+    // const processedImages = [];
+    // let imgCnt = 1;
+    // // Process and save the images using streams in parallel
+    // await Promise.all(
+    //   req.files.map(async (image) => {
+    //     if (!image.buffer) {
+    //       throw new Error("Invalid image buffer.");
+    //     }
 
-        // Save the processed image to disk
-        await new Promise((resolve, reject) => {
-          const writeStream = fs.createWriteStream(path.join(__dirname, imagePath));
-          imageStream.pipe(writeStream);
-          writeStream.on("finish", resolve);
-          writeStream.on("error", reject);
+    //     // Extract the file extension from the original image file
+    //     const ext = path.extname(image.originalname);
+
+    //     const imagePath = `../public/images/items/${Date.now()}-${toolName}-${imgCnt++}-${req.user.id}${ext}`;
+    //     const imageStream = sharp(image.buffer).resize({ width: 600 }).jpeg({ quality: 80 });
+
+    //     // Save the processed image to disk
+    //     await new Promise((resolve, reject) => {
+    //       const writeStream = fs.createWriteStream(path.join(__dirname, imagePath));
+    //       imageStream.pipe(writeStream);
+    //       writeStream.on("finish", resolve);
+    //       writeStream.on("error", reject);
+    //     });
+
+    //     processedImages.push(`/public/images/items/${path.basename(imagePath)}`);
+    //   })
+    // );
+
+
+    const images = req.files;
+    const urls = await Promise.all(
+      images.map(async (image) => {
+        const { public_id, secure_url } = await cloudinary.uploader.upload(image.path, {
+          folder: "RentiVerse/addItems",
+          width: 600,
         });
 
-        processedImages.push(`/public/images/items/${path.basename(imagePath)}`);
+        // Delete the file from disk after successful upload
+        fs.unlink(image.path, (err) => {
+          if (err) {
+            console.error('Error deleting the file:', err);
+          }
+        });
+
+        return { public_id, secure_url };
       })
     );
 
-    // Add the processed images to the newTool
-    newTool.toolImages = processedImages;
+    newTool.toolImages = urls;
 
     await newTool.save();
 
-    await User.findByIdAndUpdate(req.user.id, {$push:{listed: newTool._id}});
-    
-    return res.status(201).json({message: "Item added successfully"});
+    await User.findByIdAndUpdate(req.user.id, { $push: { listed: newTool._id } });
+
+    return res.status(201).json({ message: "Item added successfully" });
+
   } catch (error) {
+
     console.log(error);
     return res.status(500).json({ message: "Something went wrong" });
+
   }
 };
 
-module.exports = {addItems};
+module.exports = { addItems };

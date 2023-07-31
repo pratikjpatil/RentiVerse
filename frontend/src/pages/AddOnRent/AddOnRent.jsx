@@ -5,6 +5,8 @@ import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import Image from "../../assets/Upload.png";
+import LoadingDots from "../../assets/loadingDots.gif"
+
 import "./AddOnRent.css";
 
 const AddOnRent = () => {
@@ -12,7 +14,10 @@ const AddOnRent = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useContext(AuthContext);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [images, setImages] = useState([]);
+
   const [formData, setFormData] = useState({
     toolName: "",
     toolTags: "",
@@ -33,7 +38,6 @@ const AddOnRent = () => {
   }, []);
 
 
-
   const { toolName, toolTags, toolCategory, toolDesc, dueDate, toolPrice, toolQuantity } = formData;
 
   const handleChange = (e) => {
@@ -43,6 +47,7 @@ const AddOnRent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const backendUrl = process.env.REACT_APP_BACKEND_URL + "/api/item/add-item";
     try {
@@ -59,21 +64,26 @@ const AddOnRent = () => {
         formDataToSend.append(key, formData[key]);
       }
 
-      console.log(formDataToSend)
-
       const result = await axios.post(backendUrl, formDataToSend, { headers: { 'content-type': 'multipart/form-data' }, withCredentials: true });
 
       if (result.status === 201) {
         window.alert("Item added successfully");
       }
+
     } catch (error) {
+
       if (error.response.status === 400) {
         window.alert("Not selected 4 images");
         return;
       }
       console.log(error);
       window.alert("Item not added.");
+
     }
+    finally {
+      setIsLoading(false);
+    }
+
   };
 
   const handleImageChange = (e) => {
@@ -107,6 +117,12 @@ const AddOnRent = () => {
       <Sidebar />
       <div className="body">
         <div className="container">
+        {isLoading ? (
+              <div className="loading-gif">
+                <img src={LoadingDots} alt="Loading..." />
+              </div>
+            ) : (
+            <>
           <div className="header-content">
             <h1>Add on Rent</h1>
           </div>
@@ -129,78 +145,83 @@ const AddOnRent = () => {
           </div>
 
           <div className="form-box">
-            <form className="form-group" onSubmit={handleSubmit}>
-              <div className="input-wrapper">
-                <label htmlFor="toolName">Tool Name</label>
-                <input
-                  className="input-same"
-                  type="text"
-                  id="toolName"
-                  name="toolName"
-                  maxLength={20}
-                  value={toolName}
-                  onChange={handleChange}
-                  placeholder="Asset Name"
-                />
-                <span className="input-fixed-text">{toolName.length}</span>
-              </div>
+              <form className="form-group" onSubmit={handleSubmit}>
+                <div className="input-wrapper">
+                  <label htmlFor="toolName">Tool Name</label>
+                  <input
+                    className="input-same"
+                    type="text"
+                    id="toolName"
+                    name="toolName"
+                    maxLength={40}
+                    value={toolName}
+                    onChange={handleChange}
+                    placeholder="Asset Name"
+                  />
+                  <span className="input-fixed-text">{toolName.length}</span>
+                </div>
 
-              <label htmlFor="dueDate">Till Date</label>
-              <input type="date" id="tillDate" name="dueDate" value={dueDate} onChange={handleChange} min={new Date().toISOString().split("T")[0]} /* Set min to today's date*/ />
+                <label htmlFor="dueDate">Till Date</label>
+                <input type="date" id="tillDate" name="dueDate" value={dueDate} onChange={handleChange} min={new Date().toISOString().split("T")[0]} /* Set min to today's date*/ />
 
-              <label htmlFor="toolPrice">Price</label>
-              <input type="number" id="price" name="toolPrice" value={toolPrice} onChange={handleChange} placeholder="350Rs/day" />
+                <label htmlFor="toolPrice">Price</label>
+                <input type="number" id="price" name="toolPrice" value={toolPrice} onChange={handleChange} min={1} placeholder="350Rs/day" />
 
-              <label htmlFor="toolQuantity">Quantity</label>
-              <input type="number" id="quantity" name="toolQuantity" value={toolQuantity} onChange={handleChange} placeholder="4" />
+                <label htmlFor="toolQuantity">Quantity</label>
+                <input type="number" id="quantity" name="toolQuantity" value={toolQuantity} onChange={handleChange} min={1} placeholder="4" />
 
-              <div className="input-wrapper">
-                <label htmlFor="tags">Tags</label>
-                <input
-                  className="input-same"
-                  type="text"
-                  id="tags"
-                  name="toolTags"
-                  maxLength={30}
-                  value={toolTags}
-                  onChange={handleChange}
-                  placeholder="cutting, digging, etc."
-                />
-                <span className="input-fixed-text"></span>
-              </div>
-              <div className="input-wrapper">
-                <label htmlFor="toolCategory">Tool Category</label>
-                <input
-                  className="input-same"
-                  type="text"
-                  id="toolCategory"
-                  name="toolCategory"
-                  maxLength={20}
-                  value={toolCategory}
-                  onChange={handleChange}
-                  placeholder="Harvesting, watering, etc."
-                />
-                <span className="input-fixed-text"></span>
-              </div>
-              <div className="input-wrapper">
-                <label htmlFor="toolDesc">Description</label>
-                <textarea
-                  id="description"
-                  name="toolDesc"
-                  maxLength={180}
-                  value={toolDesc}
-                  onChange={handleChange}
-                  placeholder="This has sharp blades and can be used for cutting grass, maize. And wants to give this on rent for 2 days and with some conditions..."
-                ></textarea>
-                <span className="input-fixed-textarea"></span>
-              </div>
-              <button type="submit" className="add-button">
-                Add
-              </button>
-            </form>
+                <div className="input-wrapper">
+                  <label htmlFor="tags">Tags</label>
+                  <input
+                    className="input-same"
+                    type="text"
+                    id="tags"
+                    name="toolTags"
+                    maxLength={50}
+                    value={toolTags}
+                    onChange={handleChange}
+                    placeholder="cutting, digging, etc."
+                  />
+                  <span className="input-fixed-text"></span>
+                </div>
+                <div className="input-wrapper">
+                  <label htmlFor="toolCategory">Tool Category</label>
+                  <input
+                    className="input-same"
+                    type="text"
+                    id="toolCategory"
+                    name="toolCategory"
+                    maxLength={40}
+                    value={toolCategory}
+                    onChange={handleChange}
+                    placeholder="Harvesting, watering, etc."
+                  />
+                  <span className="input-fixed-text"></span>
+                </div>
+                <div className="input-wrapper">
+                  <label htmlFor="toolDesc">Description</label>
+                  <textarea
+                    id="description"
+                    name="toolDesc"
+                    maxLength={180}
+                    value={toolDesc}
+                    onChange={handleChange}
+                    placeholder="This has sharp blades and can be used for cutting grass, maize. And wants to give this on rent for 2 days and with some conditions..."
+                  ></textarea>
+                  <span className="input-fixed-textarea"></span>
+                </div>
+                <button type="submit" className="add-button">
+                  Add
+                </button>
+              </form>
+            
           </div>
+          </>
+          )}
         </div>
+        
       </div>
+      
     </>
   );
 };

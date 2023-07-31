@@ -167,7 +167,7 @@ const Dashboard = () => {
                       ?.toLowerCase()
                       .includes(searchTerm.toLowerCase())
                 )
-                .map((tool, index) => <ToolCard data={tool} index={index} />)
+                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.toolId}/>)
 
             )
           }
@@ -199,7 +199,7 @@ const Dashboard = () => {
                       ?.toLowerCase()
                       .includes(searchTerm.toLowerCase())
                 )
-                .map((tool, index) => <ToolCard data={tool} index={index} />)
+                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.toolId}/>)
 
             )
           }
@@ -230,7 +230,7 @@ const Dashboard = () => {
                       ?.toLowerCase()
                       .includes(searchTerm.toLowerCase())
                 )
-                .map((tool, index) => <ToolCard data={tool} index={index} />)
+                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.toolId}/>)
 
             )
           }
