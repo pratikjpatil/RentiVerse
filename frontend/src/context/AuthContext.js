@@ -8,7 +8,7 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [firstName, setFirstName] = useState("");
 
-  useEffect(() => {
+  useEffect( () => {
     // Function to check if the user is logged in on the server
     const checkLoggedInStatus = async () => {
       try {
