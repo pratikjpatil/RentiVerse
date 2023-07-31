@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
 const toolSchema = new mongoose.Schema({
-    itemId:{
+    itemId: {
         type: String,
         default: uuidv4,
         unique: true,
@@ -24,37 +24,33 @@ const toolSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    toolbgImg:{
-        type: String,       //temp field used for testing purpose of frontend , contains https://picsum.photos/1500/1000/?blur url for all tools
-       
+    toolImages: {
+        type: [{
+            public_id: { type: String, required: true },
+            secure_url: { type: String, required: true },
+        }],
+        required: true,
     },
-    toolImg:{
-        type: [String],         //temp field used for testing purpose of frontend , contains https://picsum.photos/200 url for all tools
-        required: true
-    },
-    toolImages:{
-        type: [String],             //main field for storing img urls uploaded from add-on-rent api
-        required: true
-    },
-    dueDate:{
+
+    dueDate: {
         type: Date,
         required: true
     },
-    toolQuantity:{
+    toolQuantity: {
         type: Number,
         default: 1,
     },
-    toolTags:{
+    toolTags: {
         type: [String]
     },
-    ownerId: { 
-        type: mongoose.Schema.Types.ObjectId, 
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,    
+        required: true,
     }, //owner of this tool
 
-    renterId:{
-        type: mongoose.Schema.Types.ObjectId, 
+    renterId: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     }, //person who has taken this tool on rent
 
@@ -63,11 +59,11 @@ const toolSchema = new mongoose.Schema({
         ref: "RentRequest",
     },  //requests received for this product for renting
 
-    createdAt : {
+    createdAt: {
         type: Date,
         default: Date.now,
     }
-});     
+});
 
 const Tool = new mongoose.model("Tool", toolSchema);
 
