@@ -34,7 +34,9 @@ const LandingPage = () => {
                 tool.toolCategory?.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((tool, index) => (
+            <div>
             <ToolCard data={tool} index={index} key={tool.itemId}/>
+            </div>
           ))}
       </div>
     </div>
