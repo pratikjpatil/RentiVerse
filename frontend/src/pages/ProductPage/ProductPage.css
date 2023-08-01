@@ -211,4 +211,15 @@
 	}
 }
 
+.rentiVerseLoadingGif{
+	width: 140px;
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 1000px;
+    border-radius: 20px;
+    margin-top: 15rem;
+    margin-left: 50rem;
+	padding: 20px;
+	position: fixed;
+}
 

@@ -12,7 +12,7 @@ const {
     showRejectedRequests_received,
     showRejectedRequests_sent } = require('../controllers/productRequest.controller');
 
-router.post('/send/:toolId', auth, sendRequest);
+router.post('/send/:itemId', auth, sendRequest);
 router.get('/show-sent', auth, showSentRequests);
 router.get('/show-received', auth, showReceivedRequests);
 

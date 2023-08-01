@@ -5,18 +5,18 @@ const RentRequest = require("../models/rentRequest");
 
 const sendRequest = async (req, res) => {
 
-    const toolId = req.params.toolId;
+    const itemId = req.params.itemId;
     const userId = req.user.id;
     let { dueDate, message } = req.body;
 
     try {
 
-        const tool = await Tool.findOne({ toolId: toolId });
+        const tool = await Tool.findOne({ itemId: itemId });
         if (!tool) {
             return res.status(404).json({ message: "Tool not found" });
         }
 
-        const exists = await RentRequest.findOne({ toolId: tool._id, userId: userId });
+        const exists = await RentRequest.findOne({ itemId: tool._id, userId: userId });
 
         if (exists) {
             return res.status(409).json({ message: "Request already sent by this user for this tool" });
@@ -27,7 +27,7 @@ const sendRequest = async (req, res) => {
         }
 
         const result = await RentRequest.create({
-            toolId: tool._id,
+            itemId: tool._id,
             userId: userId,
             ownerId: tool.ownerId,
             dueDate: dueDate,

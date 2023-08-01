@@ -94,4 +94,25 @@ const addItems = async (req, res) => {
   }
 };
 
-module.exports = { addItems };
+
+const itemInfo = async(req, res)=>{
+    try {
+      const productId = req.params.itemId;
+
+      const itemInfo = await Tool.findOne({itemId: productId}).populate("ownerId");
+
+      if(!itemInfo){
+        return res.status(404).json({message: "Product not found"})
+      }
+
+      const {itemId, toolName, toolCategory, toolDesc, toolImages, toolPrice, toolQuantity, dueDate} = itemInfo;
+
+      res.status(200).json({itemId, toolName, toolCategory, toolDesc, toolImages, toolPrice, toolQuantity, dueDate, toolImages, ownerName: itemInfo.ownerId.firstName+" "+itemInfo.ownerId.lastName});
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({message: "Internal server error"});
+    }
+}
+
+module.exports = { addItems, itemInfo };
