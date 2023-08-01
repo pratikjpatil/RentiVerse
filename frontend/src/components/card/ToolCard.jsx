@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./ToolCard.css";
 
 const ToolCard = ({ data, index }) => {
 
+  const navigate = useNavigate();
+
+  const handleCardClick = async()=>{
+    navigate(`/products/${data.itemId}`);
+  }
 
   return (
-    <div className="dashboard-page-content-main-content-cards">
+    <div className="dashboard-page-content-main-content-cards" onClick={handleCardClick}>
       <>
         <div
           key={data.id}

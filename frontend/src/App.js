@@ -22,23 +22,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          {
-            initialLoading ? (
-              <Route element={loadingPage}/>
-            ) : (
-            <>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/product" element={<ProductPage />} />
-              <Route path="/addonrent" element={<AddOnRent />} />
-              <Route path="/requests" element={<RequestPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/otp" element={<OTPPage />} />
-            </>
-          )}
-
-
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/product/:productId" element={<ProductPage />} />
+          <Route path="/addonrent" element={<AddOnRent />} />
+          <Route path="/requests" element={<RequestPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/otp" element={<OTPPage />} />
         </Routes>
       </BrowserRouter>
     </div>

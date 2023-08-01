@@ -31,14 +31,17 @@ const ProfilePage = () => {
   useEffect(() => {
 
     const fetchProfile = async () => {
+
       try {
+        
         const profile = await axios.get(backendUrl + "/api/profile/me", { withCredentials: true });
         setFormData(profile.data);
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          window.alert("Oops! you are not logged in.")
 
-          // Redirect to login page when unauthenticated
+      } catch (error) {
+
+        if (error.response && error.response.status === 401) {
+
+          window.alert("You are not logged in.")
           navigate("/login");
 
         } else {
