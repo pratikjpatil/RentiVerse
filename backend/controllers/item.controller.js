@@ -16,13 +16,15 @@ const addItems = async (req, res) => {
     return res.status(400).json({ message: "Please upload 4 images." });
   }
 
+  const tags = toolTags.split(',').map(tag => tag.trim()).filter((tag) => tag !== "");
+
   const newTool = new Tool({
     ownerId: req.user.id,
     toolName,
     dueDate,
     toolPrice,
     toolQuantity,
-    toolTags,
+    tags,
     toolCategory,
     toolDesc,
   });
@@ -83,7 +85,7 @@ const addItems = async (req, res) => {
     await newTool.save();
 
     await User.findByIdAndUpdate(req.user.id, { $push: { listed: newTool._id } });
-
+    
     return res.status(201).json({ message: "Item added successfully" });
 
   } catch (error) {
