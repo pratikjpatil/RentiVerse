@@ -7,6 +7,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [firstName, setFirstName] = useState("");
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect( () => {
     // Function to check if the user is logged in on the server
@@ -25,6 +26,9 @@ const AuthProvider = ({ children }) => {
         // If the server returns an error (e.g., 401 Unauthorized), it means the user is not logged in
         setIsLoggedIn(false);
       }
+      finally{
+        setInitialLoading(false);
+      }
       
     };
 
@@ -37,7 +41,7 @@ const AuthProvider = ({ children }) => {
   }, [isLoggedIn]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, firstName, setFirstName}}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, firstName, setFirstName, initialLoading}}>
       {children}
     </AuthContext.Provider>
   );

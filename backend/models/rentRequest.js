@@ -8,7 +8,7 @@ const rentSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
-    toolId: {
+    itemId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Tool",
         required: true,

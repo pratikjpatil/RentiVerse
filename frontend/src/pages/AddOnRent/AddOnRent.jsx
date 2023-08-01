@@ -68,6 +68,15 @@ const AddOnRent = () => {
 
       if (result.status === 201) {
         window.alert("Item added successfully");
+        setFormData({
+          toolName: "",
+          toolTags: "",
+          toolCategory: "",
+          toolDesc: "",
+          dueDate: "",
+          toolPrice: "",
+          toolQuantity: "",
+        });
       }
 
     } catch (error) {
@@ -138,6 +147,7 @@ const AddOnRent = () => {
                 multiple={true}
                 onChange={handleImageChange}
                 style={{ display: "none" }}
+                required
               />
             </div>
             <p className="imageadd">Add 4 images of tool</p>
@@ -157,18 +167,19 @@ const AddOnRent = () => {
                     value={toolName}
                     onChange={handleChange}
                     placeholder="Asset Name"
+                    required
                   />
                   <span className="input-fixed-text">{toolName.length}</span>
                 </div>
 
                 <label htmlFor="dueDate">Till Date</label>
-                <input type="date" id="tillDate" name="dueDate" value={dueDate} onChange={handleChange} min={new Date().toISOString().split("T")[0]} /* Set min to today's date*/ />
+                <input type="date" id="tillDate" name="dueDate" value={dueDate} required onChange={handleChange} min={new Date().toISOString().split("T")[0]} /* Set min to today's date*/ />
 
                 <label htmlFor="toolPrice">Price</label>
-                <input type="number" id="price" name="toolPrice" value={toolPrice} onChange={handleChange} min={1} placeholder="350Rs/day" />
+                <input type="number" id="price" name="toolPrice" value={toolPrice} onChange={handleChange} min={1} placeholder="350Rs/day" required/>
 
                 <label htmlFor="toolQuantity">Quantity</label>
-                <input type="number" id="quantity" name="toolQuantity" value={toolQuantity} onChange={handleChange} min={1} placeholder="4" />
+                <input type="number" id="quantity" name="toolQuantity" value={toolQuantity} onChange={handleChange} min={1} placeholder="4" required/>
 
                 <div className="input-wrapper">
                   <label htmlFor="tags">Tags</label>
@@ -177,10 +188,11 @@ const AddOnRent = () => {
                     type="text"
                     id="tags"
                     name="toolTags"
-                    maxLength={50}
+                    maxLength={60}
                     value={toolTags}
                     onChange={handleChange}
                     placeholder="cutting, digging, etc."
+                    required
                   />
                   <span className="input-fixed-text"></span>
                 </div>
@@ -195,6 +207,7 @@ const AddOnRent = () => {
                     value={toolCategory}
                     onChange={handleChange}
                     placeholder="Harvesting, watering, etc."
+                    required
                   />
                   <span className="input-fixed-text"></span>
                 </div>
@@ -207,6 +220,7 @@ const AddOnRent = () => {
                     value={toolDesc}
                     onChange={handleChange}
                     placeholder="This has sharp blades and can be used for cutting grass, maize. And wants to give this on rent for 2 days and with some conditions..."
+                    required
                   ></textarea>
                   <span className="input-fixed-textarea"></span>
                 </div>

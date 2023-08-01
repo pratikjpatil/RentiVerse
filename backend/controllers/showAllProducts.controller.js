@@ -6,7 +6,7 @@ const showAllProds = async (req, res) => {
   try {
 
     const tools = await Tool.find({}).select(
-      "toolId toolName toolCategory toolPrice toolDesc toolQuantity toolTags toolImages"
+      "itemId toolName toolCategory toolPrice toolDesc toolQuantity toolTags toolImages"
     );
   
     return res.status(200).json(tools);
