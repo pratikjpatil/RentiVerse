@@ -116,7 +116,7 @@ const AddOnRent = () => {
       key={index}
       src={URL.createObjectURL(image)}
       style={{ height: "40px", width: "50px", marginLeft: "4rem", marginRight: "-3rem", marginTop: "2rem" }}
-      alt={`Selected image ${index + 1}`}
+      alt={`Selected ${index + 1}`}
     />
   ));
 

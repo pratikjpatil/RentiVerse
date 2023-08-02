@@ -16,8 +16,8 @@ const RequestPage = () => {
       quantity: "5",
     },
     {
-      name: "Tejas",
-      tool: "Hammer",
+      name: "Pratik Patil",
+      tool: "2 BHK flat in salokhenager, Kolhapur",
       tillDate: "31/05/2002",
       quantity: "5",
     },

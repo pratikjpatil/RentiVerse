@@ -12,13 +12,19 @@ const sendRequest = async (req, res) => {
     try {
 
         const tool = await Tool.findOne({ itemId: itemId });
+
         if (!tool) {
             return res.status(404).json({ message: "Tool not found" });
+        }
+
+        if(tool.ownerId == userId){
+            return res.status(400).json({ message: "Owner cant send request to self" });
         }
 
         const exists = await RentRequest.findOne({ itemId: tool._id, userId: userId });
 
         if (exists) {
+            console.log(exists)
             return res.status(409).json({ message: "Request already sent by this user for this tool" });
         }
 
@@ -45,7 +51,7 @@ const sendRequest = async (req, res) => {
         tool.receivedRequests.push(result._id);
         await tool.save();
 
-        res.status(201).json({ message: "Request for renting tool sent successful" });
+        return res.status(201).json({ message: "Request for renting tool sent successful" });
 
     } catch (error) {
 
