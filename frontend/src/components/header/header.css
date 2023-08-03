@@ -115,3 +115,7 @@ Header {
   border-top: 1px solid #ccc;
 }
 
+
+.notification-img{
+  height: 2rem;
+}
