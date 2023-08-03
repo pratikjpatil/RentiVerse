@@ -1,3 +1,11 @@
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Styles for RequestPage component */
 .body-requestpage {
   display: flex;
   flex-direction: column;
@@ -7,41 +15,26 @@
   padding: 0;
   height: 100vh;
 }
-.head-request{
-  margin-top: 4rem;
-  margin-right: 32rem;
-}
 
-.body-requestpage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  padding-top: 2rem;
+.head-request {
+  margin-top: 5rem;
+  margin-right: 32rem;
 }
 
 .container-requestpage {
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-left: 21.33%; 
-  
+  padding-left: 21.33%;
 }
 
-.hr-line-requestpage{
-  width: 100%; /* Make the <hr> span the entire width of the table */
-  border: none; /* Remove the default <hr> border */
+.hr-line-requestpage {
+  width: 100%;
+  border: none;
   height: 1px;
   background-color: #dadadaee;
 }
 
-.avatar {
-  width: 30px;
-  height: 30px;
-  margin-right: 5px;
-  vertical-align: middle; /* Align the image vertically in the middle */
-}
 
 #customers {
   font-family: Arial, Helvetica, sans-serif;
@@ -73,10 +66,7 @@
   color: black;
 }
 
-
-
-/* icons */
-
+/* Icons */
 .request-button {
   border: none;
   background-color: transparent;
@@ -85,11 +75,64 @@
   border-radius: 20px;
 }
 
-.accept-img{
+.accept-img {
   height: 30px;
 }
 
-.reject-img{
+.reject-img {
   height: 33px;
 }
 
+/* Filter Buttons */
+.filter-button {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-left: 60rem;
+}
+
+.head-request-filter {
+  height: 2rem;
+  width: 14rem;
+  margin-top: 1.8rem;
+  border-radius: 12px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* background-image: url("../../assets/filter.png");  */
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: 18px; /* Adjust the size of the image as needed */
+  padding-left: 35px; /* Make space for the image */
+}
+
+.filter-image-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  right: 12rem;
+  transform: translateY(-50%);
+}
+
+.filter-image {
+  width: 20px;
+  height: 20px;
+  margin-left: 5rem;
+  margin-top: 1.8rem;
+}
+
+.filter-vertical-line {
+  margin-top: 1.8rem;
+  width: 2px;
+  height: 24px;
+  background-color: rgba(0, 0, 0, 0.22);
+  margin-left: 4px;
+}
+
+/* Loading GIF */
+.rentiVerseLoadingGif {
+  margin-top: 10rem;
+}
+
+/* Styles for the rest of your components... */
