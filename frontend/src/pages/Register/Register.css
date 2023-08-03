@@ -84,6 +84,37 @@ button.transparent-blue img {
   width: 20px;
   margin-right: 5px;
 }
+
+input,
+button.blue {
+  width: 100%; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.gender-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.blue {
+  display: flex;
+  align-items: center;
+  background-color: #4A3794;
+  border: 1px solid #6764ff;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+button.blue img {
+  width: 20px;
+  margin-right: 5px;
+}
+
 .transparent-register {
   display: flex;
   align-items: center;
@@ -103,6 +134,7 @@ button.transparent-blue img {
   background-color: #6764ff;
   color: white;
 }
+
 
 /* Additional styling for mobile responsiveness */
 @media (max-width: 600px) {

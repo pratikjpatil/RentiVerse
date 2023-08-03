@@ -4,6 +4,7 @@ import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import Filter from "../../assets/filter.png";
+import Filter1 from "../../assets/filter1.png";
 import accept from "../../assets/accept.png";
 import reject from "../../assets/reject.png";
 import "./RequestPage.css";
@@ -12,13 +13,15 @@ import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
 const RequestPage = () => {
   const [tableData, setTableData] = useState([]);
   const [requestOption, setRequestOption] = useState("show-received");
+  const [filter, setFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
-  const [isDataReady, setIsDataReady] = useState(false);
-
-  const [filter, setFilter] = useState("all"); // State to hold the selected filter option
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
+  };
+
+  const handleRequestOptionChange = (event) => {
+    setRequestOption(event.target.value);
   };
 
   const navigate = useNavigate();
@@ -39,38 +42,67 @@ const RequestPage = () => {
         setIsLoading(false);
       }
     };
+
     checkLoginStatus();
   }, []);
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/${requestOption}`;
+  const fetchRequests = async () => {
+    const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/${requestOption}-${filter}`;
 
-      try {
-        setIsLoading(true);
-        const result = await axios.get(backendUrl, { withCredentials: true });
+    try {
+      setIsLoading(true);
+      const result = await axios.get(backendUrl, { withCredentials: true });
 
-        if (result.status === 200) {
-          setTableData(result.data);
-          console.log(result.data);
-        }
-      } catch (error) {
-        console.log(error.message);
-        window.alert(error.message);
-        return;
-      } finally {
-        setIsLoading(false);
+      if (result.status === 200) {
+        setTableData(result.data);
+        console.log(result.data);
       }
-    };
-
-    fetchRequests();
-  }, [requestOption]);
+    } catch (error) {
+      console.log(error.message);
+      window.alert(error.message);
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (tableData.length > 0) {
-      setIsDataReady(true);
+    fetchRequests();
+  }, [requestOption, filter]);
+
+  const handleAcceptRequest = async (requestId) => {
+    const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/accept/${requestId}`;
+    try {
+      setIsLoading(true);
+      const result = await axios.put(backendUrl, { withCredentials: true });
+      if (result.status === 200) {
+        window.alert("Request accepted");
+        fetchRequests();
+      }
+    } catch (error) {
+      console.log(error.message);
+      window.alert(error.message);
+    } finally {
+      setIsLoading(false);
     }
-  }, [tableData]);
+  };
+
+  const handleRejectRequest = async (requestId) => {
+    const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/reject/${requestId}`;
+    try {
+      setIsLoading(true);
+      const result = await axios.post(backendUrl, { withCredentials: true });
+      if (result.status === 200) {
+        window.alert("Request rejected");
+        fetchRequests();
+      }
+    } catch (error) {
+      console.log(error.message);
+      window.alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -88,34 +120,40 @@ const RequestPage = () => {
         <div className="body-requestpage">
           <h1 className="head-request">Renting Request</h1>
           <div className="filter-button">
+            {/* Filter image */}
             <div className="filter-image-container">
-              <img
-                src={Filter} // Add the image source here
-                alt="Filter Icon"
-                className="filter-image"
-              />
+              <img src={Filter} alt="Filter Icon" className="filter-image" />
               <div className="filter-vertical-line"></div>
             </div>
+            <div className="filter-image-container-1">
+              <img
+                src={Filter1}
+                alt="Filter Icon"
+                className="filter-image-1"
+              />
+              <div className="filter-vertical-line-1"></div>
+            </div>
 
+            {/* Select menu for request options */}
             <select
               className="head-request-filter"
+              value={requestOption}
+              onChange={handleRequestOptionChange}
+            >
+              <option value="show-received">Received</option>
+              <option value="show-sent">Sent</option>
+            </select>
+
+            {/* Select menu for filter options */}
+            <select
+              className="head-request-filter-1"
               value={filter}
               onChange={handleFilterChange}
             >
-              <option value="recivedrequest">Recived Request</option>
-              <option value="recivedpendingrequest">
-                Recived Pending Request
-              </option>
-              <option value="recivedacceptedrequest">
-                Recived Accepted Request
-              </option>
-              <option value="recivedrejectedrequest">
-                Recived Rejected Request
-              </option>
-              <option value="sentrequest">Sent Request</option>
-              <option value="sentpendingrequest">Sent Pending Request</option>
-              <option value="sentacceptedrequest">Sent Accepted Request</option>
-              <option value="sentrejectedrequest">Sent Rejected Request</option>
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
             </select>
           </div>
           <div className="container-requestpage">
@@ -143,31 +181,44 @@ const RequestPage = () => {
                       <td>{rowData.dueDate.split("T")[0]}</td>
                       <td>{rowData.message}</td>
                       <td>
-                        {rowData.requestStatus === "pending" ? ( // Conditionally render action buttons
+                        {rowData.requestStatus === "pending" &&
+                        requestOption === "show-received" ? (
                           <>
                             <button
                               className="request-button accept"
-                              type="submit"
+                              type="button"
+                              onClick={() => {
+                                handleAcceptRequest(rowData.requestId);
+                              }}
                             >
-                              <img
-                                className="accept-img"
-                                src={accept}
-                                alt="img"
-                              />
+                              <img className="accept-img" src={accept} alt="img" />
                             </button>
                             <button
                               className="request-button reject"
-                              type="submit"
+                              type="button"
+                              onClick={() => {
+                                handleRejectRequest(rowData.requestId);
+                              }}
                             >
-                              <img
-                                className="reject-img"
-                                src={reject}
-                                alt="img"
-                              />
+                              <img className="reject-img" src={reject} alt="img" />
+                            </button>
+                          </>
+                        ) : rowData.requestStatus === "accepted" && requestOption === "show-sent" ? (
+                          <>
+                           { rowData.requestStatus}
+                            {/* Display "Pay Now" button */}
+                            <button
+                              className="request-button accept"
+                              type="button"
+                              onClick={() => {
+                                console.log("clicked on pay now")
+                              }}
+                            >
+                              Pay Now
                             </button>
                           </>
                         ) : (
-                          rowData.requestStatus // Show the requestStatus for accepted or rejected requests
+                          rowData.requestStatus
                         )}
                       </td>
                     </tr>

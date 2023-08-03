@@ -91,9 +91,9 @@ body {
   margin-left: 60rem;
 }
 
-.head-request-filter {
+.head-request-filter-1 {
   height: 2rem;
-  width: 14rem;
+  width: 10rem;
   margin-top: 1.8rem;
   border-radius: 12px;
   -webkit-appearance: none;
@@ -106,12 +106,52 @@ body {
   padding-left: 35px; /* Make space for the image */
 }
 
+.head-request-filter {
+  height: 2rem;
+  width: 10rem;
+  margin-top: 1.8rem;
+  border-radius: 12px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* background-image: url("../../assets/filter.png");  */
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: 18px; /* Adjust the size of the image as needed */
+  padding-left: 35px; /* Make space for the image */
+}
+
+.filter-image-container-1 {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  right: 14.5rem;
+  width: 2px;
+  transform: translateY(-50%);
+}
+
+.filter-image-1 {
+  width: 20px;
+  height: 20px;
+  margin-left: 5rem;
+  margin-top: 1.8rem;
+}
+
+.filter-vertical-line-1 {
+  margin-top: 1.8rem;
+  width: 2px;
+  height: 24px;
+  background-color: rgba(0, 0, 0, 0.22);
+  margin-left: 4px;
+}
+
 .filter-image-container {
   display: flex;
   align-items: center;
   position: absolute;
   top: 50%;
-  right: 12rem;
+  right: 18rem;
   transform: translateY(-50%);
 }
 
@@ -135,4 +175,6 @@ body {
   margin-top: 10rem;
 }
 
-/* Styles for the rest of your components... */
+.accept{
+  margin-left: 5rem;
+}

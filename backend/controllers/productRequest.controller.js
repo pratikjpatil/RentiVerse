@@ -199,6 +199,7 @@ async function getRequestsByStatusAndPopulate(userId, requestType, requestStatus
             }   //if requested for received requests then need to sent the userName thats why userId & if req for sent requests then send the ownerName in response 
 
             return {
+                requestId: request.requestId,
                 toolName: request.itemId.toolName,
                 userName: request.userId.firstName + " " + request.userId.lastName,
                 dueDate: request.dueDate,
