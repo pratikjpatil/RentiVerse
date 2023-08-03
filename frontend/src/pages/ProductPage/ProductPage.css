@@ -59,6 +59,7 @@
 	max-width: 21rem;
 	min-height: 18rem;
 	max-height: 19rem;
+	border-radius: 12px;
 }
 
 .small-images .small-images-productpage {
@@ -69,7 +70,8 @@
 	min-width: 7rem;
 	max-width: 8rem;
 	min-height: 7rem;
-	max-height: 8rem;
+	max-height: 7.1rem;
+	border-radius: 12px;
 }
 
 .left-box .heading {
