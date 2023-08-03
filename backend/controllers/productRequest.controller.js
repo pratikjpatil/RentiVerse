@@ -12,13 +12,19 @@ const sendRequest = async (req, res) => {
     try {
 
         const tool = await Tool.findOne({ itemId: itemId });
+
         if (!tool) {
             return res.status(404).json({ message: "Tool not found" });
+        }
+
+        if (tool.ownerId == userId) {
+            return res.status(400).json({ message: "Owner cant send request to self" });
         }
 
         const exists = await RentRequest.findOne({ itemId: tool._id, userId: userId });
 
         if (exists) {
+            console.log(exists)
             return res.status(409).json({ message: "Request already sent by this user for this tool" });
         }
 
@@ -45,7 +51,7 @@ const sendRequest = async (req, res) => {
         tool.receivedRequests.push(result._id);
         await tool.save();
 
-        res.status(201).json({ message: "Request for renting tool sent successful" });
+        return res.status(201).json({ message: "Request for renting tool sent successful" });
 
     } catch (error) {
 
@@ -57,52 +63,20 @@ const sendRequest = async (req, res) => {
 
 };
 
-const showSentRequests = async (req, res) => {
-    try {
-
-        const user = await User.findById(req.user.id).populate({
-            path: "sentRequests"
-        });
-
-        res.status(200).json(user.sentRequests);
-
-    } catch (error) {
-
-        console.error("Error fetching sent requests: ", error);
-        return res.status(500).json({ message: "Error fetching sent requests" });
-    }
-};
-
-
-const showReceivedRequests = async (req, res) => {
-
-    try {
-
-        const user = await User.findById(req.user.id).populate({
-            path: "receivedRequests"
-        });
-
-        res.status(200).json(user.receivedRequests);
-
-    } catch (error) {
-
-        console.error("Error fetching sent requests: ", error);
-        return res.status(500).json({ message: "Error fetching sent requests" });
-    }
-
-}
-
 
 
 const acceptRequest = async (req, res) => {
-
     const requestId = req.params.requestId;
 
     try {
+        const request = await RentRequest.findOne({ requestId: requestId }).populate({
+            path: "itemId",
+        });
 
-        const request = await RentRequest.findOne({ requestId: requestId });
+        // console.log(JSON.stringify(request.itemId.receivedRequests));
+
         if (!request) {
-            return res.status(404).json({ message: "request does not exists" });
+            return res.status(404).json({ message: "Request does not exist" });
         }
 
         const ownerId = request.ownerId;
@@ -118,67 +92,28 @@ const acceptRequest = async (req, res) => {
         }
 
         if (request.requestStatus === "rejected") {
-            return res.status(400).json({ message: "Request is already rejected you cannot accept it now" });
+            return res.status(400).json({ message: "Request is already rejected. You cannot accept it now." });
         }
 
         request.requestStatus = "accepted";
         request.acceptedAt = new Date();
 
-        await request.save();
+        await request.save(); // Save changes to the main request
+
+        // Update all pending receivedRequests to "rejected"
+        await RentRequest.updateMany(
+            { _id: { $in: request.itemId.receivedRequests }, requestStatus: "pending" },
+            { $set: { requestStatus: "rejected", rejectedAt: new Date() } }
+        );
+
         res.status(200).json({ message: "Request accepted successfully" });
 
-
     } catch (error) {
-
         console.error("Error accepting request: ", error);
         return res.status(500).json({ message: "Error accepting request" });
-
     }
-
 };
 
-
-const showAcceptedRequests_received = async (req, res) => {
-
-    try {
-
-        const user = await User.findById(req.user.id).populate({
-            path: "receivedRequests",
-            match: { requestStatus: "accepted" },
-        });
-        //the receivedRequests field will only contains the requests whose requestStatus is "accepted"
-
-        res.status(200).json(user.receivedRequests);
-
-    } catch (error) {
-
-        console.error("Error fetching accepted requests: ", error);
-        return res.status(500).json({ message: "Error fetching accepted requests" });
-    }
-
-};
-
-
-
-const showAcceptedRequests_sent = async (req, res) => {
-
-    try {
-
-        const user = await User.findById(req.user.id).populate({
-            path: "sentRequests",
-            match: { requestStatus: "accepted" },
-        });
-        //the sentRequests field will only contains the requests whose requestStatus is "accepted"
-
-        res.status(200).json(user.sentRequests);
-
-    } catch (error) {
-
-        console.error("Error fetching accepted requests: ", error);
-        return res.status(500).json({ message: "Error fetching accepted requests" });
-    }
-
-};
 
 
 
@@ -224,29 +159,102 @@ const rejectRequest = async (req, res) => {
 
 
 
+async function getRequestsByStatusAndPopulate(userId, requestType, requestStatus, userType, res) {
+    try {
+        const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // 2 days ago
+
+        const user = await User.findById(userId).populate({
+            path: requestType, // sentRequests or receivedRequests
+            match: requestStatus !== null ? {
+                $and: [   // used to combine two objects
+                    { requestStatus: requestStatus },
+                    requestStatus === "rejected" ? { rejectedAt: { $gte: twoDaysAgo } } : {}
+                ]
+            } : {},
+            populate: [
+                {
+                    path: "itemId",
+                    select: "toolName",
+                },
+                {
+                    path: userType, // ownerId or userId. If you request received requests then userId & if sent then ownerId
+                    select: "firstName lastName",
+                },
+            ],
+        });
+
+
+        if (requestType === "sentRequests") {
+            user.requestType = user.sentRequests;
+        }
+        else {
+            user.requestType = user.receivedRequests;
+        }    //have to do this to iterate over sent or received request using map.
+
+
+        const pendingRequests = user.requestType.map((request) => {
+
+            if (userType === "ownerId") {  
+                request.userId = request.ownerId;
+            }   //if requested for received requests then need to sent the userName thats why userId & if req for sent requests then send the ownerName in response 
+
+            return {
+                toolName: request.itemId.toolName,
+                userName: request.userId.firstName + " " + request.userId.lastName,
+                dueDate: request.dueDate,
+                message: request.message,
+                requestStatus: request.requestStatus,
+            }
+
+        });
+
+        res.status(200).json(pendingRequests);
+    } catch (error) {
+        console.error(`Error fetching ${requestStatus} ${requestType} :  `, error);
+        return res
+            .status(500)
+            .json({ message: `Error fetching ${requestStatus} ${requestType}` });
+    }
+}
+
+
+
+
+
+const showSentRequests = async (req, res) => {
+ 
+    getRequestsByStatusAndPopulate(req.user.id, "sentRequests", null, "ownerId", res);
+
+};
+
+
+const showReceivedRequests = async (req, res) => {
+
+    getRequestsByStatusAndPopulate(req.user.id, "receivedRequests", null, "userId", res);
+
+}
+
+
+
+const showAcceptedRequests_received = async (req, res) => {
+
+    getRequestsByStatusAndPopulate(req.user.id, "receivedRequests", "accepted", "userId", res);
+
+};
+
+
+
+const showAcceptedRequests_sent = async (req, res) => {
+
+    getRequestsByStatusAndPopulate(req.user.id, "sentRequests", "accepted", "ownerId", res);
+
+};
+
+
 
 const showRejectedRequests_received = async (req, res) => {
 
-    try {
-
-        const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // 2 days ago
-
-        const user = await User.findById(req.user.id).populate({
-            path: "receivedRequests",
-            match: {
-                requestStatus: "rejected",
-                rejectedAt: { $gte: twoDaysAgo }, // Show only rejected requests within the last 2 days
-            },
-        });
-        //the receivedRequests field will only contains the requests whose requestStatus is "rejected"
-
-        res.status(200).json(user.receivedRequests);
-
-    } catch (error) {
-
-        console.error("Error fetching accepted requests: ", error);
-        return res.status(500).json({ message: "Error fetching accepted requests" });
-    }
+    getRequestsByStatusAndPopulate(req.user.id, "receivedRequests", "rejected", "userId", res);
 
 }
 
@@ -254,31 +262,21 @@ const showRejectedRequests_received = async (req, res) => {
 
 const showRejectedRequests_sent = async (req, res) => {
 
-    try {
+    getRequestsByStatusAndPopulate(req.user.id, "sentRequests", "rejected", "ownerId", res);
 
-        const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // 2 days ago
-
-        const user = await User.findById(req.user.id).populate({
-            path: "sentRequests",
-            match: {
-                requestStatus: "rejected",
-                rejectedAt: { $gte: twoDaysAgo }, // Show only rejected requests within the last 2 days
-            },
-        });
-        //the receivedRequests field will only contains the requests whose requestStatus is "rejected"
-
-        res.status(200).json(user.sentRequests);
-
-    } catch (error) {
-
-        console.error("Error fetching accepted requests: ", error);
-        return res.status(500).json({ message: "Error fetching accepted requests" });
-    }
-    
-}   
+}
 
 
 
+const showPendingRequests_received = async (req, res) => {
+    getRequestsByStatusAndPopulate(req.user.id, "receivedRequests", "pending", "userId", res);
+};
 
 
-module.exports = { sendRequest, showSentRequests, showReceivedRequests, acceptRequest, showAcceptedRequests_received, showAcceptedRequests_sent, rejectRequest, showRejectedRequests_received, showRejectedRequests_sent };
+const showPendingRequests_sent = async (req, res) => {
+    getRequestsByStatusAndPopulate(req.user.id, "sentRequests", "pending", "ownerId", res);
+}
+
+
+
+module.exports = { sendRequest, showSentRequests, showReceivedRequests, acceptRequest, showAcceptedRequests_received, showAcceptedRequests_sent, rejectRequest, showRejectedRequests_received, showRejectedRequests_sent, showPendingRequests_received, showPendingRequests_sent };

@@ -10,10 +10,8 @@ const AuthProvider = ({ children }) => {
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect( () => {
-    // Function to check if the user is logged in on the server
     const checkLoggedInStatus = async () => {
       try {
-        // Make a server request to check if the user is logged in
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`,
           { withCredentials: true }
@@ -23,7 +21,6 @@ const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         }
       } catch (error) {
-        // If the server returns an error (e.g., 401 Unauthorized), it means the user is not logged in
         setIsLoggedIn(false);
       }
       finally{
@@ -32,7 +29,6 @@ const AuthProvider = ({ children }) => {
       
     };
 
-    // Check if the user is logged in when the component mounts
     checkLoggedInStatus();
   }, []);
 

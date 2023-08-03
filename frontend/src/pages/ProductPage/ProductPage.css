@@ -211,6 +211,27 @@
 	}
 }
 
+.submit-button-productpage:hover {
+	/* box-shadow: 0 0 10px rgba(0,0,0,0.5); */
+	cursor: pointer;
+}
+.submit-button-productpage:active {
+	background-color:rgba(0,0,0,0.3);
+	cursor: pointer;
+}
+/* .submit-button-productpage {
+	background-color:rgba(0,0,0,0.3);
+	color: black;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+	text-align: center;
+	height: 40px;
+	display: inline-block
+} */
+
 .rentiVerseLoadingGif{
 	width: 140px;
 	display: flex;

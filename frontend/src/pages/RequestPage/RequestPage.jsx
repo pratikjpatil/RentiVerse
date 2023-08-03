@@ -1,73 +1,144 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import requestavatar from "../../assets/request.png";
 import accept from "../../assets/accept.png";
 import reject from "../../assets/reject.png";
-
 import "./RequestPage.css";
+import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
 
 const RequestPage = () => {
-  const tableData = [
-    {
-      name: "Tejas",
-      tool: "Hammer",
-      tillDate: "31/05/2002",
-      quantity: "5",
-    },
-    {
-      name: "Tejas",
-      tool: "Hammer",
-      tillDate: "31/05/2002",
-      quantity: "5",
-    },
-  ];
+  const [tableData, setTableData] = useState([]);
+  const [requestOption, setRequestOption] = useState("show-received");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDataReady, setIsDataReady] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        setIsLoading(true);
+        await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`,
+          { withCredentials: true }
+        );
+      } catch (error) {
+        window.alert("You are not logged in");
+        navigate("/login");
+        return;
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/${requestOption}`;
+
+      try {
+        setIsLoading(true);
+        const result = await axios.get(backendUrl, { withCredentials: true });
+
+        if (result.status === 200) {
+          setTableData(result.data);
+          console.log(result.data);
+
+        }
+      } catch (error) {
+        console.log(error.message);
+        window.alert(error.message);
+        return;
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, [requestOption]);
+
+  useEffect(() => {
+    if (tableData.length > 0) {
+      setIsDataReady(true);
+    }
+  }, [tableData]);
+
   return (
     <>
       <Header />
       <Sidebar />
-      <div className="body-requestpage">
-        <h1 className="head-request">Renting Request</h1>
-        <div className="container-requestpage">
-          <table id="customers" className="table-requestpage">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Tool</th>
-                <th>Till Date</th>
-                <th>Quantity</th>
-                <th>Request</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colSpan="5">
-                  <hr className="hr-line-requestpage" />
-                </td>
-              </tr>
-              {tableData.map((rowData, index) => (
-                <tr key={index}>
-                  <td>
-                    <img src={requestavatar} alt="Common" className="avatar" />
-                    {rowData.name}
-                  </td>
-                  <td>{rowData.tool}</td>
-                  <td>{rowData.tillDate}</td>
-                  <td>{rowData.quantity}</td>
-                  <td>
-                    <button className="request-button accept" type="submit">
-                    <img className="accept-img" src={accept} alt="img" />
-                    </button>
-                    <button className="request-button reject" type="submit">
-                      <img className="reject-img" src={reject} alt="img" />
-                    </button>
+      {isLoading ? (
+        <div>
+          <img
+            src={rentiVerseLoadingGif}
+            className="rentiVerseLoadingGif"
+            alt="Loading..."
+          />
+        </div>
+      ) : (
+        <div className="body-requestpage">
+          <h1 className="head-request">Renting Request</h1>
+          <div className="container-requestpage">
+            <table id="customers" className="table-requestpage">
+              <thead>
+                <tr>
+                  <th>User Name</th>
+                  <th>Tool</th>
+                  <th>Till Date</th>
+                  <th>Message</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colSpan="5">
+                    <hr className="hr-line-requestpage" />
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+                {
+                  tableData.length > 0 ? (
+                    tableData.map((rowData, index) => (
+                      <tr key={index}>
+                        <td>
+                          {rowData.userName}
+                        </td>
+                        <td>{rowData.toolName}</td>
+                        <td>{rowData.dueDate.split("T")[0]}</td>
+                        <td>{rowData.message}</td>
+                        <td>
+                          {rowData.requestStatus === "pending" ? ( // Conditionally render action buttons
+                            <>
+                              <button className="request-button accept" type="submit">
+                                <img className="accept-img" src={accept} alt="img" />
+                              </button>
+                              <button className="request-button reject" type="submit">
+                                <img className="reject-img" src={reject} alt="img" />
+                              </button>
+                            </>
+                          ) : (
+                            rowData.requestStatus // Show the requestStatus for accepted or rejected requests
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) :
+                    (
+                      <tr>
+                        <td colSpan="5">No requests found</td>
+                      </tr>
+                    )
+                }
+
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
