@@ -10,18 +10,23 @@ const {
     showAcceptedRequests_sent,
     rejectRequest,
     showRejectedRequests_received,
-    showRejectedRequests_sent } = require('../controllers/productRequest.controller');
+    showRejectedRequests_sent,
+    showPendingRequests_sent, 
+    showPendingRequests_received } = require('../controllers/productRequest.controller');
 
 router.post('/send/:itemId', auth, sendRequest);
-router.get('/show-sent', auth, showSentRequests);
-router.get('/show-received', auth, showReceivedRequests);
 
 router.put('/accept/:requestId', auth, acceptRequest);
-router.get('/show-accepted-received', auth, showAcceptedRequests_received);
-router.get('/show-accepted-sent', auth, showAcceptedRequests_sent);
-
 router.post('/reject/:requestId', auth, rejectRequest);
+
+router.get('/show-received', auth, showReceivedRequests);
+router.get('/show-pending-received', auth, showPendingRequests_received);
+router.get('/show-accepted-received', auth, showAcceptedRequests_received);
 router.get('/show-rejected-received', auth, showRejectedRequests_received);
+
+router.get('/show-sent', auth, showSentRequests);
+router.get('/show-pending-sent', auth, showPendingRequests_sent);
+router.get('/show-accepted-sent', auth, showAcceptedRequests_sent);
 router.get('/show-rejected-sent', auth, showRejectedRequests_sent);
 
 
