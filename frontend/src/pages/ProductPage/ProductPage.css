@@ -55,9 +55,9 @@
 .big-image {
 	margin-bottom: 20px;
 	margin-left: 65px;
-	min-width: 20rem;
+	min-width: 20.9rem;
 	max-width: 21rem;
-	min-height: 18rem;
+	min-height: 18.9rem;
 	max-height: 19rem;
 	border-radius: 12px;
 }
@@ -67,7 +67,7 @@
 	margin-right: 10px;
 	margin-bottom: 10px;
 	float: left;
-	min-width: 7rem;
+	min-width: 7.9rem;
 	max-width: 8rem;
 	min-height: 7rem;
 	max-height: 7.1rem;
