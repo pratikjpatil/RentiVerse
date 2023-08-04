@@ -79,7 +79,7 @@ function ProductPage() {
       } else if (error.response.status === 409) {
         window.alert("Request already sent!");
       } else if (error.response.status === 400) {
-        window.alert("Can't send request\nThis is your tool!");
+        window.alert("Can't sent the request!\nEither owner of this tool has already accepted a request or you are sending request to your own tool");
       } else if (error.response.status === 401) {
         window.alert("You are not logged in");
         navigate("/login");
