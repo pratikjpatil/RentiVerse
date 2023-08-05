@@ -63,6 +63,13 @@ const userSchema = new mongoose.Schema({
             //required: true,
         },
     },
+    isVerified : {
+        type: Boolean,
+        default: false
+    },
+    otp : {
+        type: Number,
+    },
     createdAt : {
         type: Date,
         default: Date.now,
