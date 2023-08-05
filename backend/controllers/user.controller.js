@@ -1,9 +1,14 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {sendOtpToPhone, verifyOtpPhone} = require("../utils/otp");
 
 const registerUser = async (req, res) => {
     const { pincode, phone, email, gender, password, firstname, lastname, state, village, district, city } = req.body;
+    const kkk = sendOtpToPhone(phone);
+    console.log(JSON.stringify(kkk))
+    
+    
 
     try {
         const existingUser = await User.findOne({ email: email.toLowerCase() });

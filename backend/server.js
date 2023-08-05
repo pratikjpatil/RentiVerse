@@ -40,7 +40,7 @@ const getMyTools = require("./routes/getMyTools");  //dashboard page
 const itemRoutes = require("./routes/itemRoutes");    //add on rent page
 const profile = require("./routes/userProfile");    //profile page, show profile details and edit profile details
 const productRequest = require("./routes/productRequest")   //request feature, send product request to owner for rent, show received requests for your listed products, accept the request , reject the request
-
+const verifyOTP = require("./routes/verifyOTP")
 
 
 
@@ -50,7 +50,7 @@ app.use("/api/tools", getMyTools);
 app.use("/api/item", itemRoutes);
 app.use("/api/profile", profile);
 app.use("/api/request", productRequest);
-
+app.use('/api/verify', verifyOTP);
 
 
 
