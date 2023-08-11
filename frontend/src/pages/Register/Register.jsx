@@ -29,7 +29,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleRegistration = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (!selectedGender) {
       window.alert("Please select your gender.");
       return;
@@ -37,11 +37,12 @@ const Register = () => {
     try {
       if (otpSent) {
         // If OTP is already sent, verify the OTP
+        
         const response = await axios.post(
           process.env.REACT_APP_BACKEND_URL + "/api/user/verify-otp",
           {
             phone: user.phone,
-            otp,
+            otp: Number(otp.join("")),
           }
         );
         if (response.status === 200) {
