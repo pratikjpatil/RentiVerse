@@ -16,13 +16,13 @@ router.post(
         check("email", "Email length should be 3 to 30 characters")
             .trim()
             .isEmail()
-            .isLength({ min: 3, max: 30 }),
+            .isLength({ max: 30 }),
         check("firstname", "Name length should be 10 to 20 characters")
             .trim()
-            .isLength({ min: 3, max: 20, }),
+            .isLength({ min: 1, max: 20, }),
         check("lastname", "Password length should be 3 to 20 characters")
             .trim()
-            .isLength({ min: 3, max: 20 }),
+            .isLength({ min: 1, max: 20 }),
         check("phone", "Mobile number should contains 10 digits")
             .trim()
             .isInt()
@@ -30,9 +30,9 @@ router.post(
         check("password", "Password length should be 6 to 20 characters")
             .trim()
             .isLength({ min: 6, max: 20 }),
-        check("gender", "gender length should be 4 to 6 characters")
+        check("gender", "gender should be male, female or other")
             .trim()
-            .isLength({ min: 4, max: 6 }),
+            .isIn(['male', 'female', 'other']),
         check("pincode", "Pincode length should be 1 to 10 characters")
             .trim()
             .isLength({ min: 1, max: 10 }),

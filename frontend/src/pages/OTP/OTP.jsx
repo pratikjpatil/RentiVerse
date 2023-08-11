@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import "./OTP.css";
 import otpimg from "../../assets/otp.png";
-import axios from 'axios';
 
 const OTP = ({ otp, setOtp, handleOtpVerification }) => {
   const [error, setError] = useState(null);
@@ -10,8 +9,8 @@ const OTP = ({ otp, setOtp, handleOtpVerification }) => {
     setError(null);
   
     // Check if all OTP inputs are filled
-    if (otp.length !== 4 || otp.includes('')) {
-      setError("Please enter a valid OTP.");
+    if (otp.length !== 5 || otp.includes('')) {
+      window.alert("Please enter a valid OTP.");
       return;
     }
   

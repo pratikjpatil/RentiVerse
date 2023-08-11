@@ -19,21 +19,18 @@ const Register = () => {
     email: "",
     phone: "",
     password: "",
+    gender: "",
   });
   const { isLoggedIn, setIsLoggedIn, setFirstName } = useContext(AuthContext);
-  const [selectedGender, setSelectedGender] = useState("");
+  const [selectedGender, setSelectedGender] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState(['', '', '', '']);
+  const [otp, setOtp] = useState(['', '', '', '', '']);
 
 
   const navigate = useNavigate();
 
   const handleRegistration = async (e) => {
-    // e.preventDefault();
-    if (!selectedGender) {
-      window.alert("Please select your gender.");
-      return;
-    }
+
     try {
       if (otpSent) {
         // If OTP is already sent, verify the OTP
@@ -53,12 +50,17 @@ const Register = () => {
         }
       } else {
         // If OTP is not sent, send OTP to the user
+        e.preventDefault();
+        if (!selectedGender) {
+          window.alert("Please select your gender.");
+          return;
+        }
+        
         const response = await axios.post(
-          process.env.REACT_APP_BACKEND_URL + "/api/user/register",
-          user
-        );
+          process.env.REACT_APP_BACKEND_URL + "/api/user/register", user );
+          console.log(response)
         if (response.status === 200) {
-          setOtpSent(true); // Set otpSent to true after successful OTP send
+          setOtpSent(true);
           window.alert("OTP sent successfully");
         }
       }
@@ -66,8 +68,9 @@ const Register = () => {
       console.log(error);
       if (otpSent) {
         window.alert("OTP verification failed");
-      } else {
-        window.alert("There was an error");
+      } 
+      else {
+        window.alert(error.response.data.message);
       }
     }
   };
@@ -120,24 +123,28 @@ const Register = () => {
                   <div className="gender-buttons">
                     <button
                       type="button"
-                      className={selectedGender === "male" ? "blue" : "transparent-blue"}
-                      onClick={() => setSelectedGender("male")}
+                      className={user.gender === "male" ? "blue" : "transparent-blue"}
+                      onClick={() => {
+                        setSelectedGender(true); 
+                        setUser({...user, gender: "male"});
+                      }
+                    }
                     >
                       <img src={maleImage} alt="Male" className="gender-icon" />
                       Male
                     </button>
                     <button
                       type="button"
-                      className={selectedGender === "female" ? "blue" : "transparent-blue"}
-                      onClick={() => setSelectedGender("female")}
+                      className={user.gender === "female" ? "blue" : "transparent-blue"}
+                      onClick={() => {setSelectedGender(true); setUser({...user, gender: "female"});}}
                     >
                       <img src={femaleImage} alt="Female" className="gender-icon" />
                       Female
                     </button>
                     <button
                       type="button"
-                      className={selectedGender === "other" ? "blue" : "transparent-blue"}
-                      onClick={() => setSelectedGender("other")}
+                      className={user.gender === "other" ? "blue" : "transparent-blue"}
+                      onClick={() => {setSelectedGender(true); setUser({...user, gender: "other"});}}
                     >
                       Other
                     </button>

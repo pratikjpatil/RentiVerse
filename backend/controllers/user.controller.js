@@ -7,7 +7,8 @@ const { sendOtpToPhone, verifyOtpPhone } = require("../utils/otp");
 const registerUser = async (req, res) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
-    res.json(validationErrors);
+    console.log(validationErrors)
+    res.status(403).json({message: validationErrors});
     return;
   }
   const {
@@ -28,17 +29,14 @@ const registerUser = async (req, res) => {
     const existingUser = await User.findOne({ email: email.toLowerCase() });
 
     if (existingUser && existingUser.isVerified === true) {
+      console.log("existingUser && existingUser.isVerified === true")
       return res
         .status(400)
         .json({ message: "User already exists and verified" });
     }
 
-    const isOtpSent = await sendOtpToPhone(phone);
-    if(!isOtpSent.success){
-      return isOtpSent.message;
-    }
-
     if (existingUser && existingUser.isVerified === false) {
+      console.log("User not verified. OTP sent successfully.")
       return res
         .status(202)
         .json({ message: "User not verified. OTP sent successfully." });
@@ -64,6 +62,11 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
+    const isOtpSent = await sendOtpToPhone(phone);
+    if(!isOtpSent.success){
+      return isOtpSent.message;
+    }
+
     return res
       .status(200)
       .json({ message: "OTP sent to phone", firstName: result.firstName });
@@ -80,12 +83,14 @@ const verifyOtp = async (req, res) => {
     const user = await User.findOne({ phone });
 
     if (!user) {
+      console.log("you are not registered")
       return res.status(404).json({ message: "you are not registered" });
     }
 
     const isOtpValid = await verifyOtpPhone(phone, otp);
 
     if (!isOtpValid) {
+      console.log("Invalid OTP")
       return res.status(400).json({ message: "Invalid OTP" });
     } else {
       user.isVerified = true;
@@ -103,7 +108,7 @@ const verifyOtp = async (req, res) => {
 
       res.cookie("token", token, { httpOnly: true, expires: cookieExpiration });
 
-      return res.status(200).json({ message: "OTP verification successful" });
+      return res.status(200).json({ message: "OTP verification successful", firstName: user.firstName });
     }
   } catch (error) {
     console.error("Error during OTP verification:", error);
