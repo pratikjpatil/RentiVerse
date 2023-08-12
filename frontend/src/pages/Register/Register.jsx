@@ -5,7 +5,6 @@ import axios from "axios";
 import maleImage from "../../assets/male.png";
 import femaleImage from "../../assets/female.png";
 import "./Register.css";
-import OTP from "../OTP/OTP";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -16,70 +15,43 @@ const Register = () => {
     district: "",
     state: "",
     pincode: "",
-    email: "",
-    phone: "",
     password: "",
     gender: "",
   });
   const { isLoggedIn, setIsLoggedIn, setFirstName } = useContext(AuthContext);
   const [selectedGender, setSelectedGender] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState(['', '', '', '', '']);
 
 
   const navigate = useNavigate();
 
   const handleRegistration = async (e) => {
-
+    e.preventDefault();
     try {
-      if (otpSent) {
-        // If OTP is already sent, verify the OTP
-        
-        const response = await axios.post(
-          process.env.REACT_APP_BACKEND_URL + "/api/user/verify-otp",
-          {
-            phone: user.phone,
-            otp: Number(otp.join("")),
-          }
-        );
-        if (response.status === 200) {
-          setFirstName(response.data.firstName);
-          setIsLoggedIn(true);
-          window.alert("Registration successful");
-          navigate("/dashboard");
-        }
-      } else {
-        // If OTP is not sent, send OTP to the user
-        e.preventDefault();
-        if (!selectedGender) {
-          window.alert("Please select your gender.");
-          return;
-        }
-        
-        const response = await axios.post(
-          process.env.REACT_APP_BACKEND_URL + "/api/user/register", user );
-          console.log(response)
-        if (response.status === 200) {
-          setOtpSent(true);
-          window.alert("OTP sent successfully");
-        }
+      if (!selectedGender) {
+        window.alert("Please select your gender.");
+        return;
+      }
+
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_URL + "/api/user/register",
+        user,
+        {withCredentials: true}
+      );
+      console.log(response);
+      if (response.status === 200) {
+        setFirstName(response.data.firstName);
+        setIsLoggedIn(true);
+        window.alert("Registration successful");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
-      if (otpSent) {
-        window.alert("OTP verification failed");
-      } 
-      else {
-        window.alert(error.response.data.message);
-      }
+      window.alert(error.response.data.message);
     }
   };
 
   return (
     <>
-      {otpSent ? (
-        <OTP otp={otp} setOtp={setOtp} handleOtpVerification={handleRegistration} />
-      ) : (
         <div className="register">
           <div className="reegister-heading-content">
             <h1 className="register-header">Register on RentiVerse</h1>
@@ -97,7 +69,9 @@ const Register = () => {
                     name="firstName"
                     placeholder="Type your First name"
                     value={user.firstname}
-                    onChange={(e) => setUser({ ...user, firstname: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, firstname: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -111,7 +85,9 @@ const Register = () => {
                     name="lastName"
                     placeholder="Type your Last name"
                     value={user.lastname}
-                    onChange={(e) => setUser({ ...user, lastname: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, lastname: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -123,35 +99,50 @@ const Register = () => {
                   <div className="gender-buttons">
                     <button
                       type="button"
-                      className={user.gender === "male" ? "blue" : "transparent-blue"}
-                      onClick={() => {
-                        setSelectedGender(true); 
-                        setUser({...user, gender: "male"});
+                      className={
+                        user.gender === "male" ? "blue" : "transparent-blue"
                       }
-                    }
+                      onClick={() => {
+                        setSelectedGender(true);
+                        setUser({ ...user, gender: "male" });
+                      }}
                     >
                       <img src={maleImage} alt="Male" className="gender-icon" />
                       Male
                     </button>
                     <button
                       type="button"
-                      className={user.gender === "female" ? "blue" : "transparent-blue"}
-                      onClick={() => {setSelectedGender(true); setUser({...user, gender: "female"});}}
+                      className={
+                        user.gender === "female" ? "blue" : "transparent-blue"
+                      }
+                      onClick={() => {
+                        setSelectedGender(true);
+                        setUser({ ...user, gender: "female" });
+                      }}
                     >
-                      <img src={femaleImage} alt="Female" className="gender-icon" />
+                      <img
+                        src={femaleImage}
+                        alt="Female"
+                        className="gender-icon"
+                      />
                       Female
                     </button>
                     <button
                       type="button"
-                      className={user.gender === "other" ? "blue" : "transparent-blue"}
-                      onClick={() => {setSelectedGender(true); setUser({...user, gender: "other"});}}
+                      className={
+                        user.gender === "other" ? "blue" : "transparent-blue"
+                      }
+                      onClick={() => {
+                        setSelectedGender(true);
+                        setUser({ ...user, gender: "other" });
+                      }}
                     >
                       Other
                     </button>
                   </div>
                 </div>
 
-                <div className="col">
+                {/* <div className="col">
                   <label htmlFor="mobile" className="register-lable">
                     Mobile Number
                   </label>
@@ -163,13 +154,15 @@ const Register = () => {
                     pattern="[0-9]{10}"
                     title="Enter 10 digit number"
                     value={user.phone}
-                    onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, phone: e.target.value })
+                    }
                     required
                   />
-                </div>
+                </div> */}
               </div>
 
-              <div className="row">
+              {/* <div className="row">
                 <div className="col">
                   <label htmlFor="email" className="register-lable">
                     Email
@@ -180,11 +173,13 @@ const Register = () => {
                     name="email"
                     placeholder="example@email.com"
                     value={user.email}
-                    onChange={(e) => setUser({ ...user, email: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, email: e.target.value })
+                    }
                     required
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div className="row">
                 <div className="col">
@@ -197,7 +192,9 @@ const Register = () => {
                     name="town"
                     placeholder="Type your village"
                     value={user.village}
-                    onChange={(e) => setUser({ ...user, village: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, village: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -211,7 +208,9 @@ const Register = () => {
                     name="district"
                     placeholder="Type your district"
                     value={user.district}
-                    onChange={(e) => setUser({ ...user, district: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, district: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -241,7 +240,9 @@ const Register = () => {
                     name="state"
                     placeholder="Type your State"
                     value={user.state}
-                    onChange={(e) => setUser({ ...user, state: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, state: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -257,7 +258,9 @@ const Register = () => {
                     name="pincode"
                     placeholder="Type your pincode"
                     value={user.pincode}
-                    onChange={(e) => setUser({ ...user, pincode: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, pincode: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -271,7 +274,9 @@ const Register = () => {
                     name="password"
                     placeholder="Type your password"
                     value={user.password}
-                    onChange={(e) => setUser({ ...user, password: e.target.value })}
+                    onChange={(e) =>
+                      setUser({ ...user, password: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -279,11 +284,12 @@ const Register = () => {
               <button type="submit" className="transparent-register">
                 Register
               </button>
-              <div onClick={() => navigate("/login")}>Already registered? click here.</div>
+              <div onClick={() => navigate("/login")}>
+                Already registered? click here.
+              </div>
             </form>
           </div>
         </div>
-      )}
     </>
   );
 };

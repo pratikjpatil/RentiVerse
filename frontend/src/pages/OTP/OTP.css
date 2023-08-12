@@ -41,10 +41,9 @@
     color: #6764FF;
 }
 .otp-label {
-  font-size: 10px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: medium;
   color: #6764ff;
-  margin-right: 7rem;
   margin-bottom: 10px;
 }
 
@@ -58,7 +57,7 @@
 
 .otp-inputs {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
   margin-bottom: 20px;
   border-radius: 4px;
@@ -102,4 +101,28 @@
   font-size: 14px;
   color: #ff0000;
   cursor: pointer;
+}
+
+.num-input-div{
+  display: flex;
+  justify-content: center;
+}
+
+.data-input{
+  max-height: 2rem;
+  max-width: 10rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.verify-text{
+  padding-top: 0.2rem;
+  margin-left: 1.5rem;
+  color: #007bff;
+}
+
+.bottom-text{
+  font-size: 12px;
+  text-align: center;
+  color: grey;
 }

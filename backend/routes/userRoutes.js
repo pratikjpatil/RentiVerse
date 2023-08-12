@@ -7,26 +7,27 @@ const {
     userLogin,
     userLogout,
     checkIfLoggedIn,
+    sendOtp,
     verifyOtp,
 } = require("../controllers/user.controller");
 
 router.post(
     "/register",
     [
-        check("email", "Email length should be 3 to 30 characters")
-            .trim()
-            .isEmail()
-            .isLength({ max: 30 }),
+        // check("email", "Email length should be 3 to 30 characters")
+        //     .trim()
+        //     .isEmail()
+        //     .isLength({ max: 30 }),
         check("firstname", "Name length should be 10 to 20 characters")
             .trim()
             .isLength({ min: 1, max: 20, }),
         check("lastname", "Password length should be 3 to 20 characters")
             .trim()
             .isLength({ min: 1, max: 20 }),
-        check("phone", "Mobile number should contains 10 digits")
-            .trim()
-            .isInt()
-            .isLength({ min: 10, max: 10 }),
+        // check("phone", "Mobile number should contains 10 digits")
+        //     .trim()
+        //     .isInt()
+        //     .isLength({ min: 10, max: 10 }),
         check("password", "Password length should be 6 to 20 characters")
             .trim()
             .isLength({ min: 6, max: 20 }),
@@ -51,6 +52,16 @@ router.post(
     ],
     registerUser
 );
+router.post("/send-otp", [
+    check("email", "Email length should be 3 to 30 characters")
+        .trim()
+        .isEmail()
+        .isLength({ min : 3, max: 30 }),
+    check("phone", "Mobile number should contains 10 digits")
+        .trim()
+        .isLength({ min: 10, max: 10 }),
+]
+    , sendOtp)
 router.post("/verify-otp", verifyOtp);
 router.post("/login", userLogin);
 router.delete("/logout", auth, userLogout);
