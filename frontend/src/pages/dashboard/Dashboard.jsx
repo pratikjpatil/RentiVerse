@@ -5,6 +5,8 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "./dashboard.css";
 import ToolCard from "../../components/card/ToolCard";
+import toast from 'react-hot-toast';
+
 axios.defaults.withCredentials = true;
 
 const Dashboard = () => {

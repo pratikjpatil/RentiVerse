@@ -6,7 +6,7 @@ import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import maleImage from "../../assets/male.png";
 import femaleImage from "../../assets/female.png"
-
+import toast from 'react-hot-toast';
 import "./ProfilePage.css";
 
 const ProfilePage = () => {

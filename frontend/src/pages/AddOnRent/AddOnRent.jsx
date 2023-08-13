@@ -6,7 +6,7 @@ import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import Image from "../../assets/Upload.png";
 import LoadingDots from "../../assets/loadingDots.gif"
-
+import toast from 'react-hot-toast';
 import "./AddOnRent.css";
 
 const AddOnRent = () => {

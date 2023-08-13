@@ -11,7 +11,16 @@ const sendRequest = async (req, res) => {
 
     try {
 
-        const tool = await Tool.findOne({ itemId: itemId });
+        const tool = await Tool.findOne({ itemId: itemId }).populate("receivedRequests");
+
+        const isAlreadyAccepted = tool.receivedRequests.some((request)=>{
+            return request.requestStatus === "accepted"
+        })
+
+
+        if(isAlreadyAccepted){
+            return res.status(400).json({message: "Another request for this tool is already accepted"});
+        }
 
         if (!tool) {
             return res.status(404).json({ message: "Tool not found" });

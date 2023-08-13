@@ -12,11 +12,11 @@ const userSchema = new mongoose.Schema({
     },  
     firstName: {
         type: String,
-        required: true,
+        // required: true,
     },
     lastName: {
         type: String,
-        required: true,
+        // required: true,
     },
     gender: {
         type: String,
@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        default: null,
+        // required: true
     },
     address: {
         village: {
@@ -62,6 +63,13 @@ const userSchema = new mongoose.Schema({
             default: 'India'
             //required: true,
         },
+    },
+    isVerified : {
+        type: Boolean,
+        default: false
+    },
+    otp : {
+        type: Number,
     },
     createdAt : {
         type: Date,
