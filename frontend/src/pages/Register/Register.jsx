@@ -5,6 +5,7 @@ import axios from "axios";
 import maleImage from "../../assets/male.png";
 import femaleImage from "../../assets/female.png";
 import "./Register.css";
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -26,9 +27,10 @@ const Register = () => {
 
   const handleRegistration = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading('Loading...');
     try {
       if (!selectedGender) {
-        window.alert("Please select your gender.");
+        toast.error("Please select your gender.");
         return;
       }
 
@@ -38,15 +40,23 @@ const Register = () => {
         {withCredentials: true}
       );
       console.log(response);
+      
       if (response.status === 200) {
+        toast.success(response.data.message, {
+          id: toastId,
+        })
         setFirstName(response.data.firstName);
         setIsLoggedIn(true);
-        window.alert("Registration successful");
         navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
-      window.alert(error.response.data.message);
+      toast.error(error.response.data.message, {
+        id: toastId,
+      });
+      if(error.response.status===405){
+        navigate('/verify')
+      }
     }
   };
 

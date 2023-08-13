@@ -8,7 +8,7 @@ const sendOtp = async (req, res) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     console.log(validationErrors);
-    res.status(403).json({ message: validationErrors });
+    res.status(403).json({ message: validationErrors.errors[0].msg });
     return;
   }
   const { phone, email } = req.body;
@@ -66,7 +66,7 @@ const sendOtp = async (req, res) => {
 };
 
 const verifyOtp = async (req, res) => {
-  console.log(req.body)
+  
   const { phone, email, phoneOtp, emailOtp } = req.body;
   try {
     const isOtpValid = await verifyOtpPhone(phone, phoneOtp);
@@ -104,7 +104,7 @@ const registerUser = async (req, res) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     console.log(validationErrors);
-    res.status(403).json({ message: validationErrors });
+    res.status(403).json({ message: validationErrors.errors[0].msg});
     return;
   }
 
@@ -112,7 +112,7 @@ const registerUser = async (req, res) => {
   // as we are sending the email and phone in cookie in verify-otp route
   if (!req.cookies.registerTemp) {
     return res
-      .status(400)
+      .status(405)
       .json({ message: "first verify your phone number and email" });
   }
 
@@ -144,7 +144,7 @@ const registerUser = async (req, res) => {
     if ((!existingUser) || (existingUser && existingUser.isVerified === false)) {
       console.log("User has not verified email and phone");
       return res
-        .status(400)
+        .status(405)
         .json({ message: "You have not verified phone and email" });
     }
 
@@ -168,7 +168,7 @@ const registerUser = async (req, res) => {
     
 
     const token = jwt.sign(
-      { email: existingUser.email, id: existing._id },
+      { email: existingUser.email, id: existingUser._id },
       process.env.SECRET_KEY,
       {
         expiresIn: process.env.JWT_TOKEN_EXPIRATION,

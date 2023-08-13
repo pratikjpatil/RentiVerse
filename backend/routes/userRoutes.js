@@ -34,9 +34,9 @@ router.post(
         check("gender", "gender should be male, female or other")
             .trim()
             .isIn(['male', 'female', 'other']),
-        check("pincode", "Pincode length should be 1 to 10 characters")
+        check("pincode", "Pincode length should be 6 characters")
             .trim()
-            .isLength({ min: 1, max: 10 }),
+            .isLength({ min: 6, max: 6 }),
         check("state", "State length should be 1 to 20 characters")
             .trim()
             .isLength({ min: 1, max: 20 }),
@@ -53,7 +53,7 @@ router.post(
     registerUser
 );
 router.post("/send-otp", [
-    check("email", "Email length should be 3 to 30 characters")
+    check("email", "Enter valid email")
         .trim()
         .isEmail()
         .isLength({ min : 3, max: 30 }),

@@ -11,14 +11,25 @@ import ProfilePage from "./pages/Profile/ProfilePage";
 import OTPPage from "./pages/OTP/OTP";
 import loadingPage from "./pages/loadingPage";
 import { AuthContext } from "./context/AuthContext";
-
-
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const { initialLoading } = useContext(AuthContext);
 
   return (
     <div className="App">
+      <div>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            success: {
+              theme: {
+                primary: "#4aed88",
+              },
+            },
+          }}
+        ></Toaster>
+      </div>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -29,7 +40,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/otp" element={<OTPPage />} />
+          <Route path="/verify" element={<OTPPage />} />
         </Routes>
       </BrowserRouter>
     </div>

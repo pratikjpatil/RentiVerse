@@ -6,6 +6,7 @@ import axios from "axios";
 import { Header, Sidebar } from "../../components";
 import "./ProductPage.css";
 import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
+import toast from 'react-hot-toast';
 
 function ProductPage() {
   const { productId } = useParams();

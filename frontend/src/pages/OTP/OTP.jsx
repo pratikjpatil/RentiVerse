@@ -3,6 +3,7 @@ import "./OTP.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import otpimg from "../../assets/otp.png";
+import toast from 'react-hot-toast';
 
 const OTP = () => {
   const [phoneOtp, setPhoneOtp] = useState(["", "", "", "", ""]);
@@ -29,15 +30,23 @@ const OTP = () => {
 
   const handleSendOtpRegister = async () => {
     setError(null);
+    const toastId = toast.loading('Loading...');
     try {
+      
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "/api/user/send-otp", data);
+
       if (response.status === 200) {
+        toast.success(response.data.message, {
+          id: toastId,
+        })
         console.log(response);
-        window.alert(response.data.message);
         setOtpSent(true);
       }
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.message, {
+        id: toastId,
+      })
       setError(error.response.data.message);
       setOtpSent(false);
     }
@@ -47,7 +56,7 @@ const OTP = () => {
     setError(null);
     // Check if all OTP inputs are filled
     if ((phoneOtp.length !== 5 || emailOtp.length !== 5) || (phoneOtp.includes("") || emailOtp.includes(""))) {
-      window.alert("Please enter a valid OTP.");
+      toast.error("Please enter a valid OTP.");
       return;
     }
 
@@ -60,12 +69,12 @@ const OTP = () => {
       );
       if (response.status === 200) {
         console.log(response);
-        window.alert("Verification successful");
+        toast.success("Verification successful");
         navigate("/register");
       }
     } catch (error) {
       console.log(error)
-      window.alert(error.response.data.message);
+      toast.error(error.response.data.message);
       setError(error.response.data.message)
     }
   };

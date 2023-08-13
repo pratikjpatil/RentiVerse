@@ -1,5 +1,6 @@
 import React from 'react'
 import Loading from "../assets/rentiVerseLoadingGif.gif"
+import toast from 'react-hot-toast';
 
 function loadingPage() {
   return (

@@ -126,3 +126,7 @@
   text-align: center;
   color: grey;
 }
+
+.error-message{
+  color: rgb(215, 3, 3);
+}

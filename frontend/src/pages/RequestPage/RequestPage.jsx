@@ -8,6 +8,7 @@ import Filter1 from "../../assets/filter1.png";
 import accept from "../../assets/accept.png";
 import reject from "../../assets/reject.png";
 import "./RequestPage.css";
+import toast from 'react-hot-toast';
 import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
 
 const RequestPage = () => {

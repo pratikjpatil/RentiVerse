@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 import Image from "../../assets/logo.png";
 import axios from "axios";
 import "./Login.css";
+import toast from 'react-hot-toast';
 
 const Login = () => {
 
@@ -18,20 +19,27 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading('Loading...');
     try {
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/user/login', input); 
       if (response.status === 200) {
         setFirstName(response.data.firstName);
         setIsLoggedIn(true);
-        window.alert("Login successful");
+        toast.success("Login successful", {
+          id: toastId,
+        });
         navigate('/'); 
       }
     } catch (error) {
       if(error.response && error.response.status===400){
-        window.alert("Invalid credentials");
+        toast.error("Invalid credentials", {
+          id: toastId,
+        });
       }
       else{
-        window.alert("There was an error");
+        toast.error("There was an error", {
+          id: toastId,
+        });
       }
       console.log(error);
       
@@ -39,7 +47,7 @@ const Login = () => {
   };
 
   const handleRegisterRedirect = () => {
-      navigate('/register');
+      navigate('/verify');
   };
   const [input, setInput] = useState({
     email: '',

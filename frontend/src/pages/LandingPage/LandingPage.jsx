@@ -3,6 +3,7 @@ import { Header, Sidebar } from "../../components";
 import axios from "axios";
 import "./landingpage.css";
 import ToolCard from "../../components/card/ToolCard";
+import toast from 'react-hot-toast';
 
 const LandingPage = () => {
   const [tools, setTools] = useState([]);
