@@ -44,10 +44,12 @@ const Register = () => {
       if (response.status === 200) {
         toast.success(response.data.message, {
           id: toastId,
+          duration: 5000,
+          position: 'top-center',
         })
         setFirstName(response.data.firstName);
         setIsLoggedIn(true);
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

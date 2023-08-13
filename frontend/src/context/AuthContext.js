@@ -21,6 +21,7 @@ const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         }
       } catch (error) {
+        setFirstName(error.response.data.firstName);
         setIsLoggedIn(false);
       }
       finally{

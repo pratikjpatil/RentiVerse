@@ -30,7 +30,7 @@ const OTP = () => {
 
   const handleSendOtpRegister = async () => {
     setError(null);
-    const toastId = toast.loading('Loading...');
+    const toastId = toast.loading('Sending OTP...');
     try {
       
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "/api/user/send-otp", data);
@@ -54,9 +54,12 @@ const OTP = () => {
 
   const handleVerifyOtpRegister = async () => {
     setError(null);
+    const toastId = toast.loading('Verifying...');
     // Check if all OTP inputs are filled
     if ((phoneOtp.length !== 5 || emailOtp.length !== 5) || (phoneOtp.includes("") || emailOtp.includes(""))) {
-      toast.error("Please enter a valid OTP.");
+      toast.error("Please enter a valid OTP.", {
+        id: toastId,
+      })
       return;
     }
 
@@ -69,12 +72,14 @@ const OTP = () => {
       );
       if (response.status === 200) {
         console.log(response);
-        toast.success("Verification successful");
+        toast.success("Verification successful",{id: toastId});
         navigate("/register");
       }
     } catch (error) {
       console.log(error)
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.message, {
+        id: toastId,
+      })
       setError(error.response.data.message)
     }
   };
