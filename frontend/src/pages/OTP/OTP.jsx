@@ -10,6 +10,7 @@ const OTP = () => {
   const [emailOtp, setEmailOtp] = useState(["", "", "", "", ""]);
   const [otpSent, setOtpSent] = useState(false);
   const [error, setError] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(600); // Initial time left in seconds (10 minutes)
 
   const [data, setData] = useState({
     phone: "",
@@ -20,6 +21,24 @@ const OTP = () => {
 
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    if (otpSent && timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+    
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  },[otpSent, timeLeft]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes < 10 ? "0" : ""}${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
   useEffect(() => {
     setData({
       ...data,
@@ -27,6 +46,7 @@ const OTP = () => {
       emailOtp: emailOtp.join(""),
     });
   }, [phoneOtp, emailOtp]);
+
 
   const handleSendOtpRegister = async () => {
     setError(null);
@@ -172,7 +192,7 @@ const OTP = () => {
             </div>
 
             <div className="time-container">
-              <p>Time Left: 00:10</p>
+              <p>Time Left: {formatTime(timeLeft)}</p>
             </div>
           </>
         )}
