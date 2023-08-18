@@ -39,16 +39,8 @@ const ProfilePage = () => {
 
       } catch (error) {
 
-        if (error.response && error.response.status === 401) {
-
-          window.alert("You are not logged in.")
-          navigate("/login");
-
-        } else {
-          console.log(error);
-          window.alert("Error");
-          navigate('/');
-        }
+        console.log(error);
+        toast.error(error.response.data.message);
       }
     }
 
@@ -71,27 +63,24 @@ const ProfilePage = () => {
   };
 
   const handleFormSubmit = async () => {
-
+    const toastId = toast.loading("updating...");
     try {
+      
       const response = await axios.put(backendUrl + "/api/profile/edit", formData, { withCredentials: true });
       if (response.status === 200) {
-        window.alert("Profile updated successfully!");
-      }
-      else {
-        window.alert("Something went wrong.\nProfile not updated.");
-        console.log(response);
+        toast.success("Profile updated successfully!", {id: toastId});
       }
     } catch (error) {
 
       if (error.response && error.response.status === 401) {
-        window.alert("Oops! you are not logged in.")
+        toast.error("Oops! you are not logged in.", {id: toastId});
 
         // Redirect to login page when unauthenticated
         navigate("/login");
 
       } else {
         console.log(error);
-        window.alert("Error");
+        toast.error(error.response.data.message);
         navigate('/');
       }
     }

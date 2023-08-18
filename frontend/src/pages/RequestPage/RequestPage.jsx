@@ -36,7 +36,7 @@ const RequestPage = () => {
           { withCredentials: true }
         );
       } catch (error) {
-        window.alert("You are not logged in");
+        toast.error("You are not logged in");
         navigate("/login");
         return;
       } finally {
@@ -59,8 +59,8 @@ const RequestPage = () => {
         console.log(result.data);
       }
     } catch (error) {
-      console.log(error.message);
-      window.alert(error.message);
+      console.log(error);
+      toast.error(error.response.data.message);
       return;
     } finally {
       setIsLoading(false);
@@ -77,12 +77,12 @@ const RequestPage = () => {
       setIsLoading(true);
       const result = await axios.put(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        window.alert("Request accepted");
+        toast.success("Request accepted");
         fetchRequests();
       }
     } catch (error) {
-      console.log(error.message);
-      window.alert(error.message);
+      console.log(error);
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }
@@ -94,12 +94,12 @@ const RequestPage = () => {
       setIsLoading(true);
       const result = await axios.post(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        window.alert("Request rejected");
+        toast.success("Request rejected");
         fetchRequests();
       }
     } catch (error) {
       console.log(error.message);
-      window.alert(error.message);
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }

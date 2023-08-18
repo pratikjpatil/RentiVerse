@@ -18,10 +18,19 @@ const AuthProvider = ({ children }) => {
         );
         if(response.status===200){
         setFirstName(response.data.firstName);
+        console.log(response.data.firstName)
         setIsLoggedIn(true);
         }
       } catch (error) {
-        setFirstName(error.response.data.firstName);
+        const name = error.response.data.firstName;
+
+        if(!name){
+          setFirstName("?");
+        }
+        else{
+          setFirstName(name);
+        }
+        
         setIsLoggedIn(false);
       }
       finally{

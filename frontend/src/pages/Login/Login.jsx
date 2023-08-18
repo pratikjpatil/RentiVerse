@@ -12,7 +12,7 @@ const Login = () => {
   const { isLoggedIn, setIsLoggedIn, setFirstName} = useContext(AuthContext);
 
   if(isLoggedIn){
-    window.alert("You are already logged in!");
+    toast.error("You are already logged in!");
     navigate('/profile')
   }
 
