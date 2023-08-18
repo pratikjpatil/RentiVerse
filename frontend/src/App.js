@@ -32,7 +32,7 @@ function App() {
       </div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage/>} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/addonrent" element={<AddOnRent />} />

@@ -32,9 +32,9 @@ function ProductPage() {
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          window.alert("Product not found");
+          toast.error("Product not found");
         } else {
-          window.alert("Error fetching product");
+          toast.error("Error fetching product");
         }
       } finally {
         setIsLoading(false);
@@ -72,20 +72,20 @@ function ProductPage() {
 
       if (result.status === 201) {
         console.log(result.data);
-        window.alert("Product request sent");
+        toast.error("Product request sent");
       }
     } catch (error) {
       if (error.response.status === 404) {
-        window.alert("Invalid tool\nTool not found");
+        toast.error("Invalid tool\nTool not found");
       } else if (error.response.status === 409) {
-        window.alert("Request already sent!");
+        toast.error("Request already sent!");
       } else if (error.response.status === 400) {
-        window.alert("Can't sent the request!\nEither owner of this tool has already accepted a request or you are sending request to your own tool");
+        toast.error("Can't sent the request!\nEither owner of this tool has already accepted a request or you are sending request to your own tool");
       } else if (error.response.status === 401) {
-        window.alert("You are not logged in");
+        toast.error("You are not logged in");
         navigate("/login");
       } else {
-        window.alert("Internal server error");
+        toast.error("Internal server error");
       }
     } finally {
       setIsLoading(false);

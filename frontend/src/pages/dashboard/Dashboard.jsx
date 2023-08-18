@@ -30,8 +30,8 @@ const Dashboard = () => {
     const fetchListedTools = async () => {
       try {
         if(!isLoggedIn){
-          window.alert("You are not logged in!");
-          navigate('/');
+          toast.error("You are not logged in!");
+          navigate('/login');
           return;
         }
         const listed = await axios.get(`${backendUrl}/api/tools/listed`, { withCredentials: true });
@@ -50,7 +50,7 @@ const Dashboard = () => {
       } catch (error) {
         
           console.log(error);
-          window.alert("Error"); 
+          toast.error(error.response.data.message); 
         
       }
     };

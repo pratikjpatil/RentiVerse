@@ -171,7 +171,7 @@ const registerUser = async (req, res) => {
     existingUser.address.city = city.toLowerCase();
     existingUser.address.district = district.toLowerCase();
     existingUser.address.state = state.toLowerCase();
-    existingUser.address.pincode;
+    existingUser.address.pincode = pincode;
 
     existingUser.password = hashedPassword;
 
