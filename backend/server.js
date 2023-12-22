@@ -57,7 +57,7 @@ app.use("/api/tools", getMyToolsRoutes);
 app.use("/api/item", itemRoutes);
 app.use("/api/profile", userProfileRoutes);
 app.use("/api/request", productRequest);
-app.use("/api/pay", paymentRoute);
+app.use("/api/payment", paymentRoute);
 
 
 

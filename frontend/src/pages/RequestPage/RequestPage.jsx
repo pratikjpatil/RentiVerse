@@ -1,26 +1,26 @@
 // RequestPage.js
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Sidebar from '../../components/sidebar/sidebar';
-import Header from '../../components/header/Header';
-import Filter from '../../assets/filter.png';
-import Filter1 from '../../assets/filter1.png';
-import accept from '../../assets/accept.png';
-import reject from '../../assets/reject.png';
-import './RequestPage.css';
-import toast from 'react-hot-toast';
-import rentiVerseLoadingGif from '../../assets/rentiVerseLoadingGif.gif';
-import ChatModal from '../../components/ChatModal';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Sidebar from "../../components/sidebar/sidebar";
+import Header from "../../components/header/Header";
+import Filter from "../../assets/filter.png";
+import Filter1 from "../../assets/filter1.png";
+import accept from "../../assets/accept.png";
+import reject from "../../assets/reject.png";
+import "./RequestPage.css";
+import toast from "react-hot-toast";
+import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
+import ChatModal from "../../components/ChatModal";
 
 const RequestPage = () => {
   const [tableData, setTableData] = useState([]);
-  const [requestOption, setRequestOption] = useState('show-received');
-  const [filter, setFilter] = useState('all');
+  const [requestOption, setRequestOption] = useState("show-received");
+  const [filter, setFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [selectedUserName, setSelectedUserName] = useState('');
+  const [selectedUserName, setSelectedUserName] = useState("");
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
@@ -32,7 +32,7 @@ const RequestPage = () => {
 
   const openChatModal = (user2Id, user2Name) => {
     setSelectedUserId(user2Id);
-    setSelectedUserName(user2Name)
+    setSelectedUserName(user2Name);
     setIsChatModalOpen(true);
   };
 
@@ -47,12 +47,15 @@ const RequestPage = () => {
     const checkLoginStatus = async () => {
       try {
         setIsLoading(true);
-        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`, {
-          withCredentials: true,
-        });
+        await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`,
+          {
+            withCredentials: true,
+          }
+        );
       } catch (error) {
-        toast.error('You are not logged in');
-        navigate('/login');
+        toast.error("You are not logged in");
+        navigate("/login");
         return;
       } finally {
         setIsLoading(false);
@@ -89,7 +92,7 @@ const RequestPage = () => {
       setIsLoading(true);
       const result = await axios.put(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        toast.success('Request accepted');
+        toast.success("Request accepted");
         fetchRequests();
       }
     } catch (error) {
@@ -105,7 +108,7 @@ const RequestPage = () => {
       setIsLoading(true);
       const result = await axios.post(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        toast.success('Request rejected');
+        toast.success("Request rejected");
         fetchRequests();
       }
     } catch (error) {
@@ -115,13 +118,63 @@ const RequestPage = () => {
     }
   };
 
+  const initPayment = (data, productName, requestId) => {
+    console.log(process.env.REACT_APP_RAZORPAY_KEY_ID)
+    const options = {
+      key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+      amount: data.amount,
+      currency: data.currency,
+      name: productName,
+      description: "Test Transaction",
+      image: data.productImage,
+      order_id: data.id,
+      handler: async (response) => {
+        response.requestId = requestId;
+        try {
+          const verifyUrl = `${process.env.REACT_APP_BACKEND_URL}/api/payment/verify`;
+          const { data } = await axios.post(verifyUrl, response, {
+            withCredentials: true,
+          });
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    console.log(options)
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
+
+  const handlePayment = async (requestId, productName) => {
+    try {
+      const orderUrl = `${process.env.REACT_APP_BACKEND_URL}/api/payment/orders`;
+      const { data } = await axios.post(orderUrl, {requestId}, {
+        withCredentials: true,
+      });
+      // console.log(data);
+     
+      initPayment(data.data, productName, requestId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Header />
       <Sidebar />
       {isLoading ? (
         <div>
-          <img src={rentiVerseLoadingGif} className="rentiVerseLoadingGif" alt="Loading..." />
+          <img
+            src={rentiVerseLoadingGif}
+            className="rentiVerseLoadingGif"
+            alt="Loading..."
+          />
         </div>
       ) : (
         <div className="body-requestpage">
@@ -176,11 +229,11 @@ const RequestPage = () => {
                     <tr key={index}>
                       <td>{rowData.userName}</td>
                       <td>{rowData.toolName}</td>
-                      <td>{rowData.dueDate.split('T')[0]}</td>
+                      <td>{rowData.dueDate.split("T")[0]}</td>
                       <td>{rowData.message}</td>
                       <td>
-                        {rowData.requestStatus === 'pending' &&
-                        requestOption === 'show-received' ? (
+                        {rowData.requestStatus === "pending" &&
+                        requestOption === "show-received" ? (
                           <>
                             <button
                               className="request-button accept"
@@ -189,7 +242,11 @@ const RequestPage = () => {
                                 handleAcceptRequest(rowData.requestId);
                               }}
                             >
-                              <img className="accept-img" src={accept} alt="img" />
+                              <img
+                                className="accept-img"
+                                src={accept}
+                                alt="img"
+                              />
                             </button>
                             <button
                               className="request-button reject"
@@ -198,17 +255,22 @@ const RequestPage = () => {
                                 handleRejectRequest(rowData.requestId);
                               }}
                             >
-                              <img className="reject-img" src={reject} alt="img" />
+                              <img
+                                className="reject-img"
+                                src={reject}
+                                alt="img"
+                              />
                             </button>
                           </>
-                        ) : rowData.requestStatus === 'accepted' && requestOption === 'show-sent' ? (
+                        ) : rowData.requestStatus === "accepted" &&
+                          requestOption === "show-sent" ? (
                           <>
                             {rowData.requestStatus}
                             <button
                               className="request-button accept"
                               type="button"
                               onClick={() => {
-                                console.log('clicked on pay now');
+                                handlePayment(rowData.requestId, rowData.toolName);
                               }}
                             >
                               Pay Now
@@ -218,7 +280,13 @@ const RequestPage = () => {
                           rowData.requestStatus
                         )}
                         {/* Add a button or icon to open the chat modal */}
-                        <button onClick={() => openChatModal(rowData.user2Id, rowData.userName)}>Open Chat</button>
+                        <button
+                          onClick={() =>
+                            openChatModal(rowData.user2Id, rowData.userName)
+                          }
+                        >
+                          Open Chat
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -231,7 +299,12 @@ const RequestPage = () => {
             </table>
           </div>
           {/* Render the ChatModal component */}
-          <ChatModal isOpen={isChatModalOpen} onRequestClose={closeChatModal} user2Id={selectedUserId} user2Name={selectedUserName}/>
+          <ChatModal
+            isOpen={isChatModalOpen}
+            onRequestClose={closeChatModal}
+            user2Id={selectedUserId}
+            user2Name={selectedUserName}
+          />
         </div>
       )}
     </>

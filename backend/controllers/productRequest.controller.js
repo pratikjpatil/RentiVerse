@@ -115,6 +115,8 @@ const acceptRequest = async (req, res) => {
             { $set: { requestStatus: "rejected", rejectedAt: new Date() } }
         );
 
+        await Tool.findOneAndUpdate({_id: request.itemId._id}, {$set: {acceptedRequestId: request._id}});
+
         res.status(200).json({ message: "Request accepted successfully" });
 
     } catch (error) {

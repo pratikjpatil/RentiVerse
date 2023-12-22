@@ -52,12 +52,19 @@ const toolSchema = new mongoose.Schema({
     renterId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        default: null,
     }, //person who has taken this tool on rent
 
     receivedRequests: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: "RentRequest",
     },  //requests received for this product for renting
+
+    acceptedRequestId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RentRequest",
+        default: null,
+    }, //person who has taken this tool on rent
 
     createdAt: {
         type: Date,

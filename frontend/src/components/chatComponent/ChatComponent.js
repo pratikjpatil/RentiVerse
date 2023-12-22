@@ -85,7 +85,7 @@ export default function ChatComponent({ user2Id }) {
   }, [messages]);
 
   return (
-    <div className="container">
+    <div className="container-chat container">
       <div className="chat-messages">
         {messages.map((message) => (
           <div ref={scrollRef} key={uuidv4()}>
