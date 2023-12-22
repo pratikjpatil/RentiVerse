@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Sidebar from "../../components/sidebar/sidebar";
-import Header from "../../components/header/Header";
-import Filter from "../../assets/filter.png";
-import Filter1 from "../../assets/filter1.png";
-import accept from "../../assets/accept.png";
-import reject from "../../assets/reject.png";
-import "./RequestPage.css";
+// RequestPage.js
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Sidebar from '../../components/sidebar/sidebar';
+import Header from '../../components/header/Header';
+import Filter from '../../assets/filter.png';
+import Filter1 from '../../assets/filter1.png';
+import accept from '../../assets/accept.png';
+import reject from '../../assets/reject.png';
+import './RequestPage.css';
 import toast from 'react-hot-toast';
-import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
+import rentiVerseLoadingGif from '../../assets/rentiVerseLoadingGif.gif';
+import ChatModal from '../../components/ChatModal';
 
 const RequestPage = () => {
   const [tableData, setTableData] = useState([]);
-  const [requestOption, setRequestOption] = useState("show-received");
-  const [filter, setFilter] = useState("all");
+  const [requestOption, setRequestOption] = useState('show-received');
+  const [filter, setFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUserName, setSelectedUserName] = useState('');
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
@@ -25,19 +30,29 @@ const RequestPage = () => {
     setRequestOption(event.target.value);
   };
 
+  const openChatModal = (user2Id, user2Name) => {
+    setSelectedUserId(user2Id);
+    setSelectedUserName(user2Name)
+    setIsChatModalOpen(true);
+  };
+
+  const closeChatModal = () => {
+    setSelectedUserId(null);
+    setIsChatModalOpen(false);
+  };
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         setIsLoading(true);
-        await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`,
-          { withCredentials: true }
-        );
+        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`, {
+          withCredentials: true,
+        });
       } catch (error) {
-        toast.error("You are not logged in");
-        navigate("/login");
+        toast.error('You are not logged in');
+        navigate('/login');
         return;
       } finally {
         setIsLoading(false);
@@ -56,12 +71,9 @@ const RequestPage = () => {
 
       if (result.status === 200) {
         setTableData(result.data);
-        console.log(result.data);
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message);
-      return;
     } finally {
       setIsLoading(false);
     }
@@ -77,11 +89,10 @@ const RequestPage = () => {
       setIsLoading(true);
       const result = await axios.put(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        toast.success("Request accepted");
+        toast.success('Request accepted');
         fetchRequests();
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
@@ -94,11 +105,10 @@ const RequestPage = () => {
       setIsLoading(true);
       const result = await axios.post(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        toast.success("Request rejected");
+        toast.success('Request rejected');
         fetchRequests();
       }
     } catch (error) {
-      console.log(error.message);
       toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
@@ -111,31 +121,20 @@ const RequestPage = () => {
       <Sidebar />
       {isLoading ? (
         <div>
-          <img
-            src={rentiVerseLoadingGif}
-            className="rentiVerseLoadingGif"
-            alt="Loading..."
-          />
+          <img src={rentiVerseLoadingGif} className="rentiVerseLoadingGif" alt="Loading..." />
         </div>
       ) : (
         <div className="body-requestpage">
           <h1 className="head-request">Renting Request</h1>
           <div className="filter-button">
-            {/* Filter image */}
             <div className="filter-image-container">
               <img src={Filter} alt="Filter Icon" className="filter-image" />
               <div className="filter-vertical-line"></div>
             </div>
             <div className="filter-image-container-1">
-              <img
-                src={Filter1}
-                alt="Filter Icon"
-                className="filter-image-1"
-              />
+              <img src={Filter1} alt="Filter Icon" className="filter-image-1" />
               <div className="filter-vertical-line-1"></div>
             </div>
-
-            {/* Select menu for request options */}
             <select
               className="head-request-filter"
               value={requestOption}
@@ -144,8 +143,6 @@ const RequestPage = () => {
               <option value="show-received">Received</option>
               <option value="show-sent">Sent</option>
             </select>
-
-            {/* Select menu for filter options */}
             <select
               className="head-request-filter-1"
               value={filter}
@@ -179,11 +176,11 @@ const RequestPage = () => {
                     <tr key={index}>
                       <td>{rowData.userName}</td>
                       <td>{rowData.toolName}</td>
-                      <td>{rowData.dueDate.split("T")[0]}</td>
+                      <td>{rowData.dueDate.split('T')[0]}</td>
                       <td>{rowData.message}</td>
                       <td>
-                        {rowData.requestStatus === "pending" &&
-                        requestOption === "show-received" ? (
+                        {rowData.requestStatus === 'pending' &&
+                        requestOption === 'show-received' ? (
                           <>
                             <button
                               className="request-button accept"
@@ -204,15 +201,14 @@ const RequestPage = () => {
                               <img className="reject-img" src={reject} alt="img" />
                             </button>
                           </>
-                        ) : rowData.requestStatus === "accepted" && requestOption === "show-sent" ? (
+                        ) : rowData.requestStatus === 'accepted' && requestOption === 'show-sent' ? (
                           <>
-                           { rowData.requestStatus}
-                            {/* Display "Pay Now" button */}
+                            {rowData.requestStatus}
                             <button
                               className="request-button accept"
                               type="button"
                               onClick={() => {
-                                console.log("clicked on pay now")
+                                console.log('clicked on pay now');
                               }}
                             >
                               Pay Now
@@ -221,6 +217,8 @@ const RequestPage = () => {
                         ) : (
                           rowData.requestStatus
                         )}
+                        {/* Add a button or icon to open the chat modal */}
+                        <button onClick={() => openChatModal(rowData.user2Id, rowData.userName)}>Open Chat</button>
                       </td>
                     </tr>
                   ))
@@ -232,6 +230,8 @@ const RequestPage = () => {
               </tbody>
             </table>
           </div>
+          {/* Render the ChatModal component */}
+          <ChatModal isOpen={isChatModalOpen} onRequestClose={closeChatModal} user2Id={selectedUserId} user2Name={selectedUserName}/>
         </div>
       )}
     </>

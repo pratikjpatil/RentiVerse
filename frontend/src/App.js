@@ -12,8 +12,10 @@ import OTPPage from "./pages/OTP/OTP";
 import loadingPage from "./pages/loadingPage";
 import { AuthContext } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
+import Modal from 'react-modal';
 
 function App() {
+  Modal.setAppElement('#root');
   const { initialLoading } = useContext(AuthContext);
 
   return (

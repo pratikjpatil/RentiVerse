@@ -203,12 +203,15 @@ async function getRequestsByStatusAndPopulate(userId, requestType, requestStatus
 
         const pendingRequests = user.requestType.map((request) => {
 
+            let user2Id = request.userId._id;
             if (userType === "ownerId") {  
                 request.userId = request.ownerId;
+                user2Id = request.ownerId._id;
             }   //if requested for received requests then need to sent the userName thats why userId & if req for sent requests then send the ownerName in response 
 
             return {
                 requestId: request.requestId,
+                user2Id: user2Id,
                 toolName: request.itemId.toolName,
                 userName: request.userId.firstName + " " + request.userId.lastName,
                 dueDate: request.dueDate,
@@ -275,8 +278,6 @@ const showRejectedRequests_sent = async (req, res) => {
     getRequestsByStatusAndPopulate(req.user.id, "sentRequests", "rejected", "ownerId", res);
 
 }
-
-
 
 const showPendingRequests_received = async (req, res) => {
     getRequestsByStatusAndPopulate(req.user.id, "receivedRequests", "pending", "userId", res);

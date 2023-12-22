@@ -59,9 +59,9 @@ function ProductPage() {
 
   const formSubmissionHandler = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading('Loading...');
     try {
       setIsLoading(true);
-
       const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
       const result = await axios.post(
@@ -72,20 +72,20 @@ function ProductPage() {
 
       if (result.status === 201) {
         console.log(result.data);
-        toast.error("Product request sent");
+        toast.success("Product request sent",{id: toastId});
       }
     } catch (error) {
       if (error.response.status === 404) {
-        toast.error("Invalid tool\nTool not found");
+        toast.error("Invalid tool\nTool not found",{id: toastId});
       } else if (error.response.status === 409) {
-        toast.error("Request already sent!");
+        toast.error("Request already sent!",{id: toastId});
       } else if (error.response.status === 400) {
-        toast.error("Can't sent the request!\nEither owner of this tool has already accepted a request or you are sending request to your own tool");
+        toast.error("Can't sent the request!\nEither owner of this tool has already accepted a request or you are sending request to your own tool",{id: toastId});
       } else if (error.response.status === 401) {
-        toast.error("You are not logged in");
+        toast.error("You are not logged in",{id: toastId});
         navigate("/login");
       } else {
-        toast.error("Internal server error");
+        toast.error("Internal server error",{id: toastId});
       }
     } finally {
       setIsLoading(false);

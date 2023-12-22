@@ -85,6 +85,7 @@ const userSchema = new mongoose.Schema({
     sentRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests sent to item owners
     receivedRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests received from others
 
+    chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }], //chats of the user with other users
 });     
 
 const User = new mongoose.model("User", userSchema);
