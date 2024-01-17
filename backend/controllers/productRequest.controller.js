@@ -1,50 +1,49 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
-const Tool = require("../models/tool");
+const Product = require("../models/product");
 const RentRequest = require("../models/rentRequest");
 
 const sendRequest = async (req, res) => {
 
-    const itemId = req.params.itemId;
+    const productId = req.params.productId;
     const userId = req.user.id;
     let { dueDate, message } = req.body;
 
     try {
 
-        const tool = await Tool.findOne({ itemId: itemId }).populate("receivedRequests");
+        const product = await Product.findOne({ productId }).populate("receivedRequests");
 
-        const isAlreadyAccepted = tool.receivedRequests.some((request)=>{
+        const isAlreadyAccepted = product.receivedRequests.some((request)=>{
             return request.requestStatus === "accepted"
         })
 
 
         if(isAlreadyAccepted){
-            return res.status(400).json({message: "Another request for this tool is already accepted"});
+            return res.status(400).json({message: "Another request is already accepted"});
         }
 
-        if (!tool) {
-            return res.status(404).json({ message: "Tool not found" });
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
         }
 
-        if (tool.ownerId == userId) {
-            return res.status(400).json({ message: "Owner cant send request to self" });
+        if (product.ownerId == userId) {
+            return res.status(400).json({ message: "Cannot send request to own product" });
         }
 
-        const exists = await RentRequest.findOne({ itemId: tool._id, userId: userId });
+        const exists = await RentRequest.findOne({ productId: product._id, userId: userId });
 
         if (exists) {
-            console.log(exists)
-            return res.status(409).json({ message: "Request already sent by this user for this tool" });
+            return res.status(400).json({ message: "Request already sent" });
         }
 
         if (!dueDate) {
-            dueDate = tool.dueDate;
+            dueDate = product.dueDate;
         }
 
         const result = await RentRequest.create({
-            itemId: tool._id,
+            productId: product._id,
             userId: userId,
-            ownerId: tool.ownerId,
+            ownerId: product.ownerId,
             dueDate: dueDate,
             message: message,
             requestStatus: "pending",
@@ -56,11 +55,11 @@ const sendRequest = async (req, res) => {
         // Add rentRequest _id to the receivedRequests field of the owner
         await User.findByIdAndUpdate(result.ownerId, { $push: { receivedRequests: result._id } });
 
-        // Add rentRequest _id to the receivedRequests field of tool
-        tool.receivedRequests.push(result._id);
-        await tool.save();
+        // Add rentRequest _id to the receivedRequests field of product
+        product.receivedRequests.push(result._id);
+        await product.save();
 
-        return res.status(201).json({ message: "Request for renting tool sent successful" });
+        return res.status(201).json({ message: "Rent request sent successfully" });
 
     } catch (error) {
 
@@ -78,11 +77,11 @@ const acceptRequest = async (req, res) => {
     const requestId = req.params.requestId;
 
     try {
-        const request = await RentRequest.findOne({ requestId: requestId }).populate({
-            path: "itemId",
+        const request = await RentRequest.findOne({ requestId }).populate({
+            path: "productId",
         });
 
-        // console.log(JSON.stringify(request.itemId.receivedRequests));
+        // console.log(JSON.stringify(request.productId.receivedRequests));
 
         if (!request) {
             return res.status(404).json({ message: "Request does not exist" });
@@ -92,16 +91,16 @@ const acceptRequest = async (req, res) => {
 
         // If the logged-in user is not the owner of the product
         if (req.user.id != ownerId) {
-            return res.status(403).json({ message: "You are not authorized to perform this action. Only the owner of this product can do this." });
+            return res.status(403).json({ message: "Only owner can accept the request" });
         }
 
         // Check if the request is already accepted
         if (request.requestStatus === "accepted") {
-            return res.status(400).json({ message: "Request is already accepted" });
+            return res.status(400).json({ message: "Request already accepted" });
         }
 
         if (request.requestStatus === "rejected") {
-            return res.status(400).json({ message: "Request is already rejected. You cannot accept it now." });
+            return res.status(400).json({ message: "Request already rejected" });
         }
 
         request.requestStatus = "accepted";
@@ -111,11 +110,11 @@ const acceptRequest = async (req, res) => {
 
         // Update all pending receivedRequests to "rejected"
         await RentRequest.updateMany(
-            { _id: { $in: request.itemId.receivedRequests }, requestStatus: "pending" },
+            { _id: { $in: request.productId.receivedRequests }, requestStatus: "pending" },
             { $set: { requestStatus: "rejected", rejectedAt: new Date() } }
         );
 
-        await Tool.findOneAndUpdate({_id: request.itemId._id}, {$set: {acceptedRequestId: request._id}});
+        await Product.findOneAndUpdate({_id: request.productId._id}, {$set: {acceptedRequestId: request._id}});
 
         res.status(200).json({ message: "Request accepted successfully" });
 
@@ -141,16 +140,16 @@ const rejectRequest = async (req, res) => {
 
         // If the logged-in user is not the owner of the product
         if (req.user.id != ownerId) {
-            return res.status(403).json({ message: "You are not authorized to perform this action. Only the owner of this product can do this." });
+            return res.status(403).json({ message: "Only qwner can perform the action" });
         }
 
         if (request.requestStatus === "accepted") {
-            return res.status(400).json({ message: "Request is already accepted you can't reject it now" });
+            return res.status(400).json({ message: "Request already accepted you can't reject it now" });
         }
 
         // Check if the request is already rejected
         if (request.requestStatus === "rejected") {
-            return res.status(400).json({ message: "Request is already rejected" });
+            return res.status(400).json({ message: "Request already rejected" });
         }
 
         // Update the requestStatus to "rejected" and set the rejectedAt timestamp
@@ -184,8 +183,8 @@ async function getRequestsByStatusAndPopulate(userId, requestType, requestStatus
             } : {},
             populate: [
                 {
-                    path: "itemId",
-                    select: "toolName",
+                    path: "productId",
+                    select: "productName",
                 },
                 {
                     path: userType, // ownerId or userId. If you request received requests then userId & if sent then ownerId
@@ -214,7 +213,7 @@ async function getRequestsByStatusAndPopulate(userId, requestType, requestStatus
             return {
                 requestId: request.requestId,
                 user2Id: user2Id,
-                toolName: request.itemId.toolName,
+                productName: request.productId.productName,
                 userName: request.userId.firstName + " " + request.userId.lastName,
                 dueDate: request.dueDate,
                 message: request.message,

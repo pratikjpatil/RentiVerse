@@ -1,32 +1,32 @@
 const mongoose = require("mongoose");
 const cloudinary = require("../config/cloudinaryConfig");
-const Tool = require("../models/tool");
+const Product = require("../models/product");
 const User = require("../models/user");
 const fs = require("fs");
 // const sharp = require("sharp");
 // const path = require("path");
 
 
-const addItems = async (req, res) => {
+const addProduct = async (req, res) => {
 
-  const { toolName, dueDate, toolPrice, toolQuantity, toolTags, toolCategory, toolDesc } = req.body;
+  const { productName, dueDate, productPrice, productQuantity, productTags, productCategory, productDescription } = req.body;
 
 
   if (!req.files || req.files.length !== 4) {
     return res.status(400).json({ message: "Please upload 4 images." });
   }
 
-  const tags = toolTags.split(',').map(tag => tag.trim()).filter((tag) => tag !== "");
+  const tags = productTags.split(',').map(tag => tag.trim()).filter((tag) => tag !== "");
 
-  const newTool = new Tool({
+  const newProduct = new Product({
     ownerId: req.user.id,
-    toolName,
+    productName,
     dueDate,
-    toolPrice,
-    toolQuantity,
+    productPrice,
+    productQuantity,
     tags,
-    toolCategory,
-    toolDesc,
+    productCategory,
+    productDescription,
   });
 
   try {
@@ -45,7 +45,7 @@ const addItems = async (req, res) => {
     //     // Extract the file extension from the original image file
     //     const ext = path.extname(image.originalname);
 
-    //     const imagePath = `../public/images/items/${Date.now()}-${toolName}-${imgCnt++}-${req.user.id}${ext}`;
+    //     const imagePath = `../public/images/products/${Date.now()}-${productName}-${imgCnt++}-${req.user.id}${ext}`;
     //     const imageStream = sharp(image.buffer).resize({ width: 600 }).jpeg({ quality: 80 });
 
     //     // Save the processed image to disk
@@ -56,7 +56,7 @@ const addItems = async (req, res) => {
     //       writeStream.on("error", reject);
     //     });
 
-    //     processedImages.push(`/public/images/items/${path.basename(imagePath)}`);
+    //     processedImages.push(`/public/images/products/${path.basename(imagePath)}`);
     //   })
     // );
 
@@ -65,7 +65,7 @@ const addItems = async (req, res) => {
     const urls = await Promise.all(
       images.map(async (image) => {
         const { public_id, secure_url } = await cloudinary.uploader.upload(image.path, {
-          folder: "RentiVerse/addItems",
+          folder: "RentiVerse/addProduct",
           width: 600,
         });
 
@@ -80,13 +80,13 @@ const addItems = async (req, res) => {
       })
     );
 
-    newTool.toolImages = urls;
+    newProduct.productImages = urls;
 
-    await newTool.save();
+    await newProduct.save();
 
-    await User.findByIdAndUpdate(req.user.id, { $push: { listed: newTool._id } });
+    await User.findByIdAndUpdate(req.user.id, { $push: { listed: newProduct._id } });
     
-    return res.status(201).json({ message: "Item added successfully" });
+    return res.status(201).json({ message: "Product added successfully" });
 
   } catch (error) {
 
@@ -97,19 +97,18 @@ const addItems = async (req, res) => {
 };
 
 
-const itemInfo = async(req, res)=>{
+const productInfo = async(req, res)=>{
     try {
-      const productId = req.params.itemId;
 
-      const itemInfo = await Tool.findOne({itemId: productId}).populate("ownerId");
+      const productInfo = await Product.findOne({productId: req.params.productId}).populate("ownerId");
 
-      if(!itemInfo){
+      if(!productInfo){
         return res.status(404).json({message: "Product not found"})
       }
 
-      const {itemId, toolName, toolCategory, toolDesc, toolImages, toolPrice, toolQuantity, dueDate} = itemInfo;
+      const {productId, productName, productCategory, productDescription, productImages, productPrice, productQuantity, dueDate} = productInfo;
 
-      res.status(200).json({itemId, toolName, toolCategory, toolDesc, toolImages, toolPrice, toolQuantity, dueDate, toolImages, ownerName: itemInfo.ownerId.firstName+" "+itemInfo.ownerId.lastName});
+      res.status(200).json({productId, productName, productCategory, productDescription, productImages, productPrice, productQuantity, dueDate, productImages, ownerName: productInfo.ownerId.firstName+" "+productInfo.ownerId.lastName});
 
     } catch (error) {
       console.log(error);
@@ -117,4 +116,4 @@ const itemInfo = async(req, res)=>{
     }
 }
 
-module.exports = { addItems, itemInfo };
+module.exports = { addProduct, productInfo };

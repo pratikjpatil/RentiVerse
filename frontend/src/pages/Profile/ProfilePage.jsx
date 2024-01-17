@@ -122,7 +122,7 @@ const ProfilePage = () => {
                     id="firstName"
                     name="firstName"
                     placeholder="Type your First name"
-                    disabled="true"
+                    disabled={true}
                     value={formData.firstName}
                     onChange={handleInputChange}
                   />
@@ -136,7 +136,7 @@ const ProfilePage = () => {
                     id="lastName"
                     name="lastName"
                     placeholder="Type your Last name"
-                    disabled="true"
+                    disabled={true}
                     value={formData.lastName}
                     onChange={handleInputChange}
                   />

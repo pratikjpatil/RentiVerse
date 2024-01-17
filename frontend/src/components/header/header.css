@@ -15,7 +15,7 @@ Header {
     justify-content: space-between;
   }
   .search {
-    width: 30rem;
+    width: 32rem;
     gap: 1rem;
     padding: 0.2rem;
     border-radius: 1.5rem;
@@ -33,7 +33,7 @@ Header {
     background: #50a060;
     padding: 0.5rem 1rem;
     border-radius: 1rem;
-    color: white;
+    color: rgb(34, 17, 17);
   }
   .profile-cart {
     flex-direction: column;

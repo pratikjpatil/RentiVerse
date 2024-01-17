@@ -12,6 +12,7 @@ import "./RequestPage.css";
 import toast from "react-hot-toast";
 import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
 import ChatModal from "../../components/ChatModal";
+import { useSelector } from "react-redux";
 
 const RequestPage = () => {
   const [tableData, setTableData] = useState([]);
@@ -21,6 +22,13 @@ const RequestPage = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState("");
+
+  const navigate = useNavigate();
+
+  const isLoggedIn = useSelector(state => state.auth.status);
+  if(!isLoggedIn){
+    navigate('/login')
+  }
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
@@ -40,30 +48,6 @@ const RequestPage = () => {
     setSelectedUserId(null);
     setIsChatModalOpen(false);
   };
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        setIsLoading(true);
-        await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/user/loginstatus`,
-          {
-            withCredentials: true,
-          }
-        );
-      } catch (error) {
-        toast.error("You are not logged in");
-        navigate("/login");
-        return;
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkLoginStatus();
-  }, []);
 
   const fetchRequests = async () => {
     const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/${requestOption}-${filter}`;
@@ -135,9 +119,11 @@ const RequestPage = () => {
           const { data } = await axios.post(verifyUrl, response, {
             withCredentials: true,
           });
-          console.log(data);
+          toast.success("Payment Successfull!");
+          navigate('/dashboard');
         } catch (error) {
-          console.log(error);
+          toast.error("Payment failed!");
+          toast.error(error.response.data.message);
         }
       },
       theme: {
@@ -145,7 +131,6 @@ const RequestPage = () => {
       },
     };
 
-    console.log(options)
     const rzp1 = new window.Razorpay(options);
     rzp1.open();
   };
@@ -157,7 +142,7 @@ const RequestPage = () => {
         withCredentials: true,
       });
       // console.log(data);
-     
+    
       initPayment(data.data, productName, requestId);
     } catch (error) {
       console.log(error);

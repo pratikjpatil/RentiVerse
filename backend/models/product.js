@@ -1,30 +1,30 @@
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
-const toolSchema = new mongoose.Schema({
-    itemId: {
+const productSchema = new mongoose.Schema({
+    productId: {
         type: String,
         default: uuidv4,
         unique: true,
         required: true
     },
-    toolName: {
+    productName: {
         type: String,
         required: true,
     },
-    toolCategory: {
+    productCategory: {
         type: String,
         required: true,
     },
-    toolPrice: {
+    productPrice: {
         type: Number,
         required: true,
     },
-    toolDesc: {
+    productDescription: {
         type: String,
         required: true
     },
-    toolImages: {
+    productImages: {
         type: [{
             public_id: { type: String, required: true },
             secure_url: { type: String, required: true },
@@ -36,11 +36,11 @@ const toolSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    toolQuantity: {
+    productQuantity: {
         type: Number,
         default: 1,
     },
-    toolTags: {
+    productTags: {
         type: [String]
     },
     ownerId: {
@@ -72,6 +72,6 @@ const toolSchema = new mongoose.Schema({
     }
 });
 
-const Tool = new mongoose.model("Tool", toolSchema);
+const Product = new mongoose.model("Product", productSchema);
 
-module.exports = Tool;
+module.exports = Product;

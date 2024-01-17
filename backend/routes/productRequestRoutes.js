@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const auth = require("../middlewares/auth")
+const auth = require("../middlewares/auth");
 const userIsVerified = require("../middlewares/checkUserVerification");
 
 const {
@@ -15,7 +15,7 @@ const {
     showPendingRequests_sent, 
     showPendingRequests_received } = require('../controllers/productRequest.controller');
 
-router.post('/send/:itemId', auth, userIsVerified, sendRequest);
+router.post('/send/:productId', auth, userIsVerified, sendRequest);
 
 router.put('/accept/:requestId', auth, userIsVerified, acceptRequest);
 router.post('/reject/:requestId', auth, userIsVerified, rejectRequest);

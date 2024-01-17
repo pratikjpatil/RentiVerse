@@ -1,4 +1,6 @@
 import React,{Fragment, useState, useContext} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import { login, logout } from "../../store/authSlice";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import Image from "../../assets/logo.png";
@@ -7,9 +9,9 @@ import "./Login.css";
 import toast from 'react-hot-toast';
 
 const Login = () => {
-
+  const isLoggedIn = useSelector(state=>state.status)
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, setFirstName} = useContext(AuthContext);
 
   if(isLoggedIn){
     toast.error("You are already logged in!");
@@ -23,28 +25,23 @@ const Login = () => {
     try {
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/user/login', input); 
       if (response.status === 200) {
-        setFirstName(response.data.firstName);
-        setIsLoggedIn(true);
-        toast.success("Login successful", {
+        dispatch(login(response.data.userData))
+        toast.success("Login successfull", {
           id: toastId,
         });
         navigate('/'); 
       }
     } catch (error) {
-      if(error.response && error.response.status===400){
-        toast.error("Invalid credentials", {
+      
+        toast.error(error.response.data.message, {
           id: toastId,
         });
+        console.log(error.response);
+        dispatch(logout())
       }
-      else{
-        toast.error("There was an error", {
-          id: toastId,
-        });
-      }
-      console.log(error);
       
     }
-  };
+  
 
   const handleRegisterRedirect = () => {
       navigate('/verify');

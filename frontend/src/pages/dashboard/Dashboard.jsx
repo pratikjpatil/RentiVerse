@@ -1,76 +1,73 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Header, Sidebar } from "../../components";
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addListedProducts, addGivenOnRentProducts, addTakenOnRentProducts } from "../../store/productsSlice";
 import axios from "axios";
 import "./dashboard.css";
-import ToolCard from "../../components/card/ToolCard";
-import toast from 'react-hot-toast';
+import ProductCard from "../../components/card/ProductCard";
+import toast from "react-hot-toast";
 
 axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
-  const [listedTools, setListedTools] = useState([]);
-  const [givenTools, setGivenTools] = useState([]);
-  const [takenTools, setTakenTools] = useState([]);
-
-  const [searchTerm, setSearchTerm] = useState("");
-
+  const listedProducts = useSelector(state => state.products.listedProducts);
+  const givenProducts = useSelector(state => state.products.givenOnRent);
+  const takenProducts = useSelector(state => state.products.takenOnRent);
   const navigate = useNavigate();
-  const { isLoggedIn } = useContext(AuthContext);
-
-  
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state=>state.auth.status);
 
 
   useEffect(() => {
-
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
     
-    // Fetch tools if user is authenticated
-    const fetchListedTools = async () => {
+    const fetchProducts = async () => {
       try {
-        if(!isLoggedIn){
+        if (!isLoggedIn) {
           toast.error("You are not logged in!");
-          navigate('/login');
+          navigate("/login");
           return;
         }
-        const listed = await axios.get(`${backendUrl}/api/tools/listed`, { withCredentials: true });
-        const given = await axios.get(`${backendUrl}/api/tools/givenonrent`, { withCredentials: true });
-        const taken = await axios.get(`${backendUrl}/api/tools/takenonrent`, { withCredentials: true });
+        const listed = await axios.get(`${backendUrl}/api/products/listed`, {
+          withCredentials: true,
+        });
+        const given = await axios.get(
+          `${backendUrl}/api/products/givenonrent`,
+          { withCredentials: true }
+        );
+        const taken = await axios.get(
+          `${backendUrl}/api/products/takenonrent`,
+          { withCredentials: true }
+        );
 
         if (listed.status === 200) {
-          setListedTools(listed.data);
+          dispatch(addListedProducts(listed.data))
         }
         if (given.status === 200) {
-          setGivenTools(given.data);
+          dispatch(addGivenOnRentProducts(given.data))
         }
         if (taken.status === 200) {
-          setTakenTools(taken.data);
+          dispatch(addTakenOnRentProducts(taken.data))
         }
       } catch (error) {
-        
-          console.log(error);
-          toast.error(error.response.data.message); 
-        
+        console.log(error);
+        toast.error(error.response.data.message);
       }
     };
 
-    fetchListedTools(); // Fetch tools
-
+    fetchProducts(); 
   }, [isLoggedIn]);
 
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-  };
 
-  if(!isLoggedIn){
-    return <div>Loading...</div>
+  if (!isLoggedIn) {
+    return <div>Loading...</div>;
   }
-
 
   return (
     <>
-      <Header onSearch={handleSearch} />
+      <Header/>
       <Sidebar />
       <div className="dashboard-page-content">
         <div className="dashboard-page-content-heading">
@@ -81,9 +78,12 @@ const Dashboard = () => {
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
               <span>Listed</span>
-              <p>{listedTools.length}</p>
+              <p>{listedProducts.length}</p>
             </div>
-            <div className="dashboard-page-content-acivity-cards-card-icon" onClick={()=>navigate('/addonrent')}>
+            <div
+              className="dashboard-page-content-acivity-cards-card-icon"
+              onClick={() => navigate("/addonrent")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -103,7 +103,7 @@ const Dashboard = () => {
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
               <span>Given on rent</span>
-              <p>{givenTools.length}</p>
+              <p>{givenProducts.length}</p>
             </div>
             <div className="dashboard-page-content-acivity-cards-card-icon">
               <svg
@@ -125,7 +125,7 @@ const Dashboard = () => {
           <div className="dashboard-page-content-acivity-cards-card">
             <div className="dashboard-page-content-acivity-cards-card-header">
               <span>Taken on rent</span>
-              <p>{takenTools.length}</p>
+              <p>{takenProducts.length}</p>
             </div>
             <div className="dashboard-page-content-acivity-cards-card-icon">
               <svg
@@ -154,26 +154,19 @@ const Dashboard = () => {
             <div className="dashboard-page-content-main-content-button">
               <button className="owned-button-listed">Owned</button>
             </div>
-          </div><br /> <br />
-
-          {
-            listedTools.length === 0 ? (
-              <p>No items found</p>
-            ) : (
-              listedTools
-                .filter((tool) =>
-                  searchTerm === ""
-                    ? true
-                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    tool.category
-                      ?.toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                )
-                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.itemId}/>)
-
-            )
-          }
-
+          </div>
+          <br /> <br />
+          {listedProducts.length === 0 ? (
+            <p>No products found</p>
+          ) : (
+            listedProducts.map((product, index) => (
+              <ProductCard
+                data={product}
+                index={index}
+                key={product.productId}
+              />
+            ))
+          )}
         </div>
         <div className="dashboard-page-content-main">
           <div className="dashboard-page-content-main-content">
@@ -184,29 +177,19 @@ const Dashboard = () => {
             <div className="dashboard-page-content-main-content-button">
               <button>Given</button>
             </div>
-          </div><br /> <br />
-
-          {
-            givenTools.length === 0 ? (
-
-              <p>No items found</p>
-
-            ) : (
-              givenTools
-                .filter((tool) =>
-                  searchTerm === ""
-                    ? true
-                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    tool.category
-                      ?.toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                )
-                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.itemId}/>)
-
-            )
-          }
-
-
+          </div>
+          <br /> <br />
+          {givenProducts.length === 0 ? (
+            <p>No products found</p>
+          ) : (
+            givenProducts.map((product, index) => (
+              <ProductCard
+                data={product}
+                index={index}
+                key={product.productId}
+              />
+            ))
+          )}
         </div>
         <div className="dashboard-page-content-main">
           <div className="dashboard-page-content-main-content">
@@ -217,26 +200,19 @@ const Dashboard = () => {
             <div className="dashboard-page-content-main-content-button">
               <button>Taken</button>
             </div>
-          </div><br /> <br />
-
-          {
-            takenTools.length === 0 ? (
-              <p>No items found</p>
-            ) : (
-              takenTools
-                .filter((tool) =>
-                  searchTerm === ""
-                    ? true
-                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    tool.category
-                      ?.toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                )
-                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.itemId}/>)
-
-            )
-          }
-
+          </div>
+          <br /> <br />
+          {takenProducts.length === 0 ? (
+            <p>No products found</p>
+          ) : (
+            takenProducts.map((product, index) => (
+              <ProductCard
+                data={product}
+                index={index}
+                key={product.productId}
+              />
+            ))
+          )}
         </div>
       </div>
     </>

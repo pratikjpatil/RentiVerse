@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Tool = require("../models/tool");
+const Product = require("../models/product");
 const RentRequest = require("../models/rentRequest");
 const User = require("../models/user");
 const Razorpay = require("razorpay");
@@ -9,13 +9,13 @@ const createOrder = async (req, res) => {
   const { requestId } = req.body;
   try {
 
-    const request = await RentRequest.findOne({requestId}).populate("itemId");
+    const request = await RentRequest.findOne({requestId}).populate("productId");
 
     if(request.payment.status===true){
       return res.status(400).json({message: "Payment already done!"});
     }
 
-    const productPrice = request.itemId.toolPrice;
+    const productPrice = request.productId.productPrice;
 
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
@@ -35,7 +35,7 @@ const createOrder = async (req, res) => {
       }
 
       const data = order;
-      data.productImage = request.itemId.toolImages[0].secure_url;
+      data.productImage = request.productId.productImages[0].secure_url;
       res.status(200).json({ data });
     });
   } catch (error) {
@@ -72,13 +72,13 @@ const verifyPayment = async (req, res) => {
         return res.status(400).json({ message: "Invalid rent request ID!\nContact support if money is deducted." });;
       }
 
-      await Tool.findOneAndUpdate({_id: updatedRequest.itemId}, {$set:{renterId: updatedRequest.userId}});
+      await Product.findOneAndUpdate({_id: updatedRequest.productId}, {$set:{renterId: updatedRequest.userId}});
 
       await User.findOneAndUpdate(
         { _id: updatedRequest.ownerId},
         {
-          $pull: { listed: updatedRequest.itemId, receivedRequests: updatedRequest._id},
-          $addToSet: { givenOnRent: updatedRequest.itemId }
+          $pull: { listed: updatedRequest.productId, receivedRequests: updatedRequest._id},
+          $addToSet: { givenOnRent: updatedRequest.productId }
         }
       );
 
@@ -86,7 +86,7 @@ const verifyPayment = async (req, res) => {
         { _id: updatedRequest.userId},
         {
           $pull: { sentRequests: updatedRequest._id },        
-          $addToSet: { takenOnRent: updatedRequest.itemId } 
+          $addToSet: { takenOnRent: updatedRequest.productId } 
         }
       );
 

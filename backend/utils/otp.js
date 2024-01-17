@@ -31,7 +31,7 @@ const verifyOtpPhone = async (phoneNumber, userOTP) => {
       return { success: false, message: "Invalid Phone OTP" };
     }
   } catch (error) {
-    console.error("Error during OTP verification:", error.message);
+    console.error("Error during phone OTP verification:", error.message);
     return { success: false, message: "OTP verification failed" };
   }
 };
@@ -96,7 +96,7 @@ const verifyOtpEmail = async (email, emailOtp) => {
       }
     } 
    catch (error) {
-    console.error("Error during OTP verification:", error.message);
+    console.error("Error during email OTP verification:", error.message);
     return { success: false, message: "OTP verification failed" };
   }
 };
