@@ -32,13 +32,11 @@ const sendRegistrationOtp = async (req, res) => {
     
     const isOtpSentToEmail = await sendOtpToEmail(email);
     if (!isOtpSentToEmail.success) {
-      console.log(isOtpSentToEmail);
       return res.status(400).json({ message: isOtpSentToEmail.message });
     }
 
     const isOtpSentToPhone = await sendOtpToPhone(phone);
     if (!isOtpSentToPhone.success) {
-      console.log(isOtpSentToPhone);
       return res.status(400).json({ message: isOtpSentToPhone.message });
     }
 
@@ -74,11 +72,9 @@ const verifyOtpAndRegisterUser = async (req, res) => {
     const isEmailOtpValid = await verifyOtpEmail(email.toLowerCase(), emailOtp);
 
     if (!isPhoneOtpValid.success) {
-      console.log(isPhoneOtpValid);
       return res.status(400).json({ message: isPhoneOtpValid.message });
     } 
     if (!isEmailOtpValid.success) {
-      console.log(isEmailOtpValid);
       return res.status(400).json({ message: isEmailOtpValid.message });
     } 
 
@@ -98,7 +94,7 @@ const verifyOtpAndRegisterUser = async (req, res) => {
         isVerified: true,
       });
 
-      user.save();
+      await user.save();
 
       //`${process.env.JWT_TOKEN_EXPIRATION}d` need to pass string thats why using d at the end
       const token = jwt.sign({ id: user._id },process.env.SECRET_KEY,{expiresIn: `${process.env.JWT_TOKEN_EXPIRATION}d`});
@@ -111,7 +107,7 @@ const verifyOtpAndRegisterUser = async (req, res) => {
         lastName,
         isVerified: true,
       };
-      return res.status(200).json({
+      return res.status(201).json({
         message: "Registration successfull",
         userData
       });

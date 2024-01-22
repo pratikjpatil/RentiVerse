@@ -22,6 +22,14 @@ router.post("/sendRegistrationOtp", [
     ], sendRegistrationOtp);
 
 router.post("/verifyOtpAndRegisterUser",[
+            check("phoneOtp", "Phone OTP should be 5 digits")
+                .trim()
+                .isInt()
+                .isLength(5),
+            check("emailOtp", "Email OTP should be 5 digits")
+                .trim()
+                .isInt()
+                .isLength(5),
             check("email", "Email length should be max 50 characters")
                 .trim()
                 .isEmail()
@@ -35,14 +43,14 @@ router.post("/verifyOtpAndRegisterUser",[
             check("phone", "Phone number should contain 10 digits")
                 .trim()
                 .isInt()
-                .isLength({ min: 10, max: 10 }),
+                .isLength(10),
             check("password", "Password length should be 6 to 20 characters")
                 .trim()
                 .isLength({ min: 6, max: 20 }),
             check("pincode", "Pincode length should be 6 characters")
                 .trim()
                 .isInt()
-                .isLength({ min: 6, max: 6 }),
+                .isLength(6),
             check("address", "Address length should be max 80 characters")
                 .trim()
                 .isLength({ max: 80 })

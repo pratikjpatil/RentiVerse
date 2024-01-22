@@ -1,63 +1,47 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
 import maleImage from "../../assets/male.png";
-import femaleImage from "../../assets/female.png"
-import toast from 'react-hot-toast';
+import femaleImage from "../../assets/female.png";
+import toast from "react-hot-toast";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    gender: "",
-    phone: "",
-    email: "",
-    password: "",
-    village: "",
-    district: "",
-    city: "",
-    state: "",
-    pincode: "",
-  });
+  const [editMode, setEditMode] = useState(false);
+  const [userData, setUserData] = useState({});
+  const [activeTab, setActiveTab] = useState(1);
+
   const navigate = useNavigate();
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-
     const fetchProfile = async () => {
-
       try {
-        
-        const profile = await axios.get(backendUrl + "/api/profile/me", { withCredentials: true });
-        setFormData(profile.data);
-
+        const profile = await axios.get(backendUrl + "/api/profile/me", {
+          withCredentials: true,
+        });
+        setUserData(profile.data);
       } catch (error) {
-
         console.log(error);
         toast.error(error.response.data.message);
       }
-    }
+    };
 
     fetchProfile();
   }, []);
 
-
-
-
   const handleEditClick = () => {
-    setIsEditMode(!isEditMode);
+    setEditMode((prev)=>!prev);
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
+    setUserData({
+      ...userData,
       [name]: value,
     });
   };
@@ -65,27 +49,38 @@ const ProfilePage = () => {
   const handleFormSubmit = async () => {
     const toastId = toast.loading("updating...");
     try {
-      
-      const response = await axios.put(backendUrl + "/api/profile/edit", formData, { withCredentials: true });
+      const response = await axios.put(
+        backendUrl + "/api/profile/edit",
+        userData,
+        { withCredentials: true }
+      );
       if (response.status === 200) {
-        toast.success("Profile updated successfully!", {id: toastId});
+        toast.success("Profile updated successfully!", { id: toastId });
+        setEditMode(false);
       }
     } catch (error) {
-
-      if (error.response && error.response.status === 401) {
-        toast.error("Oops! you are not logged in.", {id: toastId});
-
-        // Redirect to login page when unauthenticated
-        navigate("/login");
-
-      } else {
         console.log(error);
-        toast.error(error.response.data.message);
-        navigate('/');
-      }
+        toast.error(error.response.data.message, { id: toastId });
+        navigate("/");
+      
     }
+  };
 
-  }
+
+  const handleToggleTab = (tabIndex) => {
+    setActiveTab(tabIndex);
+  };
+
+
+  const activeTabStyles =
+    "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500";
+  const inactiveTabStyles =
+    "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300";
+  const editModeStyles =
+    "w-fit ml-6 p-0 text-base font-medium bg-transparent text-blue-700 text-right";
+
+  const simpleStyles =
+    "w-fit ml-6 p-0 text-base font-medium bg-transparent text-blue-700 text-right border-transparent";
 
 
 
@@ -93,219 +88,170 @@ const ProfilePage = () => {
     <>
       <Header />
       <Sidebar />
-      <div className="body">
-        <div className="profile-header">
-          <h1>
-            Personal Information
-            {isEditMode ? (
-              <button className="edit-button" onClick={handleEditClick}>
-                Cancel
-              </button>
-            ) : (
-              <button className="edit-button" onClick={handleEditClick}>
-                Edit
-              </button>
-            )}
-          </h1>
-        </div>
 
-        <div className="profile-container">
-          <div className="form-box">
-            <form className="profile-form" onSubmit={handleFormSubmit}>
-              <div className="row">
-                <div className="col">
-                  <label htmlFor="firstName" className="profile-label">
-                    First Name
+      <div className="flex justify-center">
+        <div className="p-6 mt-5 sm:ml-64 md:w-1/2 lg:mt-28 flex flex-col justify-center">
+          <div className="w-full flex justify-between">
+            <h3 className="text-2xl font-semibold">Pratik Patil</h3>
+
+            <button
+              className="bg-gray-300 font-medium text-gray-800 rounded-2xl px-3"
+              onClick={handleEditClick}
+            >
+              {editMode ? "cancel" : "edit"}
+            </button>
+          </div>
+
+          <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <ul className="flex flex-wrap -mb-px">
+              <li className="me-2 cursor-pointer">
+                <span
+                  className={
+                    activeTab === 1 ? activeTabStyles : inactiveTabStyles
+                  }
+                  onClick={() => {
+                    handleToggleTab(1);
+                  }}
+                >
+                  About
+                </span>
+              </li>
+              <li className="me-2 cursor-pointer">
+                <span
+                  className={
+                    activeTab === 2 ? activeTabStyles : inactiveTabStyles
+                  }
+                  onClick={() => {
+                    handleToggleTab(2);
+                  }}
+                >
+                  Timeline
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="flex flex-col mt-8 px-4">
+            {activeTab === 1 ? (
+              <>
+                <div className="flex justify-between flex-wrap pt-2 border-b-2">
+                  <label htmlFor="name" className="text-base font-medium mr-4">
+                    Name
                   </label>
+
                   <input
                     type="text"
-                    id="firstName"
-                    name="firstName"
-                    placeholder="Type your First name"
-                    disabled={true}
-                    value={formData.firstName}
-                    onChange={handleInputChange}
+                    name="name"
+                    className={`${
+                      editMode ? editModeStyles : simpleStyles
+                    } border-transparent`}
+                    value={userData.firstName + " " + userData.lastName}
+                    readOnly
+                    disabled
                   />
                 </div>
-                <div className="col">
-                  <label htmlFor="lastName" className="profile-label">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Type your Last name"
-                    disabled={true}
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col">
-                  <label className="profile-label">Gender</label>
-                  <div className="gender-buttons">
-
-                    {
-                      formData.gender === "male" ?
-                        <div className="transparent-blue-profile">
-                          <img src={maleImage} alt="Male" className="gender-icon" />
-                          &nbsp; Male
-                        </div>
-                        :
-                        <div className="transparent-blue-profile">
-                          <img src={femaleImage} alt="Female" className="gender-icon" />
-                          &nbsp; Female
-                        </div>
-
-                    }
-
-
-                    {/* Add more gender buttons here */}
-                  </div>
-                </div>
-                <div className="col">
-                  <label htmlFor="phone" className="profile-label">
-                    Mobile Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    placeholder="+91 0000000000"
-                    disabled={!isEditMode}
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col">
-                  <label htmlFor="email" className="profile-label">
+                <div className="flex justify-between flex-wrap pt-2 border-b-2">
+                  <label htmlFor="email" className="text-base font-medium mr-4">
                     Email
                   </label>
+
                   <input
                     type="email"
-                    id="email"
                     name="email"
-                    placeholder="example@email.com"
-                    disabled={!isEditMode}
-                    value={formData.email}
+                    className={editMode ? editModeStyles : simpleStyles}
+                    value={userData.email}
                     onChange={handleInputChange}
+                    readOnly={!editMode}
+                    disabled={!editMode}
                   />
                 </div>
-              </div>
 
-              <div className="row">
-                <div className="col">
-                  <label htmlFor="village" className="profile-label">
-                    Village/Town
+                <div className="flex justify-between flex-wrap pt-2 border-b-2">
+                  <label htmlFor="phone" className="text-base font-medium mr-4">
+                    Phone
                   </label>
-                  <input
-                    type="text"
-                    id="village"
-                    name="village"
-                    placeholder="Type your village"
-                    disabled={!isEditMode}
-                    value={formData.village}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="col">
-                  <label htmlFor="district" className="profile-label">
-                    District
-                  </label>
-                  <input
-                    type="text"
-                    id="district"
-                    name="district"
-                    placeholder="Type your district"
-                    disabled={!isEditMode}
-                    value={formData.district}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
 
-              <div className="row">
-                <div className="col">
-                  <label htmlFor="city" className="profile-label">
-                    City
-                  </label>
                   <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    placeholder="Type Your city"
-                    disabled={!isEditMode}
-                    value={formData.city}
+                    type="tel"
+                    name="phone"
+                    className={editMode ? editModeStyles : simpleStyles}
+                    value={userData.phone}
                     onChange={handleInputChange}
+                    readOnly={!editMode}
+                    disabled={!editMode}
                   />
                 </div>
-                <div className="col">
-                  <label htmlFor="state" className="profile-label">
-                    State
+                <div className="flex justify-between flex-wrap pt-2 border-b-2">
+                  <label
+                    htmlFor="address"
+                    className="text-base font-medium mr-4"
+                  >
+                    Address
                   </label>
-                  <input
-                    type="text"
-                    id="state"
-                    name="state"
-                    placeholder="Type your State"
-                    disabled={!isEditMode}
-                    value={formData.state}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
 
-              <div className="row">
-                <div className="col">
-                  <label htmlFor="pincode" className="profile-label">
+                  <textarea
+                    type="text"
+                    name="address"
+                    className={`${
+                      editMode ? editModeStyles : simpleStyles
+                    } w-full md:w-2/3 `}
+                    value={userData.address}
+                    onChange={handleInputChange}
+                    readOnly={!editMode}
+                    disabled={!editMode}
+                  />
+                </div>
+
+                <div className="flex justify-between flex-wrap pt-2 border-b-2">
+                  <label
+                    htmlFor="pincode"
+                    className="text-base font-medium mr-4"
+                  >
                     Pincode
                   </label>
+
                   <input
-                    type="text"
-                    id="pincode"
+                    type="number"
                     name="pincode"
-                    placeholder="Type your pincode"
-                    disabled={!isEditMode}
-                    value={formData.pincode}
+                    className={editMode ? editModeStyles : simpleStyles}
+                    value={userData.pincode}
                     onChange={handleInputChange}
+                    readOnly={!editMode}
+                    disabled={!editMode}
                   />
                 </div>
-                <div className="col">
-                  {
-                    isEditMode ?
-                      <>
-                        <label htmlFor="password" className="profile-label">
-                          Set Password
-                        </label>
-                        <input
-                          type="password"
-                          id="password"
-                          name="password"
-                          placeholder="Type your password"
-                          disabled={!isEditMode}
-                          value={formData.password}
-                          onChange={handleInputChange}
-                        />
-                      </>
-                      :
-                      ""
-                  }
+                {editMode ? (
+                  <div className="mt-10 flex justify-end">
+                    <button
+                      className="bg-blue-600 text-white rounded-xl h-10 w-20"
+                      onClick={handleFormSubmit}
+                    >
+                      Update
+                    </button>
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <div className="flex justify-between flex-wrap pt-2">
+                  <label
+                    htmlFor="customerName"
+                    className="text-base font-medium mr-4"
+                  >
+                    {userData.firstName + " " + userData.lastName}
+                  </label>
 
+                  <input
+                    type="text"
+                    name="pincode"
+                    className="w-32 p-0 text-base font-medium bg-transparent text-blue-700 text-right border-transparent"
+                    value="Supra mk4"
+                    readOnly
+                    disabled
+                  />
                 </div>
-              </div>
-
-              {isEditMode && (
-                <button type="submit" className="transparent-profile">
-                  Save
-                </button>
-              )}
-            </form>
+              </>
+            )}
           </div>
         </div>
       </div>

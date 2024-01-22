@@ -1,42 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-function VerifyOTP({ formData, setFormData, handleVerifyOTPAndRegister }) {
+function VerifyOTP({ formData, setFormData, handleSendOtp, handleVerifyOTPAndRegister }) {
   const [otp, setOtp] = useState({
     phone: { otp1: "", otp2: "", otp3: "", otp4: "", otp5: "" },
     email: { otp1: "", otp2: "", otp3: "", otp4: "", otp5: "" },
   });
+  const [clickedVerify, setClickedVerify] = useState(true);
+
+  const [resendTime, setResendTime] = useState(90); //90secs
 
   const navigate = useNavigate();
 
-  const handleVerify = (e) => {
-    e.preventDefault();
-    const { phone, email } = otp;
-
-    const firstOtp = Object.values(phone).join("");
-    const secondOtp = Object.values(email).join("");
-
-    setFormData((prevState) => ({
-        ...prevState,
-        phoneOtp: firstOtp,
-        emailOtp: secondOtp,
-    }));
-
-    if(isNaN(firstOtp) || isNaN(secondOtp)){
-        toast.error("Enter numeric value only");
-        return;
+ 
+  useEffect(() => {
+    let timer;
+    if (resendTime > 0) {
+      timer = setInterval(() => {
+        setResendTime((prevTime) => prevTime - 1);
+      }, 1000);
     }
-    
-    if (firstOtp.length === 5 && secondOtp.length === 5) {
+    return () => {
+      clearInterval(timer);
+    };
+  }, [resendTime]);
+
+  const handleResend = (e) => {
+    if (resendTime === 0) {
+
+      handleSendOtp(e);
       
-      handleVerifyOTPAndRegister(e);
-    }
-    else{
-        toast.error("Enter 5 digit code");
-        return;
+      setResendTime(90);
+    } else {
+      toast.error(`Please wait ${resendTime} seconds before resending.`);
     }
   };
+
+  const handleVerify = (e) => {
+    e.preventDefault();
+  
+    const { phone, email } = otp;
+    const newFormData = {
+      ...formData,
+      phoneOtp: Object.values(phone).join(""),
+      emailOtp: Object.values(email).join("")
+    };
+  
+    if (isNaN(newFormData.phoneOtp) || isNaN(newFormData.emailOtp)) {
+      toast.error("Enter numeric value only");
+      return;
+    }
+  
+    if (newFormData.phoneOtp.length !== 5 || newFormData.emailOtp.length !== 5) {
+      toast.error("Enter 5 digit code");
+      return;
+    }
+  
+    // Set the formData state with the updated values
+    setFormData(newFormData);
+    setClickedVerify((prev)=>{return !prev})
+  };
+  
+  useEffect(() => {
+    // useEffect will be triggered whenever formData changes
+    if (formData.phoneOtp && formData.emailOtp) {
+      handleVerifyOTPAndRegister();
+    }
+  }, [clickedVerify]);
+  
+
+    
+  
 
   const handleChange = (value, e, type) => {
     const updatedOtp = { ...otp };
@@ -63,7 +98,7 @@ function VerifyOTP({ formData, setFormData, handleVerifyOTPAndRegister }) {
     return Array.from({ length: 5 }, (_, index) => (
       <div key={index} className="w-16 h-16 ">
         <input
-          className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+          className="w-3/5 h-full flex flex-col items-center justify-center text-center outline-none rounded-xl border border-gray-200 text-lg text-black bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
           type="text"
           name={`otp${index + 1}`}
           autoComplete="off"
@@ -81,8 +116,9 @@ function VerifyOTP({ formData, setFormData, handleVerifyOTPAndRegister }) {
 
   return (
     <>
-      <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
-        <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
+      <div className="flex min-h-screen justify-center">
+      <div className="relative flex flex-col justify-center overflow-hidden">
+        <div className="relative bg-white px-6 pt-9 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
           <div className="mx-auto flex w-full max-w-md flex-col space-y-8">
             <div className="flex flex-col items-center justify-center text-center space-y-2">
               <div className="font-semibold text-3xl">
@@ -92,7 +128,9 @@ function VerifyOTP({ formData, setFormData, handleVerifyOTPAndRegister }) {
               <div className="flex flex-row text-sm font-medium text-gray-400">
                 <p>
                   Enter code sent to your phone{": "}
-                  {formData && formData.phone}
+                  <span className="text-slate-600">{formData && formData.phone}</span>
+                  <br />
+                  If you didnt received code enter 111111 (for twilio unverified numbers)
                 </p>
               </div>
             </div>
@@ -108,7 +146,7 @@ function VerifyOTP({ formData, setFormData, handleVerifyOTPAndRegister }) {
                     <div className="flex flex-row text-sm font-medium text-gray-400">
                       <p>
                         Enter code sent to your email{": "}
-                        {formData && formData.email}
+                        <span className="text-slate-600">{formData && formData.email}</span>
                       </p>
                     </div>
                   </div>
@@ -125,10 +163,8 @@ function VerifyOTP({ formData, setFormData, handleVerifyOTPAndRegister }) {
                     <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
                       <p>Didn't recieve code?</p>{" "}
                       <a
-                        className="flex flex-row items-center text-blue-600"
-                        href="http://"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        className="flex flex-row items-center cursor-pointer text-blue-600"
+                        onClick={handleResend}
                       >
                         Resend
                       </a>
@@ -139,6 +175,7 @@ function VerifyOTP({ formData, setFormData, handleVerifyOTPAndRegister }) {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

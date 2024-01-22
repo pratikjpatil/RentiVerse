@@ -9,7 +9,6 @@ function RegistrationForm({formData, handleInputChange, handleSendOtp, otpSent})
     const navigate = useNavigate()
   return (
     <>
-  <div style={{ backgroundImage: `url(${bgimg})` }} className=" bg-center bg-no-repeat bg-cover">
 
     <img src={logo} onClick={()=>{navigate('/')}} alt="RentiVerse Logo" className="w-34 h-auto mx-auto pt-12 pb-6 md:pt-[2vh]" />
 
@@ -49,7 +48,6 @@ function RegistrationForm({formData, handleInputChange, handleSendOtp, otpSent})
       <p className='text-sm text-slate-400 mx-auto'>Already a member? <span className="text-blue-700 font-bold cursor-pointer" onClick={()=>{navigate('/login')}}>Log in</span></p>
 
     </div>
-  </div>
 </>
   )
 }

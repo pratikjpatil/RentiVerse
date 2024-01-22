@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
-import SidebarTemp from "../../components/sidebar/sidebarTemp";
 import { useSelector } from "react-redux";
 import Header from "../../components/header/Header";
 import Image from "../../assets/Upload.png";
 import LoadingDots from "../../assets/loadingDots.gif";
+import Resizer from 'react-image-file-resizer';
 import toast from "react-hot-toast";
 import "./AddOnRent.css";
 
@@ -51,6 +51,23 @@ const AddOnRent = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  
+  const resizeFile = (file) =>
+    new Promise((resolve, reject) => {
+      Resizer.imageFileResizer(
+        file,
+        550,
+        550,
+        'WEBP',
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        'file',
+      );
+    });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,23 +119,24 @@ const AddOnRent = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const selectedImages = Array.from(e.target.files);
-    // Check the size of each selected image
-    const invalidImages = selectedImages.filter(
-      (image) => image.size > 6 * 1024 * 1024
-    ); // 6MB in bytes
-
-    if (invalidImages.length > 0) {
-      toast.error("Please select images less than 6MB in size.");
-      return;
-    }
+  
     if (selectedImages.length !== 4) {
       toast.error("Please select 4 images.");
       return;
     }
-    setImages(selectedImages);
+  
+    try {
+      const compressedImages = await Promise.all(
+        selectedImages.map(async (image) => await resizeFile(image))
+      );
+      setImages(compressedImages);
+    } catch (error) {
+      console.error("Error compressing images:", error);
+    }
   };
+  
 
   const imagePreview = images.map((image, index) => (
     <img
@@ -132,7 +150,6 @@ const AddOnRent = () => {
   return (
     <>
       <Header />
-      {/* <SidebarTemp/> */}
 
       <Sidebar />
       <div className="p-4 px-6 mt-5 sm:ml-64 lg:mt-20 flex justify-center">

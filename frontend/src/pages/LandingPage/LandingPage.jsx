@@ -76,7 +76,6 @@ const LandingPage = () => {
               data={product}
               index={index}
               key={product.productId}
-              onClick={() => navigate(`/product/${product.productId}`)}
             />
           ))}
         {loading && <img src={loadingGif} alt="Loading..." />}

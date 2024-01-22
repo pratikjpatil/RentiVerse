@@ -3,6 +3,7 @@ const cloudinary = require("../config/cloudinaryConfig");
 const Product = require("../models/product");
 const User = require("../models/user");
 const fs = require("fs");
+const { log } = require("console");
 // const sharp = require("sharp");
 // const path = require("path");
 
@@ -101,7 +102,9 @@ const productInfo = async(req, res)=>{
     try {
 
       const productInfo = await Product.findOne({productId: req.params.productId}).populate("ownerId");
-
+      console.log(productInfo)
+      console.log(req.params);
+      
       if(!productInfo){
         return res.status(404).json({message: "Product not found"})
       }

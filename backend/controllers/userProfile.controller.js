@@ -9,13 +9,9 @@ const userInformation = async (req, res) => {
         const profile = {
             firstName: user.firstName,
             lastName: user.lastName,
-            gender: user.gender,
             phone: user.phone,
             email: user.email,
-            village: user.address.village,
-            district: user.address.district,
-            city: user.address.city,
-            state: user.address.state,
+            address: user.address.area,
             pincode: user.address.pincode,
         }
         res.status(200).json(profile);
@@ -29,7 +25,7 @@ const userInformation = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { pincode, phone, email, state, village, district, city, password } = req.body;
+        const { pincode, phone, email, address, password } = req.body;
         const update = {};
 
         if (phone && phone!="") {
@@ -49,12 +45,8 @@ const updateUser = async (req, res) => {
             }
             update.email = email.toLowerCase();
         }
-
-        update.address = {};
-        if (state && state != "") update.address.state = state.toLowerCase();
-        if (village && village != "") update.address.village = village.toLowerCase();
-        if (district && district != "") update.address.district = district.toLowerCase();
-        if (city && city != "") update.address.city = city.toLowerCase();
+        update.address = {}
+        if (address && address != "") update.address.area = address;
         if (pincode && pincode != "") update.address.pincode = pincode;
 
         if (password && password != "") {
@@ -65,15 +57,6 @@ const updateUser = async (req, res) => {
         update.modifiedAt = Date.now();
 
         const result = await User.findByIdAndUpdate(req.user.id, update, { new: true });
-
-        if(email){
-            const token = jwt.sign({ email: result.email, id: result._id }, process.env.SECRET_KEY, {
-                expiresIn: process.env.JWT_TOKEN_EXPIRATION,
-            });
-    
-            const cookieExpiration = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days in milliseconds
-            res.cookie("token", token, { httpOnly: true, expires: cookieExpiration });
-        }
 
         res.status(200).json(result);
 

@@ -11,7 +11,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.status);
 
-  const handleLoginChange = async () => {
+  const handleLoginLogoutButtonChange = async () => {
     if (!isLoggedIn) {
       navigate("/login");
     } else {
@@ -85,8 +85,10 @@ const Sidebar = () => {
                 <span className="flex-1 ms-3 whitespace-nowrap">Home</span>
               </a>
             </li>
-            <li></li>
-            <li>
+            {
+              isLoggedIn ? (
+              <>
+              <li>
               <a
                 onClick={() => {
                   navigate("/requests");
@@ -147,10 +149,13 @@ const Sidebar = () => {
                 <span className="ms-3">Dashboard</span>
               </a>
             </li>
+            </>) : null
+            }
+            
 
             <li>
               <a
-                onClick={handleLoginChange}
+                onClick={handleLoginLogoutButtonChange}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-700 group"
               >
                 <svg

@@ -8,7 +8,7 @@ import Filter from "../../assets/filter.png";
 import Filter1 from "../../assets/filter1.png";
 import accept from "../../assets/accept.png";
 import reject from "../../assets/reject.png";
-import "./RequestPage.css";
+// import "./RequestPage.css";
 import toast from "react-hot-toast";
 import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
 import ChatModal from "../../components/ChatModal";
@@ -162,15 +162,15 @@ const RequestPage = () => {
           />
         </div>
       ) : (
-        <div className="body-requestpage">
+        <div className="w-1/2 ml-96">
           <h1 className="head-request">Renting Request</h1>
           <div className="filter-button">
-            <div className="filter-image-container">
-              <img src={Filter} alt="Filter Icon" className="filter-image" />
+            <div className="">
+              <img src={Filter} alt="Filter Icon" className="w-8" />
               <div className="filter-vertical-line"></div>
             </div>
-            <div className="filter-image-container-1">
-              <img src={Filter1} alt="Filter Icon" className="filter-image-1" />
+            <div className="">
+              <img src={Filter1} alt="Filter Icon" className="w-8" />
               <div className="filter-vertical-line-1"></div>
             </div>
             <select

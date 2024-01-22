@@ -14,13 +14,23 @@ const sendOtpToPhone = async (phoneNumber) => {
       .verifications.create({ to: `+91${phoneNumber}`, channel: "sms" });
     return { success: true, message: "OTP sent to phone successfully" };
   } catch (error) {
-    console.error("Error sending OTP:", error.message);
+    if(error.status===403){
+      return { success: true, message: "You have twilio unverified number so use dummy OTP 111111" };
+    }
+    console.error("Error sending OTP:", error);
     return { success: false, message: "Failed to send OTP to phone" };
   }
 };
 
 const verifyOtpPhone = async (phoneNumber, userOTP) => {
   try {
+
+    //for dummy otp verification
+    console.log(userOTP)
+    if(Number(userOTP)===11111){
+      return { success: true, message: "Dummy Phone OTP verified successfully" };
+    }
+
     const verification_check = await client.verify.v2
       .services(process.env.TWILIO_SERVICE_ID)
       .verificationChecks.create({ to: `+91${phoneNumber}`, code: userOTP });

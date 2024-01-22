@@ -24,7 +24,7 @@ function ProductPage() {
       try {
         setIsLoading(true);
         const result = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/item/item-info/${productId}`
+          `${process.env.REACT_APP_BACKEND_URL}/api/product/product-info/${productId}`
         );
 
         if (result.status === 200) {
@@ -34,25 +34,26 @@ function ProductPage() {
         if (error.response && error.response.status === 404) {
           toast.error("Product not found");
         } else {
-          toast.error("Error fetching product");
+          toast.error(error.response.data.message);
         }
+        navigate('/')
       } finally {
         setIsLoading(false);
       }
     };
 
     getProductInfo();
-  }, [productId]);
+  }, []);
 
   const handleImageClick = (index) => {
     // Swap the positions of the big image (4th image) and the clicked small image
     if (index !== 3) {
-      const updatedImages = [...product.toolImages];
+      const updatedImages = [...product.productImages];
       [updatedImages[index], updatedImages[3]] = [
         updatedImages[3],
         updatedImages[index],
       ];
-      setProduct({ ...product, toolImages: updatedImages });
+      setProduct({ ...product, productImages: updatedImages });
       setSelectedImageIndex(index);
     }
   };
@@ -76,11 +77,11 @@ function ProductPage() {
       }
     } catch (error) {
       if (error.response.status === 404) {
-        toast.error("Invalid tool\nTool not found",{id: toastId});
+        toast.error("Invalid product\nTool not found",{id: toastId});
       } else if (error.response.status === 409) {
         toast.error("Request already sent!",{id: toastId});
       } else if (error.response.status === 400) {
-        toast.error("Can't sent the request!\nEither owner of this tool has already accepted a request or you are sending request to your own tool",{id: toastId});
+        toast.error("Can't sent the request!\nEither owner of this product has already accepted a request or you are sending request to your own product",{id: toastId});
       } else if (error.response.status === 401) {
         toast.error("You are not logged in",{id: toastId});
         navigate("/login");
@@ -92,7 +93,14 @@ function ProductPage() {
     }
   };
 
+  console.log(product);
+
+  if(!product){
+    return null;
+  }
+
   return (
+
     <div className="body-productpage">
       <Header />
       <Sidebar />
@@ -112,15 +120,15 @@ function ProductPage() {
           </div>
           <div className="container-productpage" id="white-box">
             <div className="left-box">
-              <h2 className="heading-productpage">{product.toolName}</h2>
+              <h2 className="heading-productpage">{product.productName}</h2>
               <div className="gallery-productpage">
                 <img
                   className="big-image image"
-                  src={product.toolImages[3].secure_url}
+                  src={product.productImages[3].secure_url}
                   alt="Product"
                 />
                 <div className="small-images">
-                  {product.toolImages.slice(0, 3).map((image, index) => (
+                  {product.productImages.slice(0, 3).map((image, index) => (
                     <img
                       key={index}
                       className={`small-images-productpage image ${
@@ -139,17 +147,17 @@ function ProductPage() {
                 <span className="author">By</span> {product.ownerName}
               </h3>
               <button className="grey-button">
-                {product.toolPrice} Rs/day
+                {product.productPrice} Rs/day
               </button>
               <p className="description-productpage">
-                Description: <br /> {product.toolDesc}
+                Description: <br /> {product.productDesc}
               </p>
 
               <form onSubmit={formSubmissionHandler}>
                 <label className="label-productpage" htmlFor="till-date">
                   Available Quantity:
                 </label>
-                <button className="grey-button">{product.toolQuantity}</button>
+                <button className="grey-button">{product.productQuantity}</button>
                 <label className="label-productpage" htmlFor="till-date">
                   Availability Till:
                 </label>

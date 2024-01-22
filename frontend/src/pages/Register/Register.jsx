@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import bgimg from "../../assets/bgimg.png";
 import logo from "../../assets/logop.png";
+import {useDispatch, useSelector} from "react-redux";
+import { login, logout } from "../../store/authSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +14,7 @@ function Register() {
   const [otpSent, setOtpSent] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,18 +58,25 @@ function Register() {
     }
   };
 
-  const handleVerifyOTPAndRegister = async (e) => {
-    e.preventDefault();
+  const handleVerifyOTPAndRegister = async () => {
+    
     const toastId = toast.loading("Registering...");
     try {
       console.log(formData)
-      await axios.post(
+      const response = await axios.post(
         process.env.REACT_APP_BACKEND_URL + "/api/user/verifyOtpAndRegisterUser",
         formData,
         { withCredentials: true }
       );
-      toast.success("Registration successfull!", { id: toastId });
-      navigate('/')
+      if (response.status===201) {
+        dispatch(login(response.data.userData))
+        toast.success("Registration successfull!", { id: toastId });
+        navigate('/')
+      }
+      else{
+        toast.error(response.data.message, { id: toastId });
+      }
+      
     } catch (error) {
       toast.error(error.response.data.message, { id: toastId });
     }
@@ -74,6 +84,7 @@ function Register() {
 
   return (
     <>
+    <div style={{ backgroundImage: `url(${bgimg})`, backgroundAttachment: "fixed" }} className=" bg-center bg-no-repeat bg-cover">
       {!otpSent ? (
         <RegistrationForm
           formData={formData}
@@ -85,9 +96,11 @@ function Register() {
         <VerifyOTP
           formData={formData}
           setFormData={setFormData}
+          handleSendOtp={handleSendOtp}
           handleVerifyOTPAndRegister={handleVerifyOTPAndRegister}
         />
       )}
+      </div>
     </>
   );
 }
