@@ -102,8 +102,6 @@ const productInfo = async(req, res)=>{
     try {
 
       const productInfo = await Product.findOne({productId: req.params.productId}).populate("ownerId");
-      console.log(productInfo)
-      console.log(req.params);
       
       if(!productInfo){
         return res.status(404).json({message: "Product not found"})

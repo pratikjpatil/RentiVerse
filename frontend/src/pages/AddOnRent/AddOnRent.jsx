@@ -9,7 +9,6 @@ import Image from "../../assets/Upload.png";
 import LoadingDots from "../../assets/loadingDots.gif";
 import Resizer from 'react-image-file-resizer';
 import toast from "react-hot-toast";
-import "./AddOnRent.css";
 
 const AddOnRent = () => {
   const navigate = useNavigate();
@@ -194,7 +193,7 @@ const AddOnRent = () => {
                     <div className="">
                       <label htmlFor="productName">Product Name</label>
                       <input
-                        className="h-10 p-4"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg"
                         type="text"
                         id="productName"
                         name="productName"
@@ -209,7 +208,7 @@ const AddOnRent = () => {
                     <div className="mt-3">
                       <label htmlFor="dueDate">Due Date</label>
                       <input
-                        className="h-10 p-4"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg"
                         type="date"
                         id="tillDate"
                         name="dueDate"
@@ -225,7 +224,7 @@ const AddOnRent = () => {
                     <div className="mt-3">
                       <label htmlFor="productPrice">Price</label>
                       <input
-                        className="h-10 p-4"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg"
                         type="number"
                         id="price"
                         name="productPrice"
@@ -240,7 +239,7 @@ const AddOnRent = () => {
                     <div className="mt-3">
                       <label htmlFor="productQuantity">Quantity</label>
                       <input
-                        className="h-10 p-4"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg"
                         type="number"
                         id="quantity"
                         name="productQuantity"
@@ -255,7 +254,7 @@ const AddOnRent = () => {
                     <div className="mt-3">
                       <label htmlFor="tags">Tags</label>
                       <input
-                        className="h-10 p-4"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg"
                         type="text"
                         id="tags"
                         name="productTags"
@@ -269,7 +268,7 @@ const AddOnRent = () => {
                     <div className="mt-3">
                       <label htmlFor="productCategory">Product Category</label>
                       <input
-                        className="h-10 p-4"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg"
                         type="text"
                         id="productCategory"
                         name="productCategory"
@@ -289,7 +288,7 @@ const AddOnRent = () => {
                         maxLength={180}
                         value={productDescription}
                         onChange={handleChange}
-                        placeholder="Write product description, showing its features and other factors."
+                        placeholder="Write product description in max 180 letters"
                         required
                       />
                     </div>

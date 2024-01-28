@@ -5,218 +5,50 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext"; // Import the AuthContext for user authentication
 import logo from "../../assets/logop.png"; // Import the logo image
-import notification from "../../assets/notification.png"; // Import the notification icon
-import NotificationCard from "../Notification/NotificationCard";
+import {useDispatch, useSelector} from "react-redux";
 import SearchBox from "../searchBox/searchBox";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
-// const Header = ({ onSearch }) => {
-//   // Define state variables using the useState hook
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-//   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
-//   const [notificationMessages, setNotificationMessages] = useState([]);
-
-//   // Use the useNavigate hook to get the navigate function for programmatic navigation
-//   const navigate = useNavigate();
-
-//   // Use the useContext hook to get the AuthContext data for user authentication
-//   const { isLoggedIn, setIsLoggedIn, firstName, setFirstName } =
-//     useContext(AuthContext);
-
-//   // Event handler for input change in the search bar
-//   const handleInputChange = (event) => {
-//     setSearchTerm(event.target.value);
-//     onSearch(event.target.value);
-//   };
-
-//   // Event handler for search form submission
-//   const handleSearch = (event) => {
-//     event.preventDefault();
-//     onSearch(searchTerm);
-//   };
-
-//   // Event handler for profile menu click (toggling profile dropdown)
-//   const handleProfileClick = () => {
-//     setIsProfileDropdownOpen((prevState) => !prevState);
-//     // Close the notification dropdown when profile dropdown is opened
-//     if (isNotificationDropdownOpen) {
-//       setIsNotificationDropdownOpen(false);
-//     }
-//   };
-
-//   // Event handler for user logout
-//   const handleLogout = async () => {
-//     try {
-//       // Make an API call to logout the user
-//       const result = await axios.delete(
-//         `${process.env.REACT_APP_BACKEND_URL}/api/user/logout`,
-//         { withCredentials: true }
-//       );
-
-//       // If logout is successful, update the state and navigate to login page
-//       if (result.status === 200) {
-//         setIsProfileDropdownOpen(false);
-//         setFirstName("?");
-//         setIsLoggedIn(false);
-//         navigate("/login");
-//       } else {
-//         // If logout fails, show an error message
-//         window.alert("Failed to logout.");
-//       }
-//     } catch (error) {
-//       // If an error occurs during logout, show an error message
-//       console.error("Logout error:", error);
-//       window.alert("Failed to logout. Please try again.");
-//     }
-//   };
-
-//   // Event handler for notification icon click (toggling notification dropdown)
-//   const handleNotificationClick = () => {
-//     setIsNotificationDropdownOpen((prev) => !prev);
-//     // Close the profile dropdown when notification dropdown is opened
-//     if (isProfileDropdownOpen) {
-//       setIsProfileDropdownOpen(false);
-//     }
-//     // For demonstration purposes, set some example notification messages
-//     setNotificationMessages([
-//       "Your Request is accepted or not",
-//       "Your Request is accepted or not",
-//       "Your Request is accepted or not",
-//       "Notification 2",
-//       "Notification 3",
-//     ]);
-//   };
-
-//   // Event handler for closing the notification dropdown
-//   const handleNotificationClose = () => {
-//     setIsNotificationDropdownOpen(false);
-//     setNotificationMessages([]);
-//   };
-
-//   return (
-//     <>
-//       <header style={{ position: "fixed", width: "100%", zIndex: 2 }}>
-//         <div className="logo flex-center">
-//           <img
-//             src={logo}
-//             alt="logos"
-//             onClick={() => {
-//               navigate("/");
-//             }}
-//           />
-//         </div>
-
-//         {/* Search Bar */}
-//         {window.location.href !== "http://localhost:3000/addonrent" &&
-//           window.location.href !== "http://localhost:3000/product" &&
-//           window.location.href !== "http://localhost:3000/request" &&
-//           window.location.href !== "http://localhost:3000/profile" && (
-//             <div className="search flex-center">
-//               <div className="search-logo flex-center">
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   fill="none"
-//                   viewBox="0 0 24 24"
-//                   strokeWidth="1.5"
-//                   stroke="currentColor"
-//                   className="w-6 h-6"
-//                 >
-//                   <path
-//                     strokeLinecap="round"
-//                     strokeLinejoin="round"
-//                     d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-//                   />
-//                 </svg>
-//               </div>
-
-//               <form onSubmit={handleSearch}>
-//                 <input
-//                   id="input_search"
-//                   type="text"
-//                   name="input"
-//                   placeholder="Search what you want"
-//                   value={searchTerm}
-//                   onChange={handleInputChange}
-//                 />
-//                 <button className="search-button" type="submit">
-//                   Search
-//                 </button>
-//               </form>
-//             </div>
-//           )}
-
-//         {/* Profile Section */}
-//         <div className="profile flex-center">
-//           <div className="profile-cart flex-center">
-//             <img
-//               className="notification-img"
-//               src={notification}
-//               alt="notification"
-//               onClick={handleNotificationClick}
-//             />
-//           </div>
-
-//           {/* Profile Menu */}
-//           <div className="profile-menu flex-center" onClick={handleProfileClick}>
-//             <div className="profile-logo">{firstName.charAt(0)}</div>
-//             <div className="flex-center">
-//               <svg
-//                 xmlns="http://www.w3.org/2000/svg"
-//                 fill="none"
-//                 viewBox="0 0 24 24"
-//                 strokeWidth="1.5"
-//                 stroke="currentColor"
-//                 className="w-6 h-6"
-//               >
-//                 <path
-//                   strokeLinecap="round"
-//                   strokeLinejoin="round"
-//                   d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-//                 />
-//               </svg>
-//             </div>
-//           </div>
-
-//           {/* Render the profile dropdown when isProfileDropdownOpen is true */}
-//           {isProfileDropdownOpen && (
-//             <div className="dropdown-menu">
-//               <ul>
-//                 <li onClick={() => navigate("/profile")}>Profile</li>
-//                 {isLoggedIn ? (
-//                   <li onClick={handleLogout}>Logout</li>
-//                 ) : (
-//                   <li onClick={() => navigate("/login")}>Login</li>
-//                 )}
-//               </ul>
-//             </div>
-//           )}
-//           {/* Render the NotificationCard dropdown when isNotificationDropdownOpen is true */}
-//           {isNotificationDropdownOpen && (
-//             <NotificationCard
-//               messages={notificationMessages}
-//               onClose={handleNotificationClose}
-//             />
-//           )}
-//         </div>
-//       </header>
-//     </>
-//   );
-// };
-
-// export default Header;
+import { setSidebarStatus } from "../../store/sidebarSlice";
 
 function Header({ setSearchText }) {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.userData);
+  const sidebarStatus = useSelector((state) => state.sidebar.status);
+  const dispatch = useDispatch();
 
   return (
     <div>
-      <div className="pt-0 pr-0 pb-0 pl-0 mt-0 mr-0 mb-0 ml-0"></div>
       <div className="bg-white">
         <div className="flex-col flex">
           <div className="w-full border-b-2 border-gray-200">
-            <div className="fixed bg-white h-16 justify-between items-center mx-auto px-4 w-full flex z-10 shadow-xl">
+            <div className="fixed bg-white h-16 justify-between items-center mx-auto px-4 w-full z-50 flex shadow-xl">
+
+              <div>
+              <button
+        data-drawer-target="default-sidebar"
+        data-drawer-toggle="default-sidebar"
+        aria-controls="default-sidebar"
+        type="button"
+        className="inline-flex items-center p-1 mr-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        onClick={()=>{dispatch(setSidebarStatus(!sidebarStatus))}}
+      >
+        <span className="sr-only">Open sidebar</span>
+        <svg
+          className="w-6 h-6"
+          aria-hidden="true"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            fill-rule="evenodd"
+            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+          ></path>
+        </svg>
+      </button>
+              </div>
+
               <div>
                 <img
                   src={logo}
@@ -278,7 +110,7 @@ function Header({ setSearchText }) {
                       className="object-cover btn- h-9 w-9 rounded-full mr-2 bg-gray-300"
                       alt=""
                     />
-                    <p className="font-semibold text-sm">{`${user.firstName} ${user.lastName}`}</p>
+                    <p className="font-semibold text-sm hidden md:inline-block">{`${user.firstName} ${user.lastName}`}</p>
                   </div>
                 </div>
               ) : null}

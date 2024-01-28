@@ -124,7 +124,6 @@ const userLogin = async (req, res) => {
   try {
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(404).json({ message: "User not registered" });
-    console.log(user)
     const match = await bcrypt.compare(password, user.password);
 
     if (match) {

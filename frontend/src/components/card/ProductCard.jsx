@@ -6,7 +6,7 @@ const ProductCard = ({ data, index }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="dashboard-page-content-main-content-cards product-card z-50" key={data.productId} 
+    <div className="dashboard-page-content-main-content-cards product-card z-10" key={data.productId} 
     onClick={() => navigate(`/product/${data.productId}`)}>
       <div
         className="dashboard-page-content-main-content-cards-card"

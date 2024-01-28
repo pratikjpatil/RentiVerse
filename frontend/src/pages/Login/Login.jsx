@@ -6,7 +6,6 @@ import { AuthContext } from "../../context/AuthContext";
 import bgimg from "../../assets/bgimg.png";
 import Image from "../../assets/logo.png";
 import axios from "axios";
-import "./Login.css";
 import toast from 'react-hot-toast';
 
 const Login = () => {

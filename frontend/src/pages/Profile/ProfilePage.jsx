@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
-import maleImage from "../../assets/male.png";
-import femaleImage from "../../assets/female.png";
 import toast from "react-hot-toast";
-import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const [editMode, setEditMode] = useState(false);
@@ -90,9 +86,9 @@ const ProfilePage = () => {
       <Sidebar />
 
       <div className="flex justify-center">
-        <div className="p-6 mt-5 sm:ml-64 md:w-1/2 lg:mt-28 flex flex-col justify-center">
+        <div className="p-6 mt-20 sm:ml-64 md:w-1/2 lg:mt-28 flex flex-col justify-center">
           <div className="w-full flex justify-between">
-            <h3 className="text-2xl font-semibold">Pratik Patil</h3>
+            <h3 className="text-2xl font-semibold">{userData.firstName + " " + userData.lastName}</h3>
 
             <button
               className="bg-gray-300 font-medium text-gray-800 rounded-2xl px-3"

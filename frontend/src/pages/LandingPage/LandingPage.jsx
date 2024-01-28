@@ -63,7 +63,6 @@ const LandingPage = () => {
     };
   }, [loading]); // Include loading in the dependencies to avoid unnecessary re-renders
 
-  console.log(products)
 
   return (
     <div className="landing-page">

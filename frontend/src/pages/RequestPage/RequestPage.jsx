@@ -16,8 +16,8 @@ import { useSelector } from "react-redux";
 
 const RequestPage = () => {
   const [tableData, setTableData] = useState([]);
-  const [requestOption, setRequestOption] = useState("show-received");
-  const [filter, setFilter] = useState("all");
+  const [requestOption, setRequestOption] = useState("all");
+  const [filter, setFilter] = useState("show-received");
   const [isLoading, setIsLoading] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -25,16 +25,16 @@ const RequestPage = () => {
 
   const navigate = useNavigate();
 
-  const isLoggedIn = useSelector(state => state.auth.status);
-  if(!isLoggedIn){
-    navigate('/login')
+  const isLoggedIn = useSelector((state) => state.auth.status);
+  if (!isLoggedIn) {
+    navigate("/login");
   }
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
+  const handleRequestChange = (event) => {
+    setFilter(event.target.value); //here it should be from received or sent radio buttons
   };
 
-  const handleRequestOptionChange = (event) => {
+  const handleRequestTypeChange = (event) => {
     setRequestOption(event.target.value);
   };
 
@@ -50,7 +50,7 @@ const RequestPage = () => {
   };
 
   const fetchRequests = async () => {
-    const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/${requestOption}-${filter}`;
+    const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/${filter}-${requestOption}`;
 
     try {
       setIsLoading(true);
@@ -60,6 +60,7 @@ const RequestPage = () => {
         setTableData(result.data);
       }
     } catch (error) {
+      console.log(error);
       toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
@@ -103,7 +104,7 @@ const RequestPage = () => {
   };
 
   const initPayment = (data, productName, requestId) => {
-    console.log(process.env.REACT_APP_RAZORPAY_KEY_ID)
+    console.log(process.env.REACT_APP_RAZORPAY_KEY_ID);
     const options = {
       key: process.env.REACT_APP_RAZORPAY_KEY_ID,
       amount: data.amount,
@@ -120,7 +121,7 @@ const RequestPage = () => {
             withCredentials: true,
           });
           toast.success("Payment Successfull!");
-          navigate('/dashboard');
+          navigate("/dashboard");
         } catch (error) {
           toast.error("Payment failed!");
           toast.error(error.response.data.message);
@@ -138,11 +139,14 @@ const RequestPage = () => {
   const handlePayment = async (requestId, productName) => {
     try {
       const orderUrl = `${process.env.REACT_APP_BACKEND_URL}/api/payment/orders`;
-      const { data } = await axios.post(orderUrl, {requestId}, {
-        withCredentials: true,
-      });
-      // console.log(data);
-    
+      const { data } = await axios.post(
+        orderUrl,
+        { requestId },
+        {
+          withCredentials: true,
+        }
+      );
+
       initPayment(data.data, productName, requestId);
     } catch (error) {
       console.log(error);
@@ -152,146 +156,271 @@ const RequestPage = () => {
   return (
     <>
       <Header />
+
       <Sidebar />
-      {isLoading ? (
-        <div>
-          <img
-            src={rentiVerseLoadingGif}
-            className="rentiVerseLoadingGif"
-            alt="Loading..."
-          />
-        </div>
-      ) : (
-        <div className="w-1/2 ml-96">
-          <h1 className="head-request">Renting Request</h1>
-          <div className="filter-button">
-            <div className="">
-              <img src={Filter} alt="Filter Icon" className="w-8" />
-              <div className="filter-vertical-line"></div>
-            </div>
-            <div className="">
-              <img src={Filter1} alt="Filter Icon" className="w-8" />
-              <div className="filter-vertical-line-1"></div>
-            </div>
-            <select
-              className="head-request-filter"
-              value={requestOption}
-              onChange={handleRequestOptionChange}
+
+      {!isChatModalOpen && (
+        <details
+          close
+          class="z-10 max-w-md w-screen bg-white overflow-hidden rounded-lg border border-gray-200 open:shadow-lg text-gray-700 fixed top-20 md:right-8 md:top-24"
+        >
+          <summary class="flex cursor-pointer select-none items-center justify-between bg-gray-100 px-5 py-3">
+            <span class="text-sm font-medium"> Toggle Filters </span>
+
+            <svg
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <option value="show-received">Received</option>
-              <option value="show-sent">Sent</option>
-            </select>
-            <select
-              className="head-request-filter-1"
-              value={filter}
-              onChange={handleFilterChange}
-            >
-              <option value="all">All</option>
-              <option value="pending">Pending</option>
-              <option value="accepted">Accepted</option>
-              <option value="rejected">Rejected</option>
-            </select>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </summary>
+
+          <div class="flex border-t border-gray-200 lg:border-t-0">
+            <div class="w-full">
+              <p class="block w-full bg-gray-50 px-5 py-3 text-xs font-medium">
+                Request
+              </p>
+
+              <div class="space-y-2 px-5 py-6">
+                <div class="flex items-center">
+                  <input
+                    id="received"
+                    type="radio"
+                    name="request"
+                    value="show-received"
+                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    checked={filter === "show-received"}
+                    onChange={handleRequestChange}
+                  />
+
+                  <label
+                    for="received"
+                    class="ml-3 text-sm font-medium cursor-pointer"
+                  >
+                    {" "}
+                    Received{" "}
+                  </label>
+                </div>
+
+                <div class="flex items-center">
+                  <input
+                    id="sent"
+                    type="radio"
+                    name="request"
+                    value="show-sent"
+                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    checked={filter === "show-sent"}
+                    onChange={handleRequestChange}
+                  />
+
+                  <label
+                    for="sent"
+                    class="ml-3 text-sm font-medium cursor-pointer"
+                  >
+                    {" "}
+                    Sent{" "}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full">
+              <p class="block w-full bg-gray-50 px-5 py-3 text-xs font-medium">
+                Type
+              </p>
+
+              <div class="space-y-2 px-5 py-6">
+                <div class="flex items-center">
+                  <input
+                    id="All"
+                    type="radio"
+                    name="Type"
+                    value="all"
+                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    checked={requestOption === "all"}
+                    onChange={handleRequestTypeChange}
+                  />
+
+                  <label
+                    for="All"
+                    class="ml-3 text-sm font-medium cursor-pointer"
+                  >
+                    {" "}
+                    All{" "}
+                  </label>
+                </div>
+
+                <div class="flex items-center">
+                  <input
+                    id="Pending"
+                    type="radio"
+                    name="Type"
+                    value="pending"
+                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    checked={requestOption === "pending"}
+                    onChange={handleRequestTypeChange}
+                  />
+
+                  <label
+                    for="Pending"
+                    class="ml-3 text-sm font-medium cursor-pointer"
+                  >
+                    {" "}
+                    Pending{" "}
+                  </label>
+                </div>
+
+                <div class="flex items-center">
+                  <input
+                    id="Accepted"
+                    type="radio"
+                    name="Type"
+                    value="accepted"
+                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    checked={requestOption === "accepted"}
+                    onChange={handleRequestTypeChange}
+                  />
+
+                  <label
+                    for="Accepted"
+                    class="ml-3 text-sm font-medium cursor-pointer"
+                  >
+                    {" "}
+                    Accepted{" "}
+                  </label>
+                </div>
+
+                <div class="flex items-center">
+                  <input
+                    id="Rejected"
+                    type="radio"
+                    name="Type"
+                    value="rejected"
+                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    checked={requestOption === "rejected"}
+                    onChange={handleRequestTypeChange}
+                  />
+
+                  <label
+                    for="Rejected"
+                    class="ml-3 text-sm font-medium cursor-pointer"
+                  >
+                    {" "}
+                    Rejected{" "}
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="container-requestpage">
-            <table id="customers" className="table-requestpage">
-              <thead>
-                <tr>
-                  <th>User Name</th>
-                  <th>Tool</th>
-                  <th>Till Date</th>
-                  <th>Message</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan="5">
-                    <hr className="hr-line-requestpage" />
+        </details>
+      )}
+
+      <div class="mt-32 mx-auto md:ml-80 md:mr-10 md:mt-40 md:relative overflow-x-auto md:shadow-md sm:rounded-lg">
+        <table class="md:w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                Product
+              </th>
+              <th scope="col" class="px-6 py-3">
+                User name
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Due Date
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Message
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Action
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Chat
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData &&
+              tableData.map((rowData, index) => (
+                <tr
+                  key={index}
+                  class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                >
+                  <th
+                    scope="row"
+                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {rowData.productName}
+                  </th>
+                  <td class="px-6 py-4">{rowData.userName}</td>
+                  <td class="px-6 py-4">{rowData.dueDate.split("T")[0]}</td>
+                  <td class="px-6 py-4">{rowData.message}</td>
+                  <td class="px-6 py-4">
+                    {rowData.requestStatus === "pending" &&
+                    requestOption === "show-received" ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleAcceptRequest(rowData.requestId);
+                          }}
+                        >
+                          <img className="w-10 px-1" src={accept} alt="img" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleRejectRequest(rowData.requestId);
+                          }}
+                        >
+                          <img className="w-10 px-1" src={reject} alt="img" />
+                        </button>
+                      </>
+                    ) : rowData.requestStatus === "accepted" &&
+                      requestOption === "show-sent" ? (
+                      <>
+                        <button
+                          className="bg-green-400 text-white w-20 rounded-lg h-6 hover:bg-white hover:text-green-500"
+                          type="button"
+                          onClick={() => {
+                            handlePayment(rowData.requestId, rowData.toolName);
+                          }}
+                        >
+                          Pay Now
+                        </button>
+                      </>
+                    ) : (
+                      rowData.requestStatus
+                    )}
+                  </td>
+                  <td class="px-6 py-4">
+                    <button
+                      onClick={() =>
+                        openChatModal(rowData.user2Id, rowData.userName)
+                      }
+                    >
+                      Open Chat
+                    </button>
                   </td>
                 </tr>
-                {tableData.length > 0 ? (
-                  tableData.map((rowData, index) => (
-                    <tr key={index}>
-                      <td>{rowData.userName}</td>
-                      <td>{rowData.toolName}</td>
-                      <td>{rowData.dueDate.split("T")[0]}</td>
-                      <td>{rowData.message}</td>
-                      <td>
-                        {rowData.requestStatus === "pending" &&
-                        requestOption === "show-received" ? (
-                          <>
-                            <button
-                              className="request-button accept"
-                              type="button"
-                              onClick={() => {
-                                handleAcceptRequest(rowData.requestId);
-                              }}
-                            >
-                              <img
-                                className="accept-img"
-                                src={accept}
-                                alt="img"
-                              />
-                            </button>
-                            <button
-                              className="request-button reject"
-                              type="button"
-                              onClick={() => {
-                                handleRejectRequest(rowData.requestId);
-                              }}
-                            >
-                              <img
-                                className="reject-img"
-                                src={reject}
-                                alt="img"
-                              />
-                            </button>
-                          </>
-                        ) : rowData.requestStatus === "accepted" &&
-                          requestOption === "show-sent" ? (
-                          <>
-                            {rowData.requestStatus}
-                            <button
-                              className="request-button accept"
-                              type="button"
-                              onClick={() => {
-                                handlePayment(rowData.requestId, rowData.toolName);
-                              }}
-                            >
-                              Pay Now
-                            </button>
-                          </>
-                        ) : (
-                          rowData.requestStatus
-                        )}
-                        {/* Add a button or icon to open the chat modal */}
-                        <button
-                          onClick={() =>
-                            openChatModal(rowData.user2Id, rowData.userName)
-                          }
-                        >
-                          Open Chat
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5">No requests found</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-          {/* Render the ChatModal component */}
-          <ChatModal
-            isOpen={isChatModalOpen}
-            onRequestClose={closeChatModal}
-            user2Id={selectedUserId}
-            user2Name={selectedUserName}
-          />
-        </div>
-      )}
+              ))}
+          </tbody>
+        </table>
+        <ChatModal
+          isOpen={isChatModalOpen}
+          onRequestClose={closeChatModal}
+          user2Id={selectedUserId}
+          user2Name={selectedUserName}
+        />
+      </div>
     </>
   );
 };

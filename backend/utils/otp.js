@@ -105,7 +105,7 @@ const verifyOtpEmail = async (email, emailOtp) => {
         return { success: false, message: "Email OTP expired" };
       }
     } 
-   catch (error) {
+  catch (error) {
     console.error("Error during email OTP verification:", error.message);
     return { success: false, message: "OTP verification failed" };
   }

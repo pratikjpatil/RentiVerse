@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import './ChatComponent.css'; // Import the CSS file
+// import './ChatComponent.css';
 import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { IoMdSend } from "react-icons/io";
@@ -85,31 +85,48 @@ export default function ChatComponent({ user2Id }) {
   }, [messages]);
 
   return (
-    <div className="container-chat container">
-      <div className="chat-messages">
+    <div className="mt-2">
+      <div className="h-[70vh] overflow-y-auto">
+        {" "}
         {messages.map((message) => (
           <div ref={scrollRef} key={uuidv4()}>
             <div
-              className={`message ${message.fromSelf ? "sended" : "recieved"}`}
+              className={` ${
+                message.fromSelf
+                  ? "flex items-end justify-end"
+                  : "flex items-start justify-start"
+              }`}
             >
-              <div className="content ">
-                <p>{message.content}</p>
+              <div className="p-4 mt-2 max-w-44 lg:max-w-60 rounded-lg bg-gray-100 shadow-md">
+                {" "}
+                {/* Adjusted styles */}
+                <p className="text-gray-700">{message.content}</p>{" "}
+                {/* Adjusted styles */}
               </div>
             </div>
           </div>
         ))}
       </div>
-      <form className="input-container" onSubmit={(event) => sendChat(event)}>
-        <input
-          type="text"
-          placeholder="type your message here"
-          onChange={(e) => setMsg(e.target.value)}
-          value={msg}
-        />
-        <button type="submit">
-          <IoMdSend />
-        </button>
-      </form>
+      <div className="fixed relative bottom-0 w-full mt-1 flex justify-center">
+        <form
+          className="w-full flex justify-between"
+          onSubmit={(event) => sendChat(event)}
+        >
+          <input
+            type="text"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="type your message here"
+            onChange={(e) => setMsg(e.target.value)}
+            value={msg}
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-400 focus:ring-2 focus:ring-blue-400"
+          >
+            <IoMdSend className="w-6 h-6" />
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
