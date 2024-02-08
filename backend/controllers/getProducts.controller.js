@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Product = require("../models/product");
 const User = require("../models/user");
 
-const getProducts = async(req, res) => {
+const getAllOrSearchProducts = async(req, res) => {
   const searchText = req.query.searchText || "";
   let searchQuery = {
     renterId: null,
@@ -30,6 +30,7 @@ const getProducts = async(req, res) => {
 
     const products = await Product.find(searchQuery)
       .select("productId productName productCategory productPrice productDescription productQuantity productTags productImages")
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
@@ -39,6 +40,33 @@ const getProducts = async(req, res) => {
     return res.status(500).json({ message: "Error searching products" });
   }
 }
+
+const getProductsByCategory = async (req, res) => {
+    
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 30;
+
+      const skip = (page-1) * limit;
+      const products = await Product.find({productCategory: req.params.category}).select("productId productName productCategory productPrice productDescription productQuantity productTags productImages").skip(skip).limit(limit);
+      return res.status(200).json({products});
+    } catch (error) {
+      console.error(`Error fetching products by category: ${error}`);
+      return res.status(500).json({ message: "Error fetching products by category" });
+    }
+}
+
+const getRecentlyViewed = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("recentlyViewed");
+
+    return res.status(200).json({products: user.recentlyViewed});
+  } catch (error) {
+    console.log("Error getting recently viewed" + error);
+    res.status(500).json({message: "Error getting recently viewed"});
+  }
+}
+
 
 const listed = async (req, res) => {
   try {
@@ -78,4 +106,4 @@ const givenOnRent = async (req, res) => {
   }
 };
 
-module.exports = { getProducts, listed, takenOnrent, givenOnRent };
+module.exports = { getAllOrSearchProducts, getProductsByCategory, getRecentlyViewed, listed, takenOnrent, givenOnRent };

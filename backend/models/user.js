@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
     listed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], //tools listed for rent
     givenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], //tools which are given on rent
     takenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], //tools which are taken on rent
-    wishlist:[{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    recentlyViewed:[{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     sentRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests sent to item owners
     receivedRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests received from others
 

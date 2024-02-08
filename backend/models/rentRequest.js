@@ -46,10 +46,6 @@ const rentSchema = new mongoose.Schema({
         default: null
     }
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
   acceptedAt: {
     type: Date,
     default: null,
@@ -58,7 +54,7 @@ const rentSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
-});
+},{timestamps: true});
 
 const RentRequest = mongoose.model("RentRequest", rentSchema);
 

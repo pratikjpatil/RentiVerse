@@ -31,7 +31,6 @@ const productSchema = new mongoose.Schema({
         }],
         required: true,
     },
-
     dueDate: {
         type: Date,
         required: true
@@ -66,11 +65,7 @@ const productSchema = new mongoose.Schema({
         default: null,
     }, //person who has taken this tool on rent
 
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    }
-});
+},{timestamps: true});
 
 const Product = new mongoose.model("Product", productSchema);
 
