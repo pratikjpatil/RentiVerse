@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Header, Sidebar } from "../../components";
-// import "./ProductPage.css";
 import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
 import toast from "react-hot-toast";
 

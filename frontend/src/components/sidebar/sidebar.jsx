@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/authSlice";
 import toast from "react-hot-toast";
-// import "./sidebar.css";
+import { setSidebarStatus } from "../../store/sidebarSlice";
+
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ const Sidebar = () => {
             <li>
               <a
                 onClick={() => {
+                  dispatch(setSidebarStatus(!sidebarStatus))
                   navigate("/");
                 }}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-700 group"
@@ -73,6 +75,7 @@ const Sidebar = () => {
               <li>
               <a
                 onClick={() => {
+                  dispatch(setSidebarStatus(!sidebarStatus))
                   navigate("/requests");
                 }}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-700 group"
@@ -92,6 +95,7 @@ const Sidebar = () => {
             <li>
               <a
                 onClick={() => {
+                  dispatch(setSidebarStatus(!sidebarStatus))
                   navigate("/addonrent");
                 }}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-700 group"
@@ -114,6 +118,7 @@ const Sidebar = () => {
             <li>
               <a
                 onClick={() => {
+                  dispatch(setSidebarStatus(!sidebarStatus))
                   navigate("/dashboard");
                 }}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-700 group"

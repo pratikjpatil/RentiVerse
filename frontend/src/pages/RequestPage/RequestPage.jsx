@@ -1,4 +1,3 @@
-// RequestPage.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -31,7 +30,7 @@ const RequestPage = () => {
   }
 
   const handleRequestChange = (event) => {
-    setFilter(event.target.value); //here it should be from received or sent radio buttons
+    setFilter(event.target.value);
   };
 
   const handleRequestTypeChange = (event) => {
@@ -156,7 +155,6 @@ const RequestPage = () => {
   return (
     <>
       <Header />
-
       <Sidebar />
 
       {!isChatModalOpen && (
@@ -324,7 +322,7 @@ const RequestPage = () => {
       )}
 
       <div class="mt-32 mx-auto md:ml-80 md:mr-10 md:mt-40 md:relative overflow-x-auto md:shadow-md sm:rounded-lg">
-        <table class="md:w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table class="md:w-full text-sm text-left rtl:text-right text-gray-500">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">
@@ -352,11 +350,11 @@ const RequestPage = () => {
               tableData.map((rowData, index) => (
                 <tr
                   key={index}
-                  class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                  class="odd:bg-white even:bg-gray-50 border-b"
                 >
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                   >
                     {rowData.productName}
                   </th>
@@ -365,7 +363,7 @@ const RequestPage = () => {
                   <td class="px-6 py-4">{rowData.message}</td>
                   <td class="px-6 py-4">
                     {rowData.requestStatus === "pending" &&
-                    requestOption === "show-received" ? (
+                    filter === "show-received" ? (
                       <>
                         <button
                           type="button"
@@ -385,7 +383,7 @@ const RequestPage = () => {
                         </button>
                       </>
                     ) : rowData.requestStatus === "accepted" &&
-                      requestOption === "show-sent" ? (
+                    filter === "show-sent" ? (
                       <>
                         <button
                           className="bg-green-400 text-white w-20 rounded-lg h-6 hover:bg-white hover:text-green-500"

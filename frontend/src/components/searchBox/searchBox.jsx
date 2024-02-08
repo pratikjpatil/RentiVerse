@@ -1,10 +1,24 @@
 import React, {useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setSearchText } from "../../store/searchSlice";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-function SearchBox({ setSearchText }) {
+function SearchBox() {
   const [term, setTerm] = useState('');
   const [debouncedTerm, setDebouncedTerm] = useState(term);
+  const [initialNavigationDone, setInitialNavigationDone] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (term && !initialNavigationDone) {
+      navigate('/category/search');
+      setInitialNavigationDone(true);
+    }
+  }, [term, navigate, initialNavigationDone]);
 
   // update 'term' value after 1 second from the last update of 'debouncedTerm'
   useEffect(() => {
@@ -12,9 +26,9 @@ function SearchBox({ setSearchText }) {
       return () => clearTimeout(timer);
   }, [debouncedTerm])
 
- 
+
   useEffect(() => {
-        setSearchText(term);
+    dispatch(setSearchText(term));
   }, [term]);
 
   return (

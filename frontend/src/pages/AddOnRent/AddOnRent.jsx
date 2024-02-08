@@ -7,13 +7,10 @@ import { useSelector } from "react-redux";
 import Header from "../../components/header/Header";
 import Image from "../../assets/Upload.png";
 import LoadingDots from "../../assets/loadingDots.gif";
-import Resizer from 'react-image-file-resizer';
+import Resizer from "react-image-file-resizer";
 import toast from "react-hot-toast";
 
 const AddOnRent = () => {
-  const navigate = useNavigate();
-  const isLoggedIn = useSelector(state=>state.auth.status);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const [images, setImages] = useState([]);
@@ -27,6 +24,32 @@ const AddOnRent = () => {
     productPrice: "",
     productQuantity: "",
   });
+
+
+  const categories = [
+    "Automobiles",
+    "Motorcycle",
+    "Technology",
+    "Accessories",
+    "Books, magazines",
+    "Home furniture",
+    "Toys for kids",
+    "Clothings",
+    "Musical equipments",
+    "Sport, health",
+    "Jewellery",
+    "Animals, birds",
+    "Other",
+  ];
+
+  const navigate = useNavigate();
+
+  const isLoggedIn = useSelector((state) => state.auth.status);
+
+  const handleCategoryChange = (event) => {
+    setFormData({...formData, productCategory: event.target.value});
+  };
+
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -51,29 +74,32 @@ const AddOnRent = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  
   const resizeFile = (file) =>
     new Promise((resolve, reject) => {
       Resizer.imageFileResizer(
         file,
         550,
         550,
-        'WEBP',
+        "WEBP",
         100,
         0,
         (uri) => {
           resolve(uri);
         },
-        'file',
+        "file"
       );
     });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
+    if(productCategory==="null"){
+      toast.error("Select Category");
+      return;
+    }
     const backendUrl =
       process.env.REACT_APP_BACKEND_URL + "/api/product/add-product";
+
+    setIsLoading(true);
     try {
       const formDataToSend = new FormData();
 
@@ -120,12 +146,12 @@ const AddOnRent = () => {
 
   const handleImageChange = async (e) => {
     const selectedImages = Array.from(e.target.files);
-  
+
     if (selectedImages.length !== 4) {
       toast.error("Please select 4 images.");
       return;
     }
-  
+
     try {
       const compressedImages = await Promise.all(
         selectedImages.map(async (image) => await resizeFile(image))
@@ -135,7 +161,7 @@ const AddOnRent = () => {
       console.error("Error compressing images:", error);
     }
   };
-  
+
 
   const imagePreview = images.map((image, index) => (
     <img
@@ -265,20 +291,7 @@ const AddOnRent = () => {
                         required
                       />
                     </div>
-                    <div className="mt-3">
-                      <label htmlFor="productCategory">Product Category</label>
-                      <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg"
-                        type="text"
-                        id="productCategory"
-                        name="productCategory"
-                        maxLength={40}
-                        value={productCategory}
-                        onChange={handleChange}
-                        placeholder="Harvesting, watering, etc."
-                        required
-                      />
-                    </div>
+
                     <div className="mt-3 max-h-96">
                       <label htmlFor="productDescription">Description</label>
                       <textarea
@@ -292,10 +305,33 @@ const AddOnRent = () => {
                         required
                       />
                     </div>
+
+                    <div className="mt-3">
+                      <label htmlFor="categories">Select a category:</label>
+                      <select
+                        id="categories"
+                        value={productCategory}
+                        onChange={handleCategoryChange}
+                        required
+                        className="h-10 p-2 block border border-gray-300 rounded-lg"
+                      >
+                        <option value="null" className="text-slate-500">Select Category</option>{" "}
+                        {categories.map((category, index) => (
+                          <option
+                            key={index}
+                            value={category}
+                            className="text-gray-800"
+                          >
+                            {category}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
                     <div className="flex justify-center">
                       <button
                         type="submit"
-                        className="mt-4 h-8 w-24 bg-blue-400 active:bg-blue-800 text-white rounded-lg "
+                        className="mt-4 h-8 w-24 bg-blue-400 active:bg-blue-800 text-white rounded-lg"
                       >
                         Add
                       </button>

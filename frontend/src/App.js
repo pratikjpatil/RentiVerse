@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import Dashboard from "./pages/dashboard/Dashboard";
 import AddOnRent from "./pages/AddOnRent/AddOnRent";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 import ProductPage from "./pages/ProductPage/ProductPage";
 import RequestPage from "./pages/RequestPage/RequestPage";
 import Login from "./pages/Login/Login";
@@ -66,6 +67,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage/>} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/category/:category" element={<CategoryProducts/>} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/addonrent" element={<AddOnRent />} />
           <Route path="/requests" element={<RequestPage />} />
