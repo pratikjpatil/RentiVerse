@@ -103,7 +103,7 @@ function CategoryProducts() {
       <Header />
       <Sidebar />
 
-      <section className="p-4 px-6 mt-16 md:mt-5 sm:ml-64 lg:mt-20">
+      <section className="p-4 px-6 mt-16 md:mt-20 md:ml-64">
         <h2 className="text-xl font-semibold text-slate-600">
           Category: {category}
         </h2>

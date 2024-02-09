@@ -177,7 +177,7 @@ const AddOnRent = () => {
       <Header />
 
       <Sidebar />
-      <div className="p-4 px-6 mt-5 sm:ml-64 lg:mt-20 flex justify-center">
+      <div className="p-4 px-6 mt-16 md:ml-64 md:mt-20 flex justify-center">
         <div className="">
           {isLoading ? (
             <div className="loading-gif">
