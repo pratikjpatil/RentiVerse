@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-// import './ChatComponent.css';
 import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { IoMdSend } from "react-icons/io";

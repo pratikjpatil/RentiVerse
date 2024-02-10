@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSearchText } from "../../store/searchSlice";
-import toast from "react-hot-toast";
-import axios from "axios";
+
 
 function SearchBox() {
   const [term, setTerm] = useState('');
@@ -11,6 +10,7 @@ function SearchBox() {
   const [initialNavigationDone, setInitialNavigationDone] = useState(false);
 
   const dispatch = useDispatch();
+  const searchText = useSelector(state=>state.search.searchText)
   const navigate = useNavigate();
 
   useEffect(() => {

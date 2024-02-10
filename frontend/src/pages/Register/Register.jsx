@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import bgimg from "../../assets/bgimg.png";
-import logo from "../../assets/logop.png";
-import {useDispatch, useSelector} from "react-redux";
-import { login, logout } from "../../store/authSlice";
+import {useDispatch} from "react-redux";
+import { login } from "../../store/authSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";

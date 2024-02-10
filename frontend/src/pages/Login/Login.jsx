@@ -1,8 +1,7 @@
-import React,{Fragment, useState, useContext} from "react";
+import React,{useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { login, logout } from "../../store/authSlice";
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../../context/AuthContext";
 import bgimg from "../../assets/bgimg.png";
 import Image from "../../assets/logo.png";
 import axios from "axios";

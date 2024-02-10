@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 function VerifyOTP({ formData, setFormData, handleSendOtp, handleVerifyOTPAndRegister }) {
   const [otp, setOtp] = useState({
@@ -11,7 +10,6 @@ function VerifyOTP({ formData, setFormData, handleSendOtp, handleVerifyOTPAndReg
 
   const [resendTime, setResendTime] = useState(90); //90secs
 
-  const navigate = useNavigate();
 
  
   useEffect(() => {
@@ -70,8 +68,6 @@ function VerifyOTP({ formData, setFormData, handleSendOtp, handleVerifyOTPAndReg
   }, [clickedVerify]);
   
 
-    
-  
 
   const handleChange = (value, e, type) => {
     const updatedOtp = { ...otp };

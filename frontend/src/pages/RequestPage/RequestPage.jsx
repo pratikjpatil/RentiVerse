@@ -3,13 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import Header from "../../components/header/Header";
-import Filter from "../../assets/filter.png";
-import Filter1 from "../../assets/filter1.png";
 import accept from "../../assets/accept.png";
 import reject from "../../assets/reject.png";
-// import "./RequestPage.css";
 import toast from "react-hot-toast";
-import rentiVerseLoadingGif from "../../assets/rentiVerseLoadingGif.gif";
 import ChatModal from "../../components/ChatModal";
 import { useSelector } from "react-redux";
 
@@ -29,11 +25,11 @@ const RequestPage = () => {
     navigate("/login");
   }
 
-  const handleRequestChange = (event) => {
+  const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
 
-  const handleRequestTypeChange = (event) => {
+  const handleRequestOptionChange = (event) => {
     setRequestOption(event.target.value);
   };
 
@@ -152,6 +148,25 @@ const RequestPage = () => {
     }
   };
 
+  const handleOrderStatusChange = async (value, requestId) => {
+    if (value === "null") {
+      toast.error("Select valid order status");
+      return;
+    }
+    const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/changeorderstatus`;
+    try {
+      const result = await axios.put(
+        backendUrl,
+        { requestId, orderType: "buy", orderStatus: value },
+        { withCredentials: true }
+      );
+      toast.success(result.data.message);
+      fetchRequests();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -196,7 +211,7 @@ const RequestPage = () => {
                     value="show-received"
                     class="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={filter === "show-received"}
-                    onChange={handleRequestChange}
+                    onChange={handleFilterChange}
                   />
 
                   <label
@@ -216,7 +231,7 @@ const RequestPage = () => {
                     value="show-sent"
                     class="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={filter === "show-sent"}
-                    onChange={handleRequestChange}
+                    onChange={handleFilterChange}
                   />
 
                   <label
@@ -244,7 +259,7 @@ const RequestPage = () => {
                     value="all"
                     class="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "all"}
-                    onChange={handleRequestTypeChange}
+                    onChange={handleRequestOptionChange}
                   />
 
                   <label
@@ -264,7 +279,7 @@ const RequestPage = () => {
                     value="pending"
                     class="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "pending"}
-                    onChange={handleRequestTypeChange}
+                    onChange={handleRequestOptionChange}
                   />
 
                   <label
@@ -284,7 +299,7 @@ const RequestPage = () => {
                     value="accepted"
                     class="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "accepted"}
-                    onChange={handleRequestTypeChange}
+                    onChange={handleRequestOptionChange}
                   />
 
                   <label
@@ -304,7 +319,7 @@ const RequestPage = () => {
                     value="rejected"
                     class="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "rejected"}
-                    onChange={handleRequestTypeChange}
+                    onChange={handleRequestOptionChange}
                   />
 
                   <label
@@ -348,10 +363,7 @@ const RequestPage = () => {
           <tbody>
             {tableData &&
               tableData.map((rowData, index) => (
-                <tr
-                  key={index}
-                  class="odd:bg-white even:bg-gray-50 border-b"
-                >
+                <tr key={index} class="odd:bg-white even:bg-gray-50 border-b">
                   <th
                     scope="row"
                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
@@ -383,7 +395,8 @@ const RequestPage = () => {
                         </button>
                       </>
                     ) : rowData.requestStatus === "accepted" &&
-                    filter === "show-sent" ? (
+                      filter === "show-sent" &&
+                      !rowData.paymentStatus ? (
                       <>
                         <button
                           className="bg-green-400 text-white w-20 rounded-lg h-6 hover:bg-white hover:text-green-500"
@@ -395,6 +408,30 @@ const RequestPage = () => {
                           Pay Now
                         </button>
                       </>
+                    ) : rowData.paymentStatus && filter === "show-received" ? (
+                      <>
+                        <select
+                          id="categories"
+                          value={rowData.orderStatus.buy}
+                          onChange={(e) =>
+                            handleOrderStatusChange(
+                              e.target.value,
+                              rowData.requestId
+                            )
+                          }
+                          required
+                          className="h-10 p-2 block border border-gray-300 rounded-lg"
+                        >
+                          <option value="null" className="text-slate-500">
+                            Select Category
+                          </option>
+                          <option value="processing">Processing</option>
+                          <option value="shipped">Shipped</option>
+                          <option value="delivered">Delivered</option>
+                        </select>
+                      </>
+                    ) : rowData.paymentStatus && filter === "show-sent" ? (
+                      rowData.orderStatus.buy
                     ) : (
                       rowData.requestStatus
                     )}

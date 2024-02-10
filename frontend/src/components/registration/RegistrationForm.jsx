@@ -1,8 +1,6 @@
-import React, {useState} from 'react'
-import bgimg from '../../assets/bgimg.png'
+import React from 'react'
 import logo from "../../assets/logop.png"
-import axios from 'axios'
-import toast from 'react-hot-toast'
+
 import { useNavigate } from 'react-router-dom'
 
 function RegistrationForm({formData, handleInputChange, handleSendOtp, otpSent}) {

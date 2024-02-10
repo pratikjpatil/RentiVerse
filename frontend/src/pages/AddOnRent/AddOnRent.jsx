@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import { useSelector } from "react-redux";

@@ -1,13 +1,10 @@
 // // Header.js
 
-import React, { useState, useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { AuthContext } from "../../context/AuthContext"; // Import the AuthContext for user authentication
 import logo from "../../assets/logop.png"; // Import the logo image
 import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "../searchBox/searchBox";
-import toast from "react-hot-toast";
 import { setSidebarStatus } from "../../store/sidebarSlice";
 
 function Header({ setSearchText }) {

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Header, Sidebar } from "../../components";
 import axios from "axios";
-import { setSearchText, setPrevSearchText } from "../../store/searchSlice";
 import toast from "react-hot-toast";
 import ProductsList from "../../components/ProductsList/ProductsList";
 
@@ -12,10 +11,6 @@ const LandingPage = () => {
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState([]);
   const [loading, setLoading] = useState(false); // Track if data is being loaded
   const navigate = useNavigate();
-
-  const dispatch = useDispatch();
-  const searchText = useSelector((state) => state.search.searchText);
-  const prevSearchText = useSelector((state) => state.search.prevSearchText);
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
