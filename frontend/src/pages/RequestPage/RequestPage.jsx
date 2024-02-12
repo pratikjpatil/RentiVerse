@@ -67,39 +67,40 @@ const RequestPage = () => {
   }, [requestOption, filter]);
 
   const handleAcceptRequest = async (requestId) => {
+    const toastId = toast.loading("Loading...");
     const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/accept/${requestId}`;
     try {
       setIsLoading(true);
       const result = await axios.put(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        toast.success("Request accepted");
+        toast.success("Request accepted", { id: toastId });
         fetchRequests();
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.message, { id: toastId });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleRejectRequest = async (requestId) => {
+    const toastId = toast.loading("Loading...");
     const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api/request/reject/${requestId}`;
     try {
       setIsLoading(true);
       const result = await axios.post(backendUrl, { withCredentials: true });
       if (result.status === 200) {
-        toast.success("Request rejected");
+        toast.success("Request rejected", { id: toastId });
         fetchRequests();
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.message, { id: toastId });
     } finally {
       setIsLoading(false);
     }
   };
 
   const initPayment = (data, productName, requestId) => {
-    console.log(process.env.REACT_APP_RAZORPAY_KEY_ID);
     const options = {
       key: process.env.REACT_APP_RAZORPAY_KEY_ID,
       amount: data.amount,
@@ -149,6 +150,7 @@ const RequestPage = () => {
   };
 
   const handleOrderStatusChange = async (value, requestId) => {
+    const toastId = toast.loading("Loading...");
     if (value === "null") {
       toast.error("Select valid order status");
       return;
@@ -160,10 +162,10 @@ const RequestPage = () => {
         { requestId, orderType: "buy", orderStatus: value },
         { withCredentials: true }
       );
-      toast.success(result.data.message);
+      toast.success(result.data.message, { id: toastId });
       fetchRequests();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.message, { id: toastId });
     }
   };
 
@@ -174,69 +176,69 @@ const RequestPage = () => {
 
       {!isChatModalOpen && (
         <details
-          close
-          class="z-10 max-w-md w-screen bg-white overflow-hidden rounded-lg border border-gray-200 open:shadow-lg text-gray-700 fixed top-20 md:right-8 md:top-24"
+          open
+          className="z-10 max-w-md w-screen bg-white overflow-hidden rounded-lg border border-gray-200 open:shadow-lg text-gray-700 fixed top-20 md:right-8 md:top-24"
         >
-          <summary class="flex cursor-pointer select-none items-center justify-between bg-gray-100 px-5 py-3">
-            <span class="text-sm font-medium"> Toggle Filters </span>
+          <summary className="flex cursor-pointer select-none items-center justify-between bg-gray-100 px-5 py-3">
+            <span className="text-sm font-medium"> Toggle Filters </span>
 
             <svg
-              class="h-5 w-5"
+              className="h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
           </summary>
 
-          <div class="flex border-t border-gray-200 lg:border-t-0">
-            <div class="w-full">
-              <p class="block w-full bg-gray-50 px-5 py-3 text-xs font-medium">
+          <div className="flex border-t border-gray-200 lg:border-t-0">
+            <div className="w-full">
+              <p className="block w-full bg-gray-50 px-5 py-3 text-xs font-medium">
                 Request
               </p>
 
-              <div class="space-y-2 px-5 py-6">
-                <div class="flex items-center">
+              <div className="space-y-2 px-5 py-6">
+                <div className="flex items-center">
                   <input
                     id="received"
                     type="radio"
                     name="request"
                     value="show-received"
-                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    className="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={filter === "show-received"}
                     onChange={handleFilterChange}
                   />
 
                   <label
-                    for="received"
-                    class="ml-3 text-sm font-medium cursor-pointer"
+                    htmlFor="received"
+                    className="ml-3 text-sm font-medium cursor-pointer"
                   >
                     {" "}
                     Received{" "}
                   </label>
                 </div>
 
-                <div class="flex items-center">
+                <div className="flex items-center">
                   <input
                     id="sent"
                     type="radio"
                     name="request"
                     value="show-sent"
-                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    className="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={filter === "show-sent"}
                     onChange={handleFilterChange}
                   />
 
                   <label
-                    for="sent"
-                    class="ml-3 text-sm font-medium cursor-pointer"
+                    htmlFor="sent"
+                    className="ml-3 text-sm font-medium cursor-pointer"
                   >
                     {" "}
                     Sent{" "}
@@ -245,86 +247,86 @@ const RequestPage = () => {
               </div>
             </div>
 
-            <div class="w-full">
-              <p class="block w-full bg-gray-50 px-5 py-3 text-xs font-medium">
+            <div className="w-full">
+              <p className="block w-full bg-gray-50 px-5 py-3 text-xs font-medium">
                 Type
               </p>
 
-              <div class="space-y-2 px-5 py-6">
-                <div class="flex items-center">
+              <div className="space-y-2 px-5 py-6">
+                <div className="flex items-center">
                   <input
                     id="All"
                     type="radio"
                     name="Type"
                     value="all"
-                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    className="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "all"}
                     onChange={handleRequestOptionChange}
                   />
 
                   <label
-                    for="All"
-                    class="ml-3 text-sm font-medium cursor-pointer"
+                    htmlFor="All"
+                    className="ml-3 text-sm font-medium cursor-pointer"
                   >
                     {" "}
                     All{" "}
                   </label>
                 </div>
 
-                <div class="flex items-center">
+                <div className="flex items-center">
                   <input
                     id="Pending"
                     type="radio"
                     name="Type"
                     value="pending"
-                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    className="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "pending"}
                     onChange={handleRequestOptionChange}
                   />
 
                   <label
-                    for="Pending"
-                    class="ml-3 text-sm font-medium cursor-pointer"
+                    htmlFor="Pending"
+                    className="ml-3 text-sm font-medium cursor-pointer"
                   >
                     {" "}
                     Pending{" "}
                   </label>
                 </div>
 
-                <div class="flex items-center">
+                <div className="flex items-center">
                   <input
                     id="Accepted"
                     type="radio"
                     name="Type"
                     value="accepted"
-                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    className="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "accepted"}
                     onChange={handleRequestOptionChange}
                   />
 
                   <label
-                    for="Accepted"
-                    class="ml-3 text-sm font-medium cursor-pointer"
+                    htmlFor="Accepted"
+                    className="ml-3 text-sm font-medium cursor-pointer"
                   >
                     {" "}
                     Accepted{" "}
                   </label>
                 </div>
 
-                <div class="flex items-center">
+                <div className="flex items-center">
                   <input
                     id="Rejected"
                     type="radio"
                     name="Type"
                     value="rejected"
-                    class="h-5 w-5 rounded border-gray-300 cursor-pointer"
+                    className="h-5 w-5 rounded border-gray-300 cursor-pointer"
                     checked={requestOption === "rejected"}
                     onChange={handleRequestOptionChange}
                   />
 
                   <label
-                    for="Rejected"
-                    class="ml-3 text-sm font-medium cursor-pointer"
+                    htmlFor="Rejected"
+                    className="ml-3 text-sm font-medium cursor-pointer"
                   >
                     {" "}
                     Rejected{" "}
@@ -336,117 +338,130 @@ const RequestPage = () => {
         </details>
       )}
 
-      <div class="mt-32 mx-auto md:ml-80 md:mr-10 md:mt-40 md:relative overflow-x-auto md:shadow-md sm:rounded-lg">
-        <table class="md:w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="mt-32 mx-auto md:ml-80 md:mr-10 md:mt-40 md:relative overflow-x-auto md:shadow-md sm:rounded-lg">
+        <table className="md:w-full text-sm text-left rtl:text-right text-gray-500">
+          
+          <thead className="text-xs text-gray-700 uppercase bg-green-100 dark:text-gray-400">
             <tr>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Product
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 User name
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Due Date
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Message
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Action
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Chat
               </th>
             </tr>
           </thead>
           <tbody>
-            {tableData &&
-              tableData.map((rowData, index) => (
-                <tr key={index} class="odd:bg-white even:bg-gray-50 border-b">
-                  <th
-                    scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    {rowData.productName}
-                  </th>
-                  <td class="px-6 py-4">{rowData.userName}</td>
-                  <td class="px-6 py-4">{rowData.dueDate.split("T")[0]}</td>
-                  <td class="px-6 py-4">{rowData.message}</td>
-                  <td class="px-6 py-4">
-                    {rowData.requestStatus === "pending" &&
-                    filter === "show-received" ? (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleAcceptRequest(rowData.requestId);
-                          }}
-                        >
-                          <img className="w-10 px-1" src={accept} alt="img" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleRejectRequest(rowData.requestId);
-                          }}
-                        >
-                          <img className="w-10 px-1" src={reject} alt="img" />
-                        </button>
-                      </>
-                    ) : rowData.requestStatus === "accepted" &&
-                      filter === "show-sent" &&
-                      !rowData.paymentStatus ? (
-                      <>
-                        <button
-                          className="bg-green-400 text-white w-20 rounded-lg h-6 hover:bg-white hover:text-green-500"
-                          type="button"
-                          onClick={() => {
-                            handlePayment(rowData.requestId, rowData.toolName);
-                          }}
-                        >
-                          Pay Now
-                        </button>
-                      </>
-                    ) : rowData.paymentStatus && filter === "show-received" ? (
-                      <>
-                        <select
-                          id="categories"
-                          value={rowData.orderStatus.buy}
-                          onChange={(e) =>
-                            handleOrderStatusChange(
-                              e.target.value,
-                              rowData.requestId
-                            )
-                          }
-                          required
-                          className="h-10 p-2 block border border-gray-300 rounded-lg"
-                        >
-                          <option value="null" className="text-slate-500">
-                            Select Category
-                          </option>
-                          <option value="processing">Processing</option>
-                          <option value="shipped">Shipped</option>
-                          <option value="delivered">Delivered</option>
-                        </select>
-                      </>
-                    ) : rowData.paymentStatus && filter === "show-sent" ? (
-                      rowData.orderStatus.buy
-                    ) : (
-                      rowData.requestStatus
-                    )}
-                  </td>
-                  <td class="px-6 py-4">
-                    <button
-                      onClick={() =>
-                        openChatModal(rowData.user2Id, rowData.userName)
-                      }
+            {!tableData
+              ? <tr><th>Loading..</th></tr>
+              : !tableData.length
+              ? <tr><th>No requests</th></tr>
+              : tableData &&
+                tableData.map((rowData, index) => (
+                  <tr key={index} className={index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b"}>
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                      Open Chat
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      {rowData.productName}
+                    </th>
+                    <td className="px-6 py-4">{rowData.userName}</td>
+                    <td className="px-6 py-4">{rowData.dueDate.split("T")[0]}</td>
+                    <td className="px-6 py-4">{rowData.message}</td>
+                    <td className="px-6 py-4">
+                      {rowData.requestStatus === "pending" &&
+                      filter === "show-received" ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleAcceptRequest(rowData.requestId);
+                            }}
+                          >
+                            <img className="w-10 px-1" src={accept} alt="img" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleRejectRequest(rowData.requestId);
+                            }}
+                          >
+                            <img className="w-10 px-1" src={reject} alt="img" />
+                          </button>
+                        </>
+                      ) : rowData.requestStatus === "accepted" &&
+                        filter === "show-sent" &&
+                        !rowData.paymentStatus ? (
+                        <>
+                          <button
+                            className="bg-green-400 text-white w-20 rounded-lg h-6 hover:bg-white hover:text-green-500"
+                            type="button"
+                            onClick={() => {
+                              handlePayment(
+                                rowData.requestId,
+                                rowData.toolName
+                              );
+                            }}
+                          >
+                            Pay Now
+                          </button>
+                        </>
+                      ) : rowData.paymentStatus &&
+                        filter === "show-received" ? (
+                        <>
+                          <select
+                            id="categories"
+                            value={rowData.orderStatus.buy}
+                            onChange={(e) =>
+                              handleOrderStatusChange(
+                                e.target.value,
+                                rowData.requestId
+                              )
+                            }
+                            required
+                            className="h-10 p-2 block border border-gray-300 rounded-lg"
+                          >
+                            <option value="null" className="text-slate-500">
+                              Select Category
+                            </option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                          </select>
+                        </>
+                      ) : rowData.paymentStatus &&
+                        !Object.keys(rowData.orderStatus).length &&
+                        filter === "show-sent" ? (
+                        "Paid"
+                      ) : rowData.paymentStatus && filter === "show-sent" ? (
+                        rowData.orderStatus.buy
+                      ) : (
+                        rowData.requestStatus
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() =>
+                          openChatModal(rowData.user2Id, rowData.userName)
+                        }
+                      >
+                        Open Chat
+                      </button>
+                    </td>
+                  </tr>
+                ))}
           </tbody>
         </table>
         <ChatModal

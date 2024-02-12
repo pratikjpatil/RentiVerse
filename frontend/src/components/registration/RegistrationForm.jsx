@@ -18,27 +18,28 @@ function RegistrationForm({formData, handleInputChange, handleSendOtp, otpSent})
 
         <label htmlFor="firstName" className="block text-slate-600 text-base font-medium">Name</label>
         <div className="flex justify-between">
-          <input type="text" className="w-[48%] text-sm font-medium h-8 p-2" name="firstName" placeholder="First Name" required maxLength="30" title="First name length should be max 30 characters" disabled={otpSent} value={formData.firstName} onChange={handleInputChange}/>
-          <input type="text" className="w-[48%] text-sm font-medium h-8 p-2" name="lastName" placeholder="Last Name"  required maxLength="30" title="Last name length should be max 30 characters" disabled={otpSent} value={formData.lastName} onChange={handleInputChange}/>
+          <input type="text" className="w-[48%] text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="firstName" placeholder="First Name" required maxLength="30" title="First name length should be max 30 characters" disabled={otpSent} value={formData.firstName} onChange={handleInputChange}/>
+          <input type="text" className="w-[48%] text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="lastName" placeholder="Last Name"  required maxLength="30" title="Last name length should be max 30 characters" disabled={otpSent} value={formData.lastName} onChange={handleInputChange}/>
         </div>
 
+        
         <label htmlFor="phoneNumber" className="block text-slate-600 text-base font-medium mt-3">Phone Number</label>
-        <input type="tel" className="text-sm font-medium h-8 p-2" name="phone" placeholder='9999999999' required pattern="\d{10}" title="Mobile number should contain 10 digits" disabled={otpSent} value={formData.phone} onChange={handleInputChange}/>
+        <input type="tel" className="text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="phone" placeholder='9999999999' required pattern="\d{10}" title="Mobile number should contain 10 digits" disabled={otpSent} value={formData.phone} onChange={handleInputChange}/>
 
         <label htmlFor="email" className="block text-slate-600 text-base font-medium mt-3">Email Address</label>
-        <input type="email" className="text-sm font-medium h-8 p-2" name="email" placeholder="example@abc.com" required maxLength="50" title="Email length should be max 50 characters" disabled={otpSent} value={formData.email} onChange={handleInputChange}/>
+        <input type="email" className="text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="email" placeholder="example@abc.com" required maxLength="50" title="Email length should be max 50 characters" disabled={otpSent} value={formData.email} onChange={handleInputChange}/>
 
         <label htmlFor="address" className="block text-slate-600 text-base font-medium mt-3">Address</label>
-        <input type="text" className="text-sm font-medium h-8 p-2" name="address" placeholder="123. Pratik residency, Chh. Shivaji Maharaj Nagar, Satara" required maxLength="80" title="Address length should be max 80 characters" disabled={otpSent} value={formData.address} onChange={handleInputChange}/>
+        <input type="text" className="text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="address" placeholder="123. Pratik residency, Chh. Shivaji Maharaj Nagar, Satara" required maxLength="80" title="Address length should be max 80 characters" disabled={otpSent} value={formData.address} onChange={handleInputChange}/>
 
         <label htmlFor="pincode" className="block text-slate-600 text-base font-medium mt-3">Pincode</label>
-        <input type="number" className="text-sm font-medium h-8 p-2" name="pincode" placeholder="415001" required pattern="\d{6}" title="Pincode length should be 6 digits" disabled={otpSent} value={formData.pincode} onChange={handleInputChange}/>
+        <input type="number" className="text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="pincode" placeholder="415001" required pattern="\d{6}" title="Pincode length should be 6 digits" disabled={otpSent} value={formData.pincode} onChange={handleInputChange}/>
 
         <label htmlFor="password" className="block text-slate-600 text-base font-medium mt-3">Password</label>
-        <input type="password" className="text-sm font-medium h-8 p-2" name="password" required disabled={otpSent} value={formData.password} onChange={handleInputChange}/>
+        <input type="password" className="text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="password" required disabled={otpSent} value={formData.password} onChange={handleInputChange}/>
 
         <label htmlFor="confirmPassword" className="block text-slate-600 text-base font-medium mt-3">Confirm Password</label>
-        <input type="password" className="text-sm font-medium h-8 p-2" name="confirmPassword" required disabled={otpSent} value={formData.confirmPassword} onChange={handleInputChange}/>
+        <input type="password" className="text-xs md:text-sm font-medium h-8 p-2 border-2 rounded-lg" name="confirmPassword" required disabled={otpSent} value={formData.confirmPassword} onChange={handleInputChange}/>
 
         <button type="submit" className="bg-blue-700 text-white text-sm mt-6 h-10 w-full rounded-lg">Send OTP</button>
       </form>

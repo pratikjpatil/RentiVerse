@@ -10,6 +10,7 @@ function ProductPage() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [reload, setReload] = useState(false);
   const [formData, setFormData] = useState({
     dueDate: "",
     message: "",
@@ -45,7 +46,7 @@ function ProductPage() {
     };
 
     getProductInfo();
-  }, []);
+  }, [reload]);
 
   const formSubmissionHandler = async (e) => {
     e.preventDefault();
@@ -54,10 +55,7 @@ function ProductPage() {
     try {
       setIsLoading(true);
       const backendUrl = process.env.REACT_APP_BACKEND_URL;
-      if (
-        product.requestStatus === "notSent" ||
-        product.requestStatus === "rejected"
-      ) {
+      if (product.requestStatus === "notSent") {
         const result = await axios.post(
           `${backendUrl}/api/request/send/${productId}`,
           formData,
@@ -74,6 +72,7 @@ function ProductPage() {
     } catch (error) {
       toast.error(error.response.data.message, { id: toastId });
     } finally {
+      setReload((prev)=>!prev);
       setIsLoading(false);
     }
   };
@@ -316,7 +315,7 @@ function ProductPage() {
                   : product.requestStatus === "accepted"
                   ? "Request already accepted"
                   : product.requestStatus === "rejected"
-                  ? "Request rejected - Resend"
+                  ? "Request rejected"
                   : "Send Request"}
               </button>
             </form>
