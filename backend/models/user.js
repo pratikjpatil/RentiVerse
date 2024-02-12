@@ -50,6 +50,8 @@ const userSchema = new mongoose.Schema({
     recentlyViewed:[{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     sentRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests sent to item owners
     receivedRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "RentRequest" }],   //rent requests received from others
+    
+    notifications: [{type: mongoose.Schema.Types.ObjectId, ref: "Notification"}],
 
     chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }], //chats of the user with other users
 },{timestamps: true});     

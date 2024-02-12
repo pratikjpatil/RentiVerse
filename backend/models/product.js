@@ -63,7 +63,7 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "RentRequest",
         default: null,
-    }, //person who has taken this tool on rent
+    }, 
 
 },{timestamps: true});
 

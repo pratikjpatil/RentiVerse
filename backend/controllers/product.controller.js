@@ -2,10 +2,9 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const cloudinary = require("../config/cloudinaryConfig");
 const Product = require("../models/product");
+const {createNotification} = require("../utils/notification");
 const User = require("../models/user");
 const fs = require("fs");
-const { ObjectId } = require("mongoose").Types;
-const fetch = require("node-fetch");
 // const sharp = require("sharp");
 // const path = require("path");
 
@@ -108,6 +107,8 @@ const addProduct = async (req, res) => {
 };
 
 const productInfo = async (req, res) => {
+
+  //to determine the recently viewed items by the user
   const token = req.cookies.token;
 
   if (token) {
@@ -125,7 +126,7 @@ const productInfo = async (req, res) => {
     }
 
     //if the user is logged in then add this viewed product in recentlyViewed of user
-
+    let requestStatus = "notSent"
     if (req.user && req.user.id) {
       const productId = productInfo._id;
 
@@ -144,6 +145,15 @@ const productInfo = async (req, res) => {
           },
         },
       });
+
+      //check if the loggedin user has already sent request to this product
+      const user = await User.findById(req.user.id).populate('sentRequests');
+      
+      const request = user.sentRequests.find(request => request.productId.toString() === productId.toString()); 
+
+      if(request){
+        requestStatus = request.requestStatus;
+      }
     }
 
     const {
@@ -167,6 +177,7 @@ const productInfo = async (req, res) => {
       productQuantity,
       dueDate,
       productImages,
+      requestStatus,
       ownerName:
         productInfo.ownerId.firstName + " " + productInfo.ownerId.lastName,
     });

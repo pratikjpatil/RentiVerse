@@ -2,17 +2,19 @@ const mongoose = require("mongoose");
 const Product = require("../models/product");
 const RentRequest = require("../models/rentRequest");
 const User = require("../models/user");
+const {createNotification} = require("../utils/notification");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 
 const createOrder = async (req, res) => {
   const { requestId } = req.body;
   try {
+    const request = await RentRequest.findOne({ requestId }).populate(
+      "productId"
+    );
 
-    const request = await RentRequest.findOne({requestId}).populate("productId");
-
-    if(request.payment.status===true){
-      return res.status(400).json({message: "Payment already done!"});
+    if (request.payment.status === true) {
+      return res.status(400).json({ message: "Payment already done!" });
     }
 
     const productPrice = request.productId.productPrice;
@@ -45,9 +47,13 @@ const createOrder = async (req, res) => {
 };
 
 const verifyPayment = async (req, res) => {
-  
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, requestId } = req.body;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      requestId,
+    } = req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSign = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -55,41 +61,33 @@ const verifyPayment = async (req, res) => {
       .digest("hex");
 
     if (razorpay_signature === expectedSign) {
-
       const updatedRequest = await RentRequest.findOneAndUpdate(
         { requestId },
         {
           $set: {
-            'payment.status': true,
-            'payment.sign': sign,
+            "payment.status": true,
+            "payment.sign": sign,
           },
         },
         { new: true }
-      );
+      ).populate("productId");
 
       if (!updatedRequest) {
         console.error(`No rent request found with requestId: ${requestId}`);
-        return res.status(400).json({ message: "Invalid rent request ID!\nContact support if money is deducted." });;
+        return res
+          .status(400)
+          .json({
+            message:
+              "Invalid rent request ID!\nContact support if money is deducted.",
+          });
       }
-
-      await Product.findOneAndUpdate({_id: updatedRequest.productId}, {$set:{renterId: updatedRequest.userId}});
-
-      await User.findOneAndUpdate(
-        { _id: updatedRequest.ownerId},
-        {
-          $pull: { listed: updatedRequest.productId, receivedRequests: updatedRequest._id},
-          $addToSet: { givenOnRent: updatedRequest.productId }
-        }
+      const notificationResult = await createNotification(
+        updatedRequest.ownerId,
+        `Payment received for ${updatedRequest.productId.productName}`
       );
-
-      await User.findOneAndUpdate(
-        { _id: updatedRequest.userId},
-        {
-          $pull: { sentRequests: updatedRequest._id },        
-          $addToSet: { takenOnRent: updatedRequest.productId } 
-        }
-      );
-
+      if (!notificationResult.success) {
+        return res.status(400).json({ message: result.message });
+      }
       return res.status(200).json({ message: "Payment verified successfully" });
     } else {
       return res.status(400).json({ message: "Invalid signature sent!" });

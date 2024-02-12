@@ -13,7 +13,8 @@ const {
     showRejectedRequests_received,
     showRejectedRequests_sent,
     showPendingRequests_sent, 
-    showPendingRequests_received } = require('../controllers/productRequest.controller');
+    showPendingRequests_received,
+    changeOrderStatus } = require('../controllers/productRequest.controller');
 
 router.post('/send/:productId', auth, userIsVerified, sendRequest);
 
@@ -29,6 +30,8 @@ router.get('/show-sent-all', auth, userIsVerified, showSentRequests);
 router.get('/show-sent-pending', auth, userIsVerified, showPendingRequests_sent);
 router.get('/show-sent-accepted', auth, userIsVerified, showAcceptedRequests_sent);
 router.get('/show-sent-rejected', auth, userIsVerified, showRejectedRequests_sent);
+
+router.put('/changeorderstatus', auth, userIsVerified, changeOrderStatus)
 
 
 module.exports = router;

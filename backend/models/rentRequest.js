@@ -46,6 +46,19 @@ const rentSchema = new mongoose.Schema({
         default: null
     }
   },
+
+  
+  orderStatus: {
+    buy: {
+      type: String,
+      enum: ["processing", "shipped", "delivered"],
+    },
+    return: {
+      type: String,
+      enum: ["shipped", "delivered"]
+    }
+  },
+
   acceptedAt: {
     type: Date,
     default: null,

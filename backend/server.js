@@ -47,7 +47,7 @@ const productRoutes = require("./routes/productRoutes");    //add on rent page
 const userProfileRoutes = require("./routes/userProfileRoutes");    //profile page, show profile details and edit profile details
 const productRequest = require("./routes/productRequestRoutes");   //request feature, send product request to owner for rent, show received requests for your listed products, accept the request , reject the request
 const paymentRoute = require("./routes/paymentRoute"); 
-
+const notificationRoutes = require("./routes/notificationRoutes");
 
 
 app.use("/api/products", getProductsRoutes);
@@ -56,6 +56,7 @@ app.use("/api/product", productRoutes);
 app.use("/api/profile", userProfileRoutes);
 app.use("/api/request", productRequest);
 app.use("/api/payment", paymentRoute);
+app.use("/api/notification", notificationRoutes);
 
 
 
