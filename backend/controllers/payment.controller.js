@@ -17,7 +17,8 @@ const createOrder = async (req, res) => {
       return res.status(400).json({ message: "Payment already done!" });
     }
 
-    const productPrice = request.productId.productPrice;
+    const rentingDays = request.dueDate - Date.now() - 2; //calculating the total amount by substracting current date of payment, and the requested due date and additional 2 days of delivery
+    const productPrice = request.productId.productPrice * rentingDays;
 
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
@@ -30,6 +31,7 @@ const createOrder = async (req, res) => {
       receipt: crypto.randomBytes(10).toString("hex"),
     };
 
+    let data;
     instance.orders.create(options, (error, order) => {
       if (error) {
         console.log(error);
@@ -38,8 +40,11 @@ const createOrder = async (req, res) => {
 
       const data = order;
       data.productImage = request.productId.productImages[0].secure_url;
-      res.status(200).json({ data });
+      
     });
+
+    await RentRequest.findOneAndUpdate({ requestId }, {amountPaid: productPrice})
+    return res.status(200).json({ data });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
     console.log(error);

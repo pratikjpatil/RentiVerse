@@ -2,14 +2,6 @@ const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
 const userSchema = new mongoose.Schema({
-    // userId: {
-    //     type: String,
-    //     default: uuidv4,
-    //     unique: true,
-    // },
-    profilePicture: {
-        type: String
-    },  
     firstName: {
         type: String,
         required: true,
@@ -44,6 +36,8 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+
+    draftProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], //products which have been returned after a rent and currently not listed
     listed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], //tools listed for rent
     givenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], //tools which are given on rent
     takenOnRent:[{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }], //tools which are taken on rent

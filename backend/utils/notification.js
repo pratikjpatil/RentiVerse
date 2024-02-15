@@ -5,7 +5,7 @@ const sendMail = require("./sendMail");
 const createNotification = async(userId, content)=>{
     try {
         const notification = await Notification.create({
-            content, userId
+            userId, content
         });
         
         const user = await User.findByIdAndUpdate(userId, {$push:{notifications: notification._id}});

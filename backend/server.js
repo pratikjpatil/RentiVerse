@@ -48,6 +48,7 @@ const userProfileRoutes = require("./routes/userProfileRoutes");    //profile pa
 const productRequest = require("./routes/productRequestRoutes");   //request feature, send product request to owner for rent, show received requests for your listed products, accept the request , reject the request
 const paymentRoute = require("./routes/paymentRoute"); 
 const notificationRoutes = require("./routes/notificationRoutes");
+const productReturnRoutes = require("./routes/productReturnRoutes");
 
 
 app.use("/api/products", getProductsRoutes);
@@ -57,6 +58,7 @@ app.use("/api/profile", userProfileRoutes);
 app.use("/api/request", productRequest);
 app.use("/api/payment", paymentRoute);
 app.use("/api/notification", notificationRoutes);
+app.use("/api/productreturn", productReturnRoutes);
 
 
 

@@ -184,7 +184,7 @@ const rejectRequest = async (req, res) => {
 };
 
 const changeOrderStatus = async (req, res) => {
-  const { requestId, orderType, orderStatus } = req.body;
+  const { requestId, orderStatus } = req.body;
   try {
     const request = await RentRequest.findOne({ requestId }).populate("productId");
     if (!request) {
@@ -234,7 +234,7 @@ const changeOrderStatus = async (req, res) => {
       );
     }
 
-    request.orderStatus[orderType] = orderStatus;
+    request.orderStatus.buy = orderStatus;
     await request.save();
 
     

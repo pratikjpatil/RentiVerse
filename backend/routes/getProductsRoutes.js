@@ -6,7 +6,7 @@ router.get('/', getAllOrSearchProducts); //for searching products pass query par
 router.get("/category/:category", getProductsByCategory); //pass page and limit in query
 router.get("/recently-viewed", auth, getRecentlyViewed)
 router.get("/listed", auth, listed);
-router.get("/takenonrent", auth, takenOnrent);
-router.get("/givenonrent", auth, givenOnRent);
+router.get("/takenonrent", auth, takenOnrent); //query returnsPage=true returns different data of products
+router.get("/givenonrent", auth, givenOnRent); //query returnsPage=true returns different data of products
 
 module.exports = router;

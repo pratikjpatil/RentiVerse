@@ -55,8 +55,18 @@ const rentSchema = new mongoose.Schema({
     },
     return: {
       type: String,
-      enum: ["shipped", "delivered"]
+      enum: ["shipped", "delivered", "rejected"] //rejected means owner have rejected the returnConfirmation
     }
+  },
+
+  returnConfirmation : {
+    type: Boolean,
+    default: false
+  },
+
+  amountPaid : {
+    type: Number,
+    default: 0
   },
 
   acceptedAt: {

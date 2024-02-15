@@ -11,4 +11,9 @@ const orderDetails = async (req, res) => {
   }
 };
 
+
+const getTakenOnRentProducts = (req, res) => {
+  
+}
+
 module.exports = { orderDetails };
