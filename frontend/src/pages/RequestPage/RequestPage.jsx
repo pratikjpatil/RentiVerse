@@ -113,7 +113,7 @@ const RequestPage = () => {
         response.requestId = requestId;
         try {
           const verifyUrl = `${process.env.REACT_APP_BACKEND_URL}/api/payment/verify`;
-          const { data } = await axios.post(verifyUrl, response, {
+          await axios.post(verifyUrl, response, {
             withCredentials: true,
           });
           toast.success("Payment Successfull!");
@@ -159,7 +159,7 @@ const RequestPage = () => {
     try {
       const result = await axios.put(
         backendUrl,
-        { requestId, orderType: "buy", orderStatus: value },
+        { requestId, orderStatus: value },
         { withCredentials: true }
       );
       toast.success(result.data.message, { id: toastId });
@@ -367,7 +367,7 @@ const RequestPage = () => {
             {!tableData
               ? <tr><th>Loading..</th></tr>
               : !tableData.length
-              ? <tr><th>No requests</th></tr>
+              ? <tr><th className="p-4">No requests</th></tr>
               : tableData &&
                 tableData.map((rowData, index) => (
                   <tr key={index} className={index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b"}>
@@ -413,6 +413,7 @@ const RequestPage = () => {
                                 rowData.requestId,
                                 rowData.toolName
                               );
+                              window.alert("Total amount will be total days from today to due date also 2 days for delivery excluded.")
                             }}
                           >
                             Pay Now

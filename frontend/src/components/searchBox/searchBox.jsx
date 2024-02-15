@@ -32,11 +32,10 @@ function SearchBox() {
   }, [term]);
 
   return (
-    <div className="hidden lg:block mr-auto ml-40 relative max-w-xs">
+    <div className="w-full">
       <p className="pl-3 items-center flex absolute inset-y-0 left-0 pointer-events-none">
-        <span className="justify-center items-center flex">
-          <span className="justify-center items-center flex">
-            <span className="items-center justify-center flex">
+        <span className="flex justify-center items-center">
+          
               <svg
                 className="w-5 h-5 text-gray-400"
                 fill="none"
@@ -51,8 +50,7 @@ function SearchBox() {
                       11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-            </span>
-          </span>
+            
         </span>
       </p>
       <input

@@ -24,9 +24,9 @@ const NotificationCard = () => {
   return (
     <div className="absolute -right-6 mt-2 min-w-64 text-xs max-h-3/8 overflow-y-auto bg-white border border-gray-200 rounded-md shadow-lg z-10">
       {!notifications ? (
-        "Loading..."
+        <p className="p-4">Loading...</p>
       ) : !notifications.length ? (
-        <p>No Notifications</p>
+        <p className="p-4">No Notifications</p>
       ) : (
         <div className="divide-y divide-gray-200">
           {notifications.reverse().map((notification, index) => (

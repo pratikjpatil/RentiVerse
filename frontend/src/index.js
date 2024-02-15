@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { AuthProvider } from "../src/context/AuthContext";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import "./index.css";

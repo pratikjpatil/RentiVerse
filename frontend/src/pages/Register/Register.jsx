@@ -83,7 +83,7 @@ function Register() {
 
   return (
     <>
-    <div style={{ backgroundImage: `url(${bgimg})`, backgroundAttachment: "fixed" }} className=" bg-center bg-no-repeat bg-cover">
+    <div style={{ backgroundImage: `url(${bgimg})`, backgroundAttachment: "fixed" }} className=" bg-center bg-no-repeat bg-cover h-screen overflow-y-auto">
       {!otpSent ? (
         <RegistrationForm
           formData={formData}

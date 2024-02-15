@@ -15,17 +15,17 @@ const ProductCard = ({ data }) => {
             <img
               src={data.productImages[0].secure_url}
               alt="Product"
-              className="md:h-60 w-full object-cover rounded-t-xl"
+              className="h-56 w-full object-cover rounded-t-xl"
             />
-            <div className="px-4 py-3 w-full">
-              <span className="text-gray-400 mr-3 uppercase text-xs">
+            <div className="px-4 w-full">
+              <span className="text-gray-400 uppercase text-xs">
                 {data.productCategory}
               </span>
               <p className="text-lg font-bold text-black truncate block capitalize">
                 {data.productName}
               </p>
               <div className="flex items-center">
-                <p className="text-lg font-semibold text-black cursor-auto my-3">
+                <p className="text-lg font-semibold text-black cursor-auto my-2">
                   ₹ {data.productPrice}
                 </p>
                 <span>

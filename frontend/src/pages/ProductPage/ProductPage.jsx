@@ -77,25 +77,25 @@ function ProductPage() {
     }
   };
 
-  const cartEdit = (operation) => {
-    if (operation === "-") {
-      setItmesInCart((prev) => {
-        if (prev > 1) {
-          return prev - 1;
-        } else {
-          return prev;
-        }
-      });
-    } else if (operation === "+") {
-      setItmesInCart((prev) => {
-        if (prev < product.productQuantity) {
-          return prev + 1;
-        } else {
-          return prev;
-        }
-      });
-    }
-  };
+  // const cartEdit = (operation) => {
+  //   if (operation === "-") {
+  //     setItmesInCart((prev) => {
+  //       if (prev > 1) {
+  //         return prev - 1;
+  //       } else {
+  //         return prev;
+  //       }
+  //     });
+  //   } else if (operation === "+") {
+  //     setItmesInCart((prev) => {
+  //       if (prev < product.productQuantity) {
+  //         return prev + 1;
+  //       } else {
+  //         return prev;
+  //       }
+  //     });
+  //   }
+  // };
 
   const scrollRight = () => {
     setFocusedIndex((prev) => {
@@ -234,11 +234,11 @@ function ProductPage() {
               <span className="flex items-center gap-3 text-2xl">
                 {product.productPrice} ₹
               </span>
-              <span className="text-GB">
+              {/* <span className="text-GB">
                 Available Quantity: {product.productQuantity}
-              </span>
+              </span> */}
             </div>
-            <div className="flex flex-col gap-3 lg:flex-row ">
+            {/* <div className="flex flex-col gap-3 lg:flex-row ">
               <button className="flex justify-between bg-LGB p-4 items-center rounded-xl lg:gap-6 cursor-default">
                 <img
                   src="/images/icon-plus.svg"
@@ -258,7 +258,7 @@ function ProductPage() {
                   }}
                 />
               </button>
-            </div>
+            </div> */}
 
             <form
               onSubmit={formSubmissionHandler}
@@ -273,7 +273,7 @@ function ProductPage() {
                 Due Date:
               </label>
               <input
-                className="w-2/3 px-4"
+                className="w-2/3 px-4 border-2 rounded-lg"
                 type="date"
                 id="till-date"
                 name="till-date"

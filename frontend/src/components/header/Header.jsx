@@ -16,10 +16,10 @@ function Header({ setSearchText }) {
   const sidebarStatus = useSelector((state) => state.sidebar.status);
   const dispatch = useDispatch();
 
+
   return (
-    <div>
+    <>
       <div className="bg-white">
-        <div className="flex-col flex">
           <div className="w-full border-b-2 border-gray-200">
             <div className="fixed bg-white h-16 justify-between items-center mx-auto px-4 w-full z-50 flex shadow-xl">
               <div>
@@ -61,9 +61,12 @@ function Header({ setSearchText }) {
                 />
               </div>
 
-              {window.location.pathname === "/" ||
-              window.location.pathname === "/category/search" ? (
+              {((window.location.pathname === "/" ||
+              window.location.pathname === "/category/search") && window.innerWidth >= 768) ? (
+                <div className="hidden md:inline-block mr-auto ml-40 relative max-w-xs">
                 <SearchBox setSearchText={setSearchText} />
+                </div>
+                
               ) : (
                 ""
               )}
@@ -104,23 +107,38 @@ function Header({ setSearchText }) {
                     )}
                   </div>
                   <div
-                    className="justify-center items-center flex relative cursor-pointer"
+                    className="flex justify-center items-center relative cursor-pointer"
                     onClick={() => navigate("/profile")}
                   >
-                    <img
-                      src="https://static01.nyt.com/images/2019/11/08/world/08quebec/08quebec-superJumbo.jpg"
-                      className="object-cover btn- h-9 w-9 rounded-full mr-2 bg-gray-300"
+                    <span
+                      className="h-9 w-9 rounded-full mr-2 bg-green-100 flex justify-center items-center font-bold"
                       alt=""
-                    />
+                    >{user.firstName[0]}</span>
                     <p className="font-semibold text-sm hidden md:inline-block">{`${user.firstName} ${user.lastName}`}</p>
                   </div>
                 </div>
               ) : null}
+
+              
             </div>
+            
           </div>
-        </div>
+
+          {((window.location.pathname === "/" ||
+              window.location.pathname === "/category/search") && window.innerWidth < 768) ? (
+                <div className="bg-white md:hidden h-16 flex items-center mx-auto mt-16 -mb-20 px-4 w-full z-50 shadow-xl">
+                  <div className="relative w-full">
+                <SearchBox setSearchText={setSearchText} />
+                </div>
+                </div>
+                
+              ) : (
+                ""
+              )}
+
+
       </div>
-    </div>
+    </>
   );
 }
 

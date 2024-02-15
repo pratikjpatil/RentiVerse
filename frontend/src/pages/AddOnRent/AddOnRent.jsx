@@ -21,7 +21,7 @@ const AddOnRent = () => {
     productDescription: "",
     dueDate: "",
     productPrice: "",
-    productQuantity: "",
+    // productQuantity: "",
   });
 
 
@@ -65,7 +65,7 @@ const AddOnRent = () => {
     productDescription,
     dueDate,
     productPrice,
-    productQuantity,
+    // productQuantity,
   } = formData;
 
   const handleChange = (e) => {
@@ -126,7 +126,7 @@ const AddOnRent = () => {
           productDescription: "",
           dueDate: "",
           productPrice: "",
-          productQuantity: "",
+          // productQuantity: "",
         });
 
         setImages([]);
@@ -184,8 +184,8 @@ const AddOnRent = () => {
             </div>
           ) : (
             <>
-              <h1 className="text-2xl">Add on Rent</h1>
-
+              <h1 className="text-lg md:text-xl font-bold">Add on Rent</h1>
+              <p className="text-xs md:text-sm text-gray-500">List your product for rent</p>
               <div className="mt-6 lg:-mt-8 flex flex-wrap justify-center content-center">
                 <div className="flex flex-col justify-center md:flex-nowrap lg:mr-28">
                   <div className="w-1/2 md:-mt-24 md:w-48 mx-auto">
@@ -256,12 +256,12 @@ const AddOnRent = () => {
                         value={productPrice}
                         onChange={handleChange}
                         min={1}
-                        placeholder="350Rs/day"
+                        placeholder="price per day"
                         required
                       />
                     </div>
 
-                    <div className="mt-3">
+                    {/* <div className="mt-3">
                       <label htmlFor="productQuantity">Quantity</label>
                       <input
                         className="h-10 p-4 block border border-gray-300 rounded-lg"
@@ -274,7 +274,7 @@ const AddOnRent = () => {
                         placeholder="4"
                         required
                       />
-                    </div>
+                    </div> */}
 
                     <div className="mt-3">
                       <label htmlFor="tags">Tags</label>
@@ -286,7 +286,7 @@ const AddOnRent = () => {
                         maxLength={60}
                         value={productTags}
                         onChange={handleChange}
-                        placeholder="cutting, digging, etc."
+                        placeholder="comma seperated tags"
                         required
                       />
                     </div>

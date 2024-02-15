@@ -21,8 +21,7 @@ const LandingPage = () => {
         const response = await axios.get(
           `${backendUrl}/api/products/?limit=9`
         );
-        // If searchText changed, set entirely new products
-        // If only page changed, add newly fetched products to existing products
+
         const uniqueProducts = response.data.products.filter(
           (newProduct) =>
             !products.some(
@@ -33,7 +32,6 @@ const LandingPage = () => {
         setProducts((prevProducts) =>[...prevProducts, ...uniqueProducts]);
       } catch (error) {
         console.error(error);
-        toast.error("Error fetching products");
       } finally {
         setLoading(false);
       }
@@ -65,7 +63,6 @@ const LandingPage = () => {
         ]);
       } catch (error) {
         console.error(error);
-        toast.error("Error fetching recentlyViewedProducts");
       } finally {
         setLoading(false);
       }
