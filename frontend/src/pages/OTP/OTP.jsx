@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./OTP.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import otpimg from "../../assets/otp.png";

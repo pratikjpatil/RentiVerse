@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const auth = require("../middlewares/auth")
+const auth = require("../middlewares/auth");
 const userIsVerified = require("../middlewares/checkUserVerification");
 
 const {
@@ -13,9 +13,10 @@ const {
     showRejectedRequests_received,
     showRejectedRequests_sent,
     showPendingRequests_sent, 
-    showPendingRequests_received } = require('../controllers/productRequest.controller');
+    showPendingRequests_received,
+    changeOrderStatus } = require('../controllers/productRequest.controller');
 
-router.post('/send/:itemId', auth, userIsVerified, sendRequest);
+router.post('/send/:productId', auth, userIsVerified, sendRequest);
 
 router.put('/accept/:requestId', auth, userIsVerified, acceptRequest);
 router.post('/reject/:requestId', auth, userIsVerified, rejectRequest);
@@ -29,6 +30,8 @@ router.get('/show-sent-all', auth, userIsVerified, showSentRequests);
 router.get('/show-sent-pending', auth, userIsVerified, showPendingRequests_sent);
 router.get('/show-sent-accepted', auth, userIsVerified, showAcceptedRequests_sent);
 router.get('/show-sent-rejected', auth, userIsVerified, showRejectedRequests_sent);
+
+router.put('/changeorderstatus', auth, userIsVerified, changeOrderStatus)
 
 
 module.exports = router;

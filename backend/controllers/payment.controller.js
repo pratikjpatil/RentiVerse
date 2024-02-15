@@ -1,21 +1,24 @@
 const mongoose = require("mongoose");
-const Tool = require("../models/tool");
+const Product = require("../models/product");
 const RentRequest = require("../models/rentRequest");
 const User = require("../models/user");
+const {createNotification} = require("../utils/notification");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 
 const createOrder = async (req, res) => {
   const { requestId } = req.body;
   try {
+    const request = await RentRequest.findOne({ requestId }).populate(
+      "productId"
+    );
 
-    const request = await RentRequest.findOne({requestId}).populate("itemId");
-
-    if(request.payment.status===true){
-      return res.status(400).json({message: "Payment already done!"});
+    if (request.payment.status === true) {
+      return res.status(400).json({ message: "Payment already done!" });
     }
 
-    const productPrice = request.itemId.toolPrice;
+    const rentingDays = request.dueDate - Date.now() - 2; //calculating the total amount by substracting current date of payment, and the requested due date and additional 2 days of delivery
+    const productPrice = request.productId.productPrice * rentingDays;
 
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
@@ -28,6 +31,7 @@ const createOrder = async (req, res) => {
       receipt: crypto.randomBytes(10).toString("hex"),
     };
 
+    let data;
     instance.orders.create(options, (error, order) => {
       if (error) {
         console.log(error);
@@ -35,9 +39,12 @@ const createOrder = async (req, res) => {
       }
 
       const data = order;
-      data.productImage = request.itemId.toolImages[0].secure_url;
-      res.status(200).json({ data });
+      data.productImage = request.productId.productImages[0].secure_url;
+      
     });
+
+    await RentRequest.findOneAndUpdate({ requestId }, {amountPaid: productPrice})
+    return res.status(200).json({ data });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
     console.log(error);
@@ -45,9 +52,13 @@ const createOrder = async (req, res) => {
 };
 
 const verifyPayment = async (req, res) => {
-  
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, requestId } = req.body;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      requestId,
+    } = req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSign = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -55,41 +66,33 @@ const verifyPayment = async (req, res) => {
       .digest("hex");
 
     if (razorpay_signature === expectedSign) {
-
       const updatedRequest = await RentRequest.findOneAndUpdate(
         { requestId },
         {
           $set: {
-            'payment.status': true,
-            'payment.sign': sign,
+            "payment.status": true,
+            "payment.sign": sign,
           },
         },
         { new: true }
-      );
+      ).populate("productId");
 
       if (!updatedRequest) {
         console.error(`No rent request found with requestId: ${requestId}`);
-        return res.status(400).json({ message: "Invalid rent request ID!\nContact support if money is deducted." });;
+        return res
+          .status(400)
+          .json({
+            message:
+              "Invalid rent request ID!\nContact support if money is deducted.",
+          });
       }
-
-      await Tool.findOneAndUpdate({_id: updatedRequest.itemId}, {$set:{renterId: updatedRequest.userId}});
-
-      await User.findOneAndUpdate(
-        { _id: updatedRequest.ownerId},
-        {
-          $pull: { listed: updatedRequest.itemId, receivedRequests: updatedRequest._id},
-          $addToSet: { givenOnRent: updatedRequest.itemId }
-        }
+      const notificationResult = await createNotification(
+        updatedRequest.ownerId,
+        `Payment received for ${updatedRequest.productId.productName}`
       );
-
-      await User.findOneAndUpdate(
-        { _id: updatedRequest.userId},
-        {
-          $pull: { sentRequests: updatedRequest._id },        
-          $addToSet: { takenOnRent: updatedRequest.itemId } 
-        }
-      );
-
+      if (!notificationResult.success) {
+        return res.status(400).json({ message: result.message });
+      }
       return res.status(200).json({ message: "Payment verified successfully" });
     } else {
       return res.status(400).json({ message: "Invalid signature sent!" });

@@ -3,66 +3,60 @@ const auth = require("../middlewares/auth");
 const { check, validationResult } = require('express-validator');
 
 const {
-    registerUser,
     userLogin,
     userLogout,
     checkIfLoggedIn,
-    sendOtp,
-    verifyOtp,
+    sendRegistrationOtp,
+    verifyOtpAndRegisterUser,
 } = require("../controllers/user.controller");
 
-router.post(
-    "/register",
-    [
-        // check("email", "Email length should be 3 to 30 characters")
-        //     .trim()
-        //     .isEmail()
-        //     .isLength({ max: 30 }),
-        check("firstname", "Name length should be 10 to 20 characters")
-            .trim()
-            .isLength({ min: 1, max: 20, }),
-        check("lastname", "Password length should be 3 to 20 characters")
-            .trim()
-            .isLength({ min: 1, max: 20 }),
-        // check("phone", "Mobile number should contains 10 digits")
-        //     .trim()
-        //     .isInt()
-        //     .isLength({ min: 10, max: 10 }),
-        check("password", "Password length should be 6 to 20 characters")
-            .trim()
-            .isLength({ min: 6, max: 20 }),
-        check("gender", "gender should be male, female or other")
-            .trim()
-            .isIn(['male', 'female', 'other']),
-        check("pincode", "Pincode length should be 6 characters")
-            .trim()
-            .isLength({ min: 6, max: 6 }),
-        check("state", "State length should be 1 to 20 characters")
-            .trim()
-            .isLength({ min: 1, max: 20 }),
-        check("village", "Village length should be 1 to 20 characters")
-            .trim()
-            .isLength({ min: 1, max: 20 }),
-        check("district", "District length should be 1 to 20 characters")
-            .trim()
-            .isLength({ min: 1, max: 20 }),
-        check("city", "City length should be 1 to 20 characters")
-            .trim()
-            .isLength({ min: 1, max: 20 }),
-    ],
-    registerUser
-);
-router.post("/send-otp", [
+router.post("/sendRegistrationOtp", [
     check("email", "Enter valid email")
         .trim()
         .isEmail()
         .isLength({ min : 3, max: 30 }),
-    check("phone", "Mobile number should contains 10 digits")
+    check("phone", "Phone number should contains 10 digits")
         .trim()
+        .isInt()
         .isLength({ min: 10, max: 10 }),
-]
-    , sendOtp)
-router.post("/verify-otp", verifyOtp);
+    ], sendRegistrationOtp);
+
+router.post("/verifyOtpAndRegisterUser",[
+            check("phoneOtp", "Phone OTP should be 5 digits")
+                .trim()
+                .isInt()
+                .isLength(5),
+            check("emailOtp", "Email OTP should be 5 digits")
+                .trim()
+                .isInt()
+                .isLength(5),
+            check("email", "Email length should be max 50 characters")
+                .trim()
+                .isEmail()
+                .isLength({ max: 50 }),
+            check("firstName", "First name length should be 1 to 30 characters")
+                .trim()
+                .isLength({ min: 1, max: 30, }),
+            check("lastName", "Last name length should be 1 to 30 characters")
+                .trim()
+                .isLength({ min: 1, max: 30 }),
+            check("phone", "Phone number should contain 10 digits")
+                .trim()
+                .isInt()
+                .isLength(10),
+            check("password", "Password length should be 6 to 20 characters")
+                .trim()
+                .isLength({ min: 6, max: 20 }),
+            check("pincode", "Pincode length should be 6 characters")
+                .trim()
+                .isInt()
+                .isLength(6),
+            check("address", "Address length should be max 80 characters")
+                .trim()
+                .isLength({ max: 80 })
+        ],verifyOtpAndRegisterUser
+    );
+
 router.post("/login", userLogin);
 router.delete("/logout", auth, userLogout);
 router.get("/loginstatus", auth, checkIfLoggedIn);

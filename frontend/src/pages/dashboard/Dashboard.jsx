@@ -1,96 +1,104 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useRef } from "react";
 import { Header, Sidebar } from "../../components";
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addListedProducts, addGivenOnRentProducts, addTakenOnRentProducts } from "../../store/productsSlice";
 import axios from "axios";
-import "./dashboard.css";
-import ToolCard from "../../components/card/ToolCard";
-import toast from 'react-hot-toast';
+import ProductsList from "../../components/ProductsList/ProductsList";
+import toast from "react-hot-toast";
 
 axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
-  const [listedTools, setListedTools] = useState([]);
-  const [givenTools, setGivenTools] = useState([]);
-  const [takenTools, setTakenTools] = useState([]);
-
-  const [searchTerm, setSearchTerm] = useState("");
-
+  const listedProducts = useSelector(state => state.products.listedProducts);
+  const givenProducts = useSelector(state => state.products.givenOnRent);
+  const takenProducts = useSelector(state => state.products.takenOnRent);
   const navigate = useNavigate();
-  const { isLoggedIn } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state=>state.auth.status);
 
-  
-
+  const givenSectionRef = useRef(null);
+  const takenSectionRef = useRef(null);
 
   useEffect(() => {
-
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
     
-    // Fetch tools if user is authenticated
-    const fetchListedTools = async () => {
+    const fetchProducts = async () => {
       try {
-        if(!isLoggedIn){
+        if (!isLoggedIn) {
           toast.error("You are not logged in!");
-          navigate('/login');
+          navigate("/login");
           return;
         }
-        const listed = await axios.get(`${backendUrl}/api/tools/listed`, { withCredentials: true });
-        const given = await axios.get(`${backendUrl}/api/tools/givenonrent`, { withCredentials: true });
-        const taken = await axios.get(`${backendUrl}/api/tools/takenonrent`, { withCredentials: true });
+        const listed = await axios.get(`${backendUrl}/api/products/listed`, {
+          withCredentials: true,
+        });
+        const given = await axios.get(
+          `${backendUrl}/api/products/givenonrent`,
+          { withCredentials: true }
+        );
+        const taken = await axios.get(
+          `${backendUrl}/api/products/takenonrent`,
+          { withCredentials: true }
+        );
 
         if (listed.status === 200) {
-          setListedTools(listed.data);
+          dispatch(addListedProducts(listed.data))
         }
         if (given.status === 200) {
-          setGivenTools(given.data);
+          dispatch(addGivenOnRentProducts(given.data))
         }
         if (taken.status === 200) {
-          setTakenTools(taken.data);
+          dispatch(addTakenOnRentProducts(taken.data))
         }
       } catch (error) {
-        
-          console.log(error);
-          toast.error(error.response.data.message); 
-        
+        console.log(error);
+        toast.error(error.response.data.message);
       }
     };
 
-    fetchListedTools(); // Fetch tools
-
+    fetchProducts(); 
   }, [isLoggedIn]);
 
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-  };
-
-  if(!isLoggedIn){
-    return <div>Loading...</div>
+  const scrollToGivenProductsSection = () => {
+    givenSectionRef.current.scrollIntoView({behavior: "smooth"})
   }
 
+  const scrollToTakenProductsSection = () => {
+    givenSectionRef.current.scrollIntoView({behavior: "smooth"})
+  }
+
+  if (!isLoggedIn) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <Header onSearch={handleSearch} />
+      <Header/>
       <Sidebar />
-      <div className="dashboard-page-content">
-        <div className="dashboard-page-content-heading">
-          <span>Dashboard</span>
-          <p>Home / Dashboard</p>
+      <div className="p-4 px-6 mt-16 md:mt-20 md:ml-64">
+        <div>
+          <span className="text-lg md:text-xl font-bold">Dashboard</span>
+          <p className="text-xs md:text-sm text-gray-500">Home / Dashboard</p>
         </div>
-        <div className="dashboard-page-content-acivity-cards">
-          <div className="dashboard-page-content-acivity-cards-card">
-            <div className="dashboard-page-content-acivity-cards-card-header">
-              <span>Listed</span>
-              <p>{listedTools.length}</p>
+        <div className="py-4 flex flex-wrap items-center gap-4 lg:gap-14">
+          <div className="w-full md:w-56 flex p-2 rounded-lg bg-orange-100 justify-around items-center">
+            <div className="flex flex-col p-2 gap-2">
+              <span className="text-sm md:text-base font-medium">Listed for rent</span>
+              <p className="text-xl md:text-2xl font-medium text-red-600">{listedProducts.length}</p>
             </div>
-            <div className="dashboard-page-content-acivity-cards-card-icon" onClick={()=>navigate('/addonrent')}>
+            <div
+              
+              onClick={() => navigate("/addonrent")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="h-7 stroke-current text-gray-500"
               >
                 <path
                   strokeLinecap="round"
@@ -100,19 +108,19 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
-          <div className="dashboard-page-content-acivity-cards-card">
-            <div className="dashboard-page-content-acivity-cards-card-header">
-              <span>Given on rent</span>
-              <p>{givenTools.length}</p>
+          <div onClick={scrollToGivenProductsSection} className="w-full md:w-56 flex p-2 rounded-lg bg-orange-100 justify-around items-center">
+            <div className="flex flex-col p-2 gap-2">
+              <span className="text-sm md:text-base font-medium">Given on rent</span>
+              <p className="text-xl md:text-2xl font-medium text-red-600">{givenProducts.length}</p>
             </div>
-            <div className="dashboard-page-content-acivity-cards-card-icon">
+            <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="h-7 stroke-current text-gray-500"
               >
                 <path
                   strokeLinecap="round"
@@ -122,19 +130,19 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
-          <div className="dashboard-page-content-acivity-cards-card">
-            <div className="dashboard-page-content-acivity-cards-card-header">
-              <span>Taken on rent</span>
-              <p>{takenTools.length}</p>
+          <div onClick={scrollToTakenProductsSection} className="w-full md:w-56 flex p-2 rounded-lg bg-orange-100 justify-around items-center">
+            <div className="flex flex-col p-2 gap-2">
+              <span className="text-sm md:text-base font-medium">Taken on rent</span>
+              <p className="text-xl md:text-2xl font-medium text-red-600">{takenProducts.length}</p>
             </div>
-            <div className="dashboard-page-content-acivity-cards-card-icon">
+            <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="h-7 stroke-current text-gray-500"
               >
                 <path
                   strokeLinecap="round"
@@ -145,98 +153,61 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="dashboard-page-content-main">
-          <div className="dashboard-page-content-main-content">
-            <div className="dashboard-page-content-main-content-header">
-              <span>Listed</span>
-              <p>Overall Information</p>
+        <div className="">
+          <div className="flex mt-4 items-center justify-between pb-4">
+            <div className="">
+              <span className="text-lg md:text-2xl font-semibold whitespace-nowrap">Listed</span>
+              <p className="text-xs text-gray-500">Overall Information</p>
             </div>
-            <div className="dashboard-page-content-main-content-button">
-              <button className="owned-button-listed">Owned</button>
+            <div className="">
+              <button className="px-2 md:px-6 text-xs md:text-base h-6 md:h-10 rounded-full bg-gradient-to-r from-green-500 to-gray-700 border-none font-medium text-white">Owned</button>
             </div>
-          </div><br /> <br />
-
-          {
-            listedTools.length === 0 ? (
-              <p>No items found</p>
-            ) : (
-              listedTools
-                .filter((tool) =>
-                  searchTerm === ""
-                    ? true
-                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    tool.category
-                      ?.toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                )
-                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.itemId}/>)
-
-            )
-          }
-
+          </div>
+          {!listedProducts.length ? (
+            <p className="font-semibold text-orange-300">No products found</p>
+          ) : (
+            <ProductsList
+                products={listedProducts}
+              />
+          )}
         </div>
-        <div className="dashboard-page-content-main">
-          <div className="dashboard-page-content-main-content">
-            <div className="dashboard-page-content-main-content-header">
-              <span>Given on Rent</span>
-              <p>Overall Information</p>
+        <div ref={givenSectionRef} className="">
+          <div className="flex mt-4 items-center justify-between pb-4">
+            <div className="">
+              <span className="text-lg md:text-2xl font-semibold whitespace-nowrap">Given on Rent</span>
+              <p className="text-xs text-gray-500">Overall Information</p>
             </div>
-            <div className="dashboard-page-content-main-content-button">
-              <button>Given</button>
+            <div className="">
+              <button className="px-2 md:px-6 text-xs md:text-base h-6 md:h-10 rounded-full bg-gradient-to-r from-green-500 to-gray-700 border-none font-medium text-white">Given</button>
             </div>
-          </div><br /> <br />
-
-          {
-            givenTools.length === 0 ? (
-
-              <p>No items found</p>
-
-            ) : (
-              givenTools
-                .filter((tool) =>
-                  searchTerm === ""
-                    ? true
-                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    tool.category
-                      ?.toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                )
-                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.itemId}/>)
-
-            )
-          }
-
-
+          </div>
+          {!givenProducts.length ? (
+            <p className="font-semibold text-orange-300">No products found</p>
+          ) : (
+          <ProductsList
+            products={givenProducts}
+          />
+          )}
         </div>
-        <div className="dashboard-page-content-main">
-          <div className="dashboard-page-content-main-content">
-            <div className="dashboard-page-content-main-content-header">
-              <span>Taken on Rent</span>
-              <p>Overall Information</p>
+        <div ref={takenSectionRef} className="">
+          <div className="flex mt-4 items-center justify-between pb-4">
+            <div className="">
+              <span className="text-lg md:text-2xl font-semibold whitespace-nowrap">Taken on Rent</span>
+              <p className="text-xs text-gray-500">Overall Information</p>
             </div>
-            <div className="dashboard-page-content-main-content-button">
-              <button>Taken</button>
+            <div className="">
+              <button className="px-2 md:px-6 text-xs md:text-base h-6 md:h-10 rounded-full bg-gradient-to-r from-green-500 to-gray-700 border-none font-medium text-white">Taken</button>
             </div>
-          </div><br /> <br />
-
-          {
-            takenTools.length === 0 ? (
-              <p>No items found</p>
-            ) : (
-              takenTools
-                .filter((tool) =>
-                  searchTerm === ""
-                    ? true
-                    : tool.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    tool.category
-                      ?.toLowerCase()
-                      .includes(searchTerm.toLowerCase())
-                )
-                .map((tool, index) => <ToolCard data={tool} index={index} key={tool.itemId}/>)
-
-            )
-          }
-
+          </div>
+          {!takenProducts.length ? (
+            <p className="font-semibold text-orange-300">No products found</p>
+          ) : (
+            
+              <ProductsList
+                products={takenProducts}
+              />
+            
+          )}
         </div>
       </div>
     </>

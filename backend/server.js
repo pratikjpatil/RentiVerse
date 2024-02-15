@@ -41,23 +41,24 @@ const { setupSocket } = require("./socket/socket");
 setupSocket(server);
 
 
-const showAllProducts = require("./routes/showAllProducts"); //landing page
+const getProductsRoutes = require("./routes/getProductsRoutes"); //landing page, dashboard page
 const userRoutes = require("./routes/userRoutes");  //user registration, login, check if logged in
-const getMyToolsRoutes = require("./routes/getMyToolsRoutes");  //dashboard page
-const itemRoutes = require("./routes/itemRoutes");    //add on rent page
+const productRoutes = require("./routes/productRoutes");    //add on rent page
 const userProfileRoutes = require("./routes/userProfileRoutes");    //profile page, show profile details and edit profile details
 const productRequest = require("./routes/productRequestRoutes");   //request feature, send product request to owner for rent, show received requests for your listed products, accept the request , reject the request
 const paymentRoute = require("./routes/paymentRoute"); 
+const notificationRoutes = require("./routes/notificationRoutes");
+const productReturnRoutes = require("./routes/productReturnRoutes");
 
 
-
-app.use("/api/products", showAllProducts);
+app.use("/api/products", getProductsRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/tools", getMyToolsRoutes);
-app.use("/api/item", itemRoutes);
+app.use("/api/product", productRoutes);
 app.use("/api/profile", userProfileRoutes);
 app.use("/api/request", productRequest);
 app.use("/api/payment", paymentRoute);
+app.use("/api/notification", notificationRoutes);
+app.use("/api/productreturn", productReturnRoutes);
 
 
 

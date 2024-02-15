@@ -15,7 +15,7 @@ const setupSocket = (server) => {
 
   io.use((socket, next) => {
     try {
-      const cookieString = socket.handshake.headers.cookie || "KIRAN";
+      const cookieString = socket.handshake.headers.cookie || "NOCOOKIE";
       const cookies = cookie.parse(cookieString);
       const token = cookies.token;
 
@@ -48,8 +48,8 @@ const setupSocket = (server) => {
         if (!chat) {
           chat = new Chat({
             chatRoomId: chatRoomId,
-            users: [user1Id, user2Id], // Assuming that 'users' is an array of user IDs in the Chat schema
-            messages: [], // Assuming that 'messages' is an array in the Chat schema
+            users: [user1Id, user2Id],
+            messages: [],
           });
 
           await chat.save();

@@ -8,9 +8,9 @@ const rentSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  itemId: {
+  productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Tool",
+    ref: "Product",
     required: true,
   },
   userId: {
@@ -46,10 +46,29 @@ const rentSchema = new mongoose.Schema({
         default: null
     }
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+
+  
+  orderStatus: {
+    buy: {
+      type: String,
+      enum: ["processing", "shipped", "delivered"],
+    },
+    return: {
+      type: String,
+      enum: ["shipped", "delivered", "rejected"] //rejected means owner have rejected the returnConfirmation
+    }
   },
+
+  returnConfirmation : {
+    type: Boolean,
+    default: false
+  },
+
+  amountPaid : {
+    type: Number,
+    default: 0
+  },
+
   acceptedAt: {
     type: Date,
     default: null,
@@ -58,7 +77,7 @@ const rentSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
-});
+},{timestamps: true});
 
 const RentRequest = mongoose.model("RentRequest", rentSchema);
 

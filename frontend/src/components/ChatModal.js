@@ -10,23 +10,12 @@ const ChatModal = ({ isOpen, onRequestClose, user2Id, user2Name }) => {
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="Chat Modal"
-      style={{
-        content: {
-          height: '85%',
-          width: '50%',
-          marginTop: '2%',
-          marginLeft: '30%',
-        },
-      }}
+      className="w-11/12 h-[85vh] m-auto mt-20 bg-slate-200 p-4 md:w-1/2 md:ml-80 lg:w-[40vw] lg:ml-[35vw]"
     >
-      <h2 style={{
-        position: "fixed",
-
-      }}>{user2Name}</h2>
-      <button style={
-        {position: "fixed",
-        right: "20%"}
-      } onClick={onRequestClose}>close</button>
+      <div className='flex justify-between'>
+      <h2 className='inline-block'>{user2Name}</h2>
+      <button onClick={onRequestClose}>close</button>
+      </div>
       <ChatComponent user2Id={user2Id}/>
     </Modal>
   );
