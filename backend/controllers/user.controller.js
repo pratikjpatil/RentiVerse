@@ -97,11 +97,13 @@ const verifyOtpAndRegisterUser = async (req, res) => {
       await user.save();
 
       //`${process.env.JWT_TOKEN_EXPIRATION}d` need to pass string thats why using d at the end
-      const token = jwt.sign({ id: user._id },process.env.SECRET_KEY,{expiresIn: `${process.env.JWT_TOKEN_EXPIRATION}d`});
+      const token = jwt.sign({ id: user._id },process.env.SECRET_KEY);
   
-      const cookieExpiration = new Date(Date.now() + process.env.JWT_TOKEN_EXPIRATION * 24 * 60 * 60 * 1000);
   
-      res.cookie("token", token, { httpOnly: true, expires: cookieExpiration });
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'Development' ? false : true,
+      });
       const userData = {
         firstName,
         lastName,
@@ -129,15 +131,13 @@ const userLogin = async (req, res) => {
     if (match) {
       const token = jwt.sign(
         { id: user._id },
-        process.env.SECRET_KEY,
-        {
-          expiresIn: `${process.env.JWT_TOKEN_EXPIRATION}d`,
-        }
+        process.env.SECRET_KEY
       );
 
-      const cookieExpiration = new Date(Date.now() + process.env.JWT_TOKEN_EXPIRATION * 24 * 60 * 60 * 1000);
-
-      res.cookie("token", token, { httpOnly: true, expires: cookieExpiration });
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'Development' ? false : true,
+      });
       const userData = {
         firstName: user.firstName,
         lastName: user.lastName,
