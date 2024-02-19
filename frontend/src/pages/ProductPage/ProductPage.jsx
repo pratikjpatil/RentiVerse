@@ -17,7 +17,6 @@ function ProductPage() {
   });
 
   const [focusedIndex, setFocusedIndex] = useState(0);
-  const [itemsInCart, setItmesInCart] = useState(1);
 
   const navigate = useNavigate();
   const focusedStyling = "border-4 border-O opacity-50";
@@ -72,30 +71,10 @@ function ProductPage() {
     } catch (error) {
       toast.error(error.response.data.message, { id: toastId });
     } finally {
-      setReload((prev)=>!prev);
+      setReload((prev) => !prev);
       setIsLoading(false);
     }
   };
-
-  // const cartEdit = (operation) => {
-  //   if (operation === "-") {
-  //     setItmesInCart((prev) => {
-  //       if (prev > 1) {
-  //         return prev - 1;
-  //       } else {
-  //         return prev;
-  //       }
-  //     });
-  //   } else if (operation === "+") {
-  //     setItmesInCart((prev) => {
-  //       if (prev < product.productQuantity) {
-  //         return prev + 1;
-  //       } else {
-  //         return prev;
-  //       }
-  //     });
-  //   }
-  // };
 
   const scrollRight = () => {
     setFocusedIndex((prev) => {
@@ -129,151 +108,115 @@ function ProductPage() {
   }
 
   return (
-    <div>
+    <>
       <Header />
       <Sidebar />
 
-      <main className="lg:flex md:mt-24 md:ml-72 lg:ml-96  sm:max-w-4xl md:max-w-full lg:max-w-4xl m-auto lg:gap-20 md:gap-14">
-        <section className="relative md:w-3/4 lg:1/2 md:flex md:flex-col justify-center gap-6">
-          <div className="aspect-[6/5] whitespace-nowrap snap-x snap-mandatory overflow-y-hidden sm:rounded-3xl">
-            <div className={`inline-block snap-center`}>
+      {/* <main className="lg:flex lg:mt-24 md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl mt-16 mx-auto lg:gap-10 md:gap-14"> */}
+      <main className="flex flex-col lg:flex-row lg:mt-24 md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl mt-16 mx-auto lg:gap-10 md:gap-14">
+        {/* <section className="relative md:w-1/2 md:flex md:flex-col justify-center gap-6"> */}
+
+        <section className="flex flex-col gap-4 p-5 md:w-full lg:gap-4 justify-center items-center">
+          <div className="whitespace-nowrap snap-x snap-mandatory overflow-y-hidden rounded-3xl shadow-2xl shadow-orange-300 w-full max-w-96 md:max-w-none">
+            <div className="relative flex justify-center h-72 md:h-96 snap-center border-t-2 rounded-3xl">
               <img
-                className="aspect-[6/5] object-cover"
+                className="h-full w-full max-w-96 md:max-w-none object-cover  rounded-3xl hover:object-scale-down"
                 src={product.productImages[focusedIndex].secure_url}
-                alt="shoe"
+                alt="Product"
               />
+              <div className="absolute top-1/2 flex justify-between w-full px-2 md:hidden">
+                <span
+                  className="aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full"
+                  onClick={scrollRight}
+                >
+                  <img
+                    src="/images/icon-previous.svg"
+                    alt="next button"
+                    className="w-2"
+                  />
+                </span>
+                <span
+                  className="aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full"
+                  onClick={scrollLeft}
+                >
+                  <img
+                    src="/images/icon-next.svg"
+                    alt="previous button"
+                    className="w-2"
+                  />
+                </span>
+              </div>
             </div>
           </div>
 
           <div className="hidden md:flex justify-between max-w-full">
-            <img
-              src={product.productImages[0].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 0 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60 `}
-              alt="shoe"
-              tabIndex={0}
-              onFocus={() => {
-                shiftFocus(0);
-              }}
-            />
-            <img
-              src={product.productImages[1].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 1 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60`}
-              alt="shoe thumbnail"
-              tabIndex={1}
-              onFocus={() => {
-                shiftFocus(1);
-              }}
-            />
-            <img
-              src={product.productImages[2].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 2 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60`}
-              alt="shoe thumbnail"
-              tabIndex={2}
-              onFocus={() => {
-                shiftFocus(2);
-              }}
-            />
-            <img
-              src={product.productImages[3].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 3 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60`}
-              alt="shoe thumbnail"
-              tabIndex={3}
-              onFocus={() => {
-                shiftFocus(3);
-              }}
-            />
-          </div>
-
-          <div className="absolute top-1/2 flex justify-between w-full  px-5 md:hidden">
-            <span
-              className="aspect-square w-8 flex items-center justify-center bg-white rounded-full"
-              onClick={scrollRight}
-            >
+            {product.productImages.map((image, index) => (
               <img
-                src="/images/icon-previous.svg"
-                alt="next button"
-                className="w-2"
+                key={index}
+                src={image.secure_url}
+                className={`aspect-square w-1/4 p-1 rounded-3xl ${
+                  focusedIndex === index ? focusedStyling : ""
+                } cursor-pointer hover:opacity-60`}
+                alt={`Product thumbnail ${index}`}
+                tabIndex={index}
+                onFocus={() => {
+                  shiftFocus(index);
+                }}
               />
-            </span>
-            <span
-              className="aspect-square w-8 flex items-center justify-center bg-white rounded-full"
-              onClick={scrollLeft}
-            >
-              <img
-                src="/images/icon-next.svg"
-                alt="previous button"
-                className="w-2"
-              />
-            </span>
+            ))}
           </div>
         </section>
 
         <section className="flex flex-col gap-4 p-5 md:w-full lg:gap-4 lg:justify-center">
-          <div className="flex flex-col gap-2 lg:gap-4">
-            <span className="text-sm tracking-widest text-O kumbhB">
-              {product.ownerName}
+          <div className="flex justify-between items-center gap-3 flex-col lg:items-start">
+            <span className="text-sm text-slate-600">
+              Product owner:
+              <span className="text-sm tracking-widest">
+                {" "}
+                {product.ownerName}
+              </span>
             </span>
-            <span className="text-3xl text-VDB kumbhB lg:text-4xl">
+            <span className="text-2xl font-semibold lg:text-4xl">
               {product.productName}
             </span>
-            <p className="text-base text-DGB kumbhS">
+            <p className="text-sm text-slate-600">Product description:</p>
+            <p className="text-base text-slate-700 text-center md:text-left">
               {product.productDescription}
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 kumbhB lg:gap-6">
+          <div className="flex flex-col gap-3 lg:gap-6">
             <div className="flex justify-between items-center gap-3 flex-col lg:items-start">
-              <span className="flex items-center gap-3 text-2xl">
-                {product.productPrice} ₹
+              <span className="flex items-center gap-3 text-slate-600 text-sm">
+                Price:
+                <span className="text-2xl text-orange-500 font-semibold">
+                  {product.productPrice} ₹
+                </span>
               </span>
-              {/* <span className="text-GB">
-                Available Quantity: {product.productQuantity}
-              </span> */}
+
+              <span className="text-xs text-slate-400 text-center md:text-left">
+                Price listed is per day. Charges will be adjusted based on the
+                number of days rented.
+              </span>
             </div>
-            {/* <div className="flex flex-col gap-3 lg:flex-row ">
-              <button className="flex justify-between bg-LGB p-4 items-center rounded-xl lg:gap-6 cursor-default">
-                <img
-                  src="/images/icon-plus.svg"
-                  alt="add shoes button"
-                  className="cursor-pointer hover:opacity-50"
-                  onClick={() => {
-                    cartEdit("+");
-                  }}
-                />
-                {itemsInCart}
-                <img
-                  src="/images/icon-minus.svg"
-                  alt="reduce shoes button"
-                  className="cursor-pointer hover:opacity-50"
-                  onClick={() => {
-                    cartEdit("-");
-                  }}
-                />
-              </button>
-            </div> */}
 
             <form
               onSubmit={formSubmissionHandler}
               className="flex justify-between items-center gap-3 flex-col lg:items-start"
             >
-              <div className="" htmlFor="till-date">
-                Availability Till:{" "}
-                <span className="">{product.dueDate.split("T")[0]}</span>
+              <div className="text-slate-600 text-sm" htmlFor="till-date">
+                Availability Till:
+                <span className="text-slate-700 text-base">
+                  {" "}
+                  {product.dueDate.split("T")[0]}
+                </span>
               </div>
 
-              <label className="" htmlFor="till-date">
-                Due Date:
+              <label className="text-sm text-slate-600" htmlFor="till-date">
+                Your return Date:
               </label>
               <input
-                className="w-2/3 px-4 border-2 rounded-lg"
+                className="w-48 px-4 border-2 rounded-lg"
                 type="date"
                 id="till-date"
                 name="till-date"
@@ -286,12 +229,12 @@ function ProductPage() {
                 required
               />
 
-              <label className="" htmlFor="message">
+              <label className="text-sm text-slate-600" htmlFor="message">
                 Message:
               </label>
               <textarea
                 type="text"
-                className="px-4 border border-slate-300 rounded-xl"
+                className="px-4 w-72 border border-slate-300 text-slate-700 rounded-xl"
                 placeholder="Add message for owner here"
                 name="message"
                 value={formData.message}
@@ -303,12 +246,12 @@ function ProductPage() {
 
               <button
                 type="submit"
-                className="flex md:mt-5 justify-center gap-2 text-white hover:text-black bg-O bg-orange-400 hover:bg-orange-300 p-2 items-center rounded-2xl shadow-2xl shadow-O lg:w-content lg:shadow-Op"
+                className="flex text-sm md:mt-5 justify-center gap-2 text-white bg-orange-400 hover:bg-orange-500 active:bg-orange-700 p-2 items-center rounded-2xl shadow-2xl shadow-orange-400 lg:w-content"
               >
                 <img
                   src="/images/icon-cart.svg"
                   alt="cart icon"
-                  className="grayscale hover:invert brightness-0"
+                  className="grayscale invert brightness-0"
                 />
                 {product.requestStatus === "pending"
                   ? "Request already sent"
@@ -322,7 +265,7 @@ function ProductPage() {
           </div>
         </section>
       </main>
-    </div>
+    </>
   );
 }
 

@@ -4,7 +4,8 @@ const initialState = {
         homePageProducts:[],
         listedProducts:[],
         givenOnRent:[],
-        takenOnRent:[]
+        takenOnRent:[],
+        draftProducts: []
 }
 
 const productsSlice = createSlice({
@@ -22,10 +23,13 @@ const productsSlice = createSlice({
         },
         addTakenOnRentProducts: (state, action) => {
             state.takenOnRent = action.payload;
+        },
+        addDraftProducts: (state, action) => {
+            state.draftProducts = action.payload;
         }
     }
 })
 
-export const {addHomepageProducts, addListedProducts, addGivenOnRentProducts, addTakenOnRentProducts} = productsSlice.actions;
+export const {addHomepageProducts, addListedProducts, addGivenOnRentProducts, addTakenOnRentProducts, addDraftProducts} = productsSlice.actions;
 
 export default productsSlice.reducer;

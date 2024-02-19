@@ -1,8 +1,28 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
+import ProductUpdateModal from "../ProductUpdateModal/ProductUpdateModal";
 
-const ProductCard = ({ data }) => {
+const ProductCard = ({ data, isEditable, openEditModal, closeEditModal, onAction, isDeletable, isEditModalOpen}) => {
   const navigate = useNavigate();
+  
+  const handleDelete = async(e, productId) => {
+    e.stopPropagation(); // Stop event propagation to prevent navigation
+    const toastId = toast.loading("Processing...");
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/product/delete/${productId}`);
+
+        toast.success(response.data.message, {id: toastId});
+    } catch (error) {
+      toast.error(error.response.data.message, {id: toastId})
+    }
+    finally{
+      onAction();
+    }
+  }
+
+
 
   return (
     <>
@@ -18,12 +38,31 @@ const ProductCard = ({ data }) => {
               className="h-56 w-full object-cover rounded-t-xl"
             />
             <div className="px-4 w-full">
-              <span className="text-gray-400 uppercase text-xs">
+              <div className="flex justify-between mt-2">
+                <span className="text-gray-400 uppercase text-xs">
                 {data.productCategory}
               </span>
+
+              <span>
+                {isDeletable && (
+                <button className="w-content px-2 py-1 rounded-lg mr-2 text-xs bg-red-500" type="button" onClick={(e)=>handleDelete(e,data.productId)}>
+                  Delete
+                </button>
+              )}
+              {isEditable && (
+                <button className="w-content px-2 py-1 rounded-lg text-xs bg-blue-500" onClick={(e)=>openEditModal(e, data)}>
+                  Edit
+                </button>
+              )}
+              </span>
+              </div>
+              
+              
+
               <p className="text-lg font-bold text-black truncate block capitalize">
                 {data.productName}
               </p>
+
               <div className="flex items-center">
                 <p className="text-lg font-semibold text-black cursor-auto my-2">
                   ₹ {data.productPrice}
@@ -54,6 +93,10 @@ const ProductCard = ({ data }) => {
           </div>
         </div>
       </div>
+      <ProductUpdateModal isOpen={isEditModalOpen}
+          onRequestClose={closeEditModal}
+          product={data}
+          onAction={onAction}/>
     </>
   );
 };

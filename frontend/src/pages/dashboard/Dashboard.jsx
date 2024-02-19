@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Header, Sidebar } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addListedProducts, addGivenOnRentProducts, addTakenOnRentProducts } from "../../store/productsSlice";
+import { addListedProducts, addGivenOnRentProducts, addTakenOnRentProducts, addDraftProducts } from "../../store/productsSlice";
 import axios from "axios";
 import ProductsList from "../../components/ProductsList/ProductsList";
 import toast from "react-hot-toast";
@@ -10,15 +10,21 @@ import toast from "react-hot-toast";
 axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
+
+  const [productChange, setProductChange] = useState(false);
+
   const listedProducts = useSelector(state => state.products.listedProducts);
   const givenProducts = useSelector(state => state.products.givenOnRent);
   const takenProducts = useSelector(state => state.products.takenOnRent);
+  const draftProducts = useSelector(state => state.products.draftProducts);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state=>state.auth.status);
 
   const givenSectionRef = useRef(null);
   const takenSectionRef = useRef(null);
+  const draftsSectionRef = useRef(null);
 
   useEffect(() => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -42,6 +48,11 @@ const Dashboard = () => {
           `${backendUrl}/api/products/takenonrent`,
           { withCredentials: true }
         );
+        
+        const drafts = await axios.get(
+          `${backendUrl}/api/products/drafts`,
+          { withCredentials: true }
+        );
 
         if (listed.status === 200) {
           dispatch(addListedProducts(listed.data))
@@ -52,6 +63,9 @@ const Dashboard = () => {
         if (taken.status === 200) {
           dispatch(addTakenOnRentProducts(taken.data))
         }
+        if (drafts.status === 200) {
+          dispatch(addDraftProducts(drafts.data))
+        }
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.message);
@@ -59,14 +73,22 @@ const Dashboard = () => {
     };
 
     fetchProducts(); 
-  }, [isLoggedIn]);
+  }, [isLoggedIn, productChange]);
+
+  const onAction = () => {
+    setProductChange((prev)=>!prev);
+  }
 
   const scrollToGivenProductsSection = () => {
     givenSectionRef.current.scrollIntoView({behavior: "smooth"})
   }
 
   const scrollToTakenProductsSection = () => {
-    givenSectionRef.current.scrollIntoView({behavior: "smooth"})
+    takenSectionRef.current.scrollIntoView({behavior: "smooth"})
+  }
+
+  const scrollToDraftProductsSection = () => {
+    draftsSectionRef.current.scrollIntoView({behavior: "smooth"})
   }
 
   if (!isLoggedIn) {
@@ -152,6 +174,28 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
+          <div onClick={scrollToDraftProductsSection} className="w-full md:w-56 flex p-2 rounded-lg bg-orange-100 justify-around items-center">
+            <div className="flex flex-col p-2 gap-2">
+              <span className="text-sm md:text-base font-medium">Draft Products</span>
+              <p className="text-xl md:text-2xl font-medium text-red-600">{draftProducts.length}</p>
+            </div>
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="h-7 stroke-current text-gray-500"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
         <div className="">
           <div className="flex mt-4 items-center justify-between pb-4">
@@ -168,6 +212,8 @@ const Dashboard = () => {
           ) : (
             <ProductsList
                 products={listedProducts}
+                onAction={onAction}
+                isDeletable={true}
               />
           )}
         </div>
@@ -205,6 +251,30 @@ const Dashboard = () => {
             
               <ProductsList
                 products={takenProducts}
+              />
+            
+          )}
+        </div>
+
+        <div ref={draftsSectionRef} className="">
+          <div className="flex mt-4 items-center justify-between pb-4">
+            <div className="">
+              <span className="text-lg md:text-2xl font-semibold whitespace-nowrap">Draft Products</span>
+              <p className="text-xs text-gray-500">Overall Information</p>
+            </div>
+            <div className="">
+              <button className="px-2 md:px-6 text-xs md:text-base h-6 md:h-10 rounded-full bg-gradient-to-r from-green-500 to-gray-700 border-none font-medium text-white">Drafts</button>
+            </div>
+          </div>
+          {!draftProducts.length ? (
+            <p className="font-semibold text-orange-300">No products found</p>
+          ) : (
+            
+              <ProductsList
+                products={draftProducts}
+                onAction={onAction}
+                isDeletable={true}
+                isEditable={true}
               />
             
           )}

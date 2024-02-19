@@ -261,21 +261,6 @@ const AddOnRent = () => {
                       />
                     </div>
 
-                    {/* <div className="mt-3">
-                      <label htmlFor="productQuantity">Quantity</label>
-                      <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg"
-                        type="number"
-                        id="quantity"
-                        name="productQuantity"
-                        value={productQuantity}
-                        onChange={handleChange}
-                        min={1}
-                        placeholder="4"
-                        required
-                      />
-                    </div> */}
-
                     <div className="mt-3">
                       <label htmlFor="tags">Tags</label>
                       <input
