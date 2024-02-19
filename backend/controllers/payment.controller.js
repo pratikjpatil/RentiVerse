@@ -2,24 +2,31 @@ const mongoose = require("mongoose");
 const Product = require("../models/product");
 const RentRequest = require("../models/rentRequest");
 const User = require("../models/user");
+const moment = require('moment');
 const {createNotification} = require("../utils/notification");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
+const { log } = require("console");
 
 const createOrder = async (req, res) => {
   const { requestId } = req.body;
+
   try {
-    const request = await RentRequest.findOne({ requestId }).populate(
-      "productId"
-    );
+    const request = await RentRequest.findOne({ requestId }).populate("productId");
 
     if (request.payment.status === true) {
       return res.status(400).json({ message: "Payment already done!" });
     }
 
-    const rentingDays = request.dueDate - Date.now() - 2; //calculating the total amount by substracting current date of payment, and the requested due date and additional 2 days of delivery
-    const productPrice = request.productId.productPrice * rentingDays;
+    const dueDate = moment(request.dueDate);
+    const currentDate = moment();
 
+    let rentingDays = Math.ceil(dueDate.diff(currentDate, 'days') + 1); 
+    if(rentingDays>=10){ // Calculating the total number of renting days excluding 2 days for delivery
+      rentingDays -= 2; 
+    } 
+    const productPrice = request.productId.productPrice * rentingDays;
+    
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -31,25 +38,25 @@ const createOrder = async (req, res) => {
       receipt: crypto.randomBytes(10).toString("hex"),
     };
 
-    let data;
-    instance.orders.create(options, (error, order) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({ message: "Something Went Wrong!" });
-      }
-
-      const data = order;
-      data.productImage = request.productId.productImages[0].secure_url;
-      
+    const order = await new Promise((resolve, reject) => {
+      instance.orders.create(options, (error, order) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(order);
+        }
+      });
     });
 
-    await RentRequest.findOneAndUpdate({ requestId }, {amountPaid: productPrice})
-    return res.status(200).json({ data });
+    order.productImage = request.productId.productImages[0].secure_url;
+
+    return res.status(200).json({ order });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error!" });
     console.log(error);
+    return res.status(500).json({ message: "Internal Server Error!" });
   }
 };
+
 
 const verifyPayment = async (req, res) => {
   try {
@@ -58,6 +65,7 @@ const verifyPayment = async (req, res) => {
       razorpay_payment_id,
       razorpay_signature,
       requestId,
+      amountPaid
     } = req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSign = crypto
@@ -73,6 +81,7 @@ const verifyPayment = async (req, res) => {
             "payment.status": true,
             "payment.sign": sign,
           },
+          amountPaid: Number(amountPaid)/100
         },
         { new: true }
       ).populate("productId");
@@ -88,7 +97,7 @@ const verifyPayment = async (req, res) => {
       }
       const notificationResult = await createNotification(
         updatedRequest.ownerId,
-        `Payment received for ${updatedRequest.productId.productName}`
+        `Payment of ${updatedRequest.amountPaid}rs received for ${updatedRequest.productId.productName}`
       );
       if (!notificationResult.success) {
         return res.status(400).json({ message: result.message });
@@ -98,8 +107,9 @@ const verifyPayment = async (req, res) => {
       return res.status(400).json({ message: "Invalid signature sent!" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error!" });
     console.log(error);
+    res.status(500).json({ message: "Internal Server Error!" });
+    
   }
 };
 

@@ -22,7 +22,8 @@ const confirmReturn = async(req, res) => {
     await Product.findByIdAndUpdate(order.productId, {
         renterId: null,
         acceptedRequestId: null,
-        receivedRequests: []
+        receivedRequests: [],
+        isDrafted: true
       });
 
     const userNotificationResult = await createNotification(order.userId, `Your return of ${order.productId.productName} is confirmed.`)
@@ -44,7 +45,7 @@ const rejectReturn = async(req, res) => {
   try {
 
     const order = await RentRequest.findOne({requestId}).populate("productId");
-    console.log(order)
+    
     if(order.returnConfirmation){
         return res.status(400).json({message: "You have already confirmed the return cannot reject it now."});
     }

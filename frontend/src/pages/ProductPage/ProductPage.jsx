@@ -113,14 +113,14 @@ function ProductPage() {
       <Sidebar />
 
       {/* <main className="lg:flex lg:mt-24 md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl mt-16 mx-auto lg:gap-10 md:gap-14"> */}
-      <main className="flex flex-col lg:flex-row lg:mt-24 md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl mt-16 mx-auto lg:gap-10 md:gap-14">
+      <main className="mt-16 lg:mt-20 mx-auto flex flex-col lg:flex-row md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl lg:gap-20 md:gap-14">
         {/* <section className="relative md:w-1/2 md:flex md:flex-col justify-center gap-6"> */}
 
-        <section className="flex flex-col gap-4 p-5 md:w-full lg:gap-4 justify-center items-center">
-          <div className="whitespace-nowrap snap-x snap-mandatory overflow-y-hidden rounded-3xl shadow-2xl shadow-orange-300 w-full max-w-96 md:max-w-none">
-            <div className="relative flex justify-center h-72 md:h-96 snap-center border-t-2 rounded-3xl">
+        <section className="flex flex-col gap-6 lg:w-9/12 justify-center items-center select-none">
+          <div className="whitespace-nowrap snap-x snap-mandatory overflow-y-hidden md:rounded-3xl shadow-2xl shadow-orange-300">
+            <div className="relative flex justify-center h-72 md:h-96 w-full snap-center md:border-t-2 md:rounded-3xl">
               <img
-                className="h-full w-full max-w-96 md:max-w-none object-cover  rounded-3xl hover:object-scale-down"
+                className="h-full w-full object-cover lg:object-contain md:rounded-3xl hover:object-scale-down lg:hover:object-cover"
                 src={product.productImages[focusedIndex].secure_url}
                 alt="Product"
               />
@@ -154,7 +154,7 @@ function ProductPage() {
               <img
                 key={index}
                 src={image.secure_url}
-                className={`aspect-square w-1/4 p-1 rounded-3xl ${
+                className={`aspect-square w-1/4 p-4 rounded-3xl ${
                   focusedIndex === index ? focusedStyling : ""
                 } cursor-pointer hover:opacity-60`}
                 alt={`Product thumbnail ${index}`}

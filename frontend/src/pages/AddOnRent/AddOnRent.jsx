@@ -184,7 +184,7 @@ const AddOnRent = () => {
             </div>
           ) : (
             <>
-              <h1 className="text-lg md:text-xl font-bold">Add on Rent</h1>
+              <h3 className="text-lg md:text-xl font-bold">Add on Rent</h3>
               <p className="text-xs md:text-sm text-gray-500">List your product for rent</p>
               <div className="mt-6 lg:-mt-8 flex flex-wrap justify-center content-center">
                 <div className="flex flex-col justify-center md:flex-nowrap lg:mr-28">

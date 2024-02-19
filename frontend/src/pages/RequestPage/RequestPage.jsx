@@ -415,7 +415,7 @@ const RequestPage = () => {
                                 rowData.requestId,
                                 rowData.toolName
                               );
-                              window.alert("The total cost covers all days from today until the due date, excluding the 2-day delivery period.")
+                              window.alert("The total cost covers all days from today until the due date, and excludes the 2-day delivery period if renting for 10 days or more.")
                             }}
                           >
                             Pay Now

@@ -7,6 +7,7 @@ const getAllOrSearchProducts = async (req, res) => {
   let searchQuery = {
     renterId: null,
     acceptedRequestId: null,
+    isDrafted: false,
   };
   if (searchText !== "") {
     searchQuery = {
@@ -17,6 +18,7 @@ const getAllOrSearchProducts = async (req, res) => {
       ],
       renterId: null,
       acceptedRequestId: null,
+      isDrafted: false
     };
   }
 
@@ -50,7 +52,10 @@ const getProductsByCategory = async (req, res) => {
 
     const skip = (page - 1) * limit;
     const products = await Product.find({
-      productCategory: req.params.category,
+      productCategory: req.params.category, 
+      renterId: null,
+      acceptedRequestId: null,
+      isDrafted: false
     })
       .select(
         "productId productName productCategory productPrice productDescription productQuantity productTags productImages"
@@ -69,8 +74,9 @@ const getProductsByCategory = async (req, res) => {
 const getRecentlyViewed = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate("recentlyViewed");
+    const products = user.recentlyViewed.filter(product => !product.isDrafted);
 
-    return res.status(200).json({ products: user.recentlyViewed });
+    return res.status(200).json({ products });
   } catch (error) {
     console.log("Error getting recently viewed" + error);
     res.status(500).json({ message: "Error getting recently viewed" });
@@ -99,6 +105,8 @@ const takenOnrent = async (req, res) => {
       },
     });
 
+    
+
     if (returnsPage) {
       //to view on returns page
       const returnProductsInfo = user.takenOnRent.map((product) => {
@@ -118,19 +126,6 @@ const takenOnrent = async (req, res) => {
       });
       return res.status(200).json(returnProductsInfo);
     } else {
-      //to view on dashboard page
-      // const takenOnRentProducts = user.takenOnRent.map((product) => {
-      //   return {
-      //     productId: product.productId,
-      //     productName: product.productName,
-      //     productCategory:product.productCategory,
-      //     productPrice: product.acceptedRequestId.dueDate,
-      //     productDescription: product.acceptedRequestId.amountPaid,
-      //     productQuantity: product.ownerId,
-      //     productTags: product.acceptedRequestId.orderStatus,
-      //     productImages: product.productImages,
-      //   };
-      // });
 
       const takenOnRentProducts = user.takenOnRent.map((product) => {
        
@@ -154,7 +149,6 @@ const takenOnrent = async (req, res) => {
           productImages
       };
       });
-
       return res.status(200).json(takenOnRentProducts);
     }
   } catch (error) {
@@ -225,6 +219,18 @@ const givenOnRent = async (req, res) => {
   }
 };
 
+
+const draftProducts = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("draftProducts");
+
+    return res.status(200).json(user.draftProducts);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   getAllOrSearchProducts,
   getProductsByCategory,
@@ -232,4 +238,5 @@ module.exports = {
   listed,
   takenOnrent,
   givenOnRent,
+  draftProducts
 };

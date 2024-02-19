@@ -76,85 +76,54 @@ const ProductUpdateModal = ({ isOpen, onRequestClose, product, onAction }) => {
       </div>
 
       <div className="min-w-3 mt-6">
-        <section className="relative md:w-full lg:1/2 md:flex md:flex-col justify-center gap-6">
-          <div className="aspect-[6/5] whitespace-nowrap snap-x snap-mandatory overflow-y-hidden sm:rounded-3xl">
-            <div className={`inline-block snap-center`}>
+      <section className="flex flex-col gap-4 p-5 md:w-full lg:gap-4 justify-center items-center select-none">
+          <div className="whitespace-nowrap snap-x snap-mandatory overflow-y-hidden rounded-3xl shadow-2xl shadow-orange-300 w-full max-w-96 md:max-w-none">
+            <div className="relative flex justify-center h-72 md:h-96 snap-center border-t-2 rounded-3xl">
               <img
-                className="aspect-[6/5] object-cover rounded-3xl"
+                className="h-full w-full max-w-96 md:max-w-none object-cover  rounded-3xl hover:object-scale-down"
                 src={product.productImages[focusedIndex].secure_url}
-                alt="Product Image"
+                alt="Product"
               />
+              <div className="absolute top-1/2 flex justify-between w-full px-2 md:hidden">
+                <span
+                  className="aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full"
+                  onClick={scrollRight}
+                >
+                  <img
+                    src="/images/icon-previous.svg"
+                    alt="next button"
+                    className="w-2"
+                  />
+                </span>
+                <span
+                  className="aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full"
+                  onClick={scrollLeft}
+                >
+                  <img
+                    src="/images/icon-next.svg"
+                    alt="previous button"
+                    className="w-2"
+                  />
+                </span>
+              </div>
             </div>
           </div>
 
           <div className="hidden md:flex justify-between max-w-full">
-            <img
-              src={product.productImages[0].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 0 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60 `}
-              alt="Product Image"
-              tabIndex={0}
-              onFocus={() => {
-                shiftFocus(0);
-              }}
-            />
-            <img
-              src={product.productImages[1].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 1 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60`}
-              alt="Product Image thumbnail"
-              tabIndex={1}
-              onFocus={() => {
-                shiftFocus(1);
-              }}
-            />
-            <img
-              src={product.productImages[2].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 2 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60`}
-              alt="Product Image thumbnail"
-              tabIndex={2}
-              onFocus={() => {
-                shiftFocus(2);
-              }}
-            />
-            <img
-              src={product.productImages[3].secure_url}
-              className={`md:aspect-square lg:w-20 md:w-20 rounded-3xl ${
-                focusedIndex === 3 ? focusedStyling : ""
-              } cursor-pointer hover:opacity-60`}
-              alt="Product Image thumbnail"
-              tabIndex={3}
-              onFocus={() => {
-                shiftFocus(3);
-              }}
-            />
-          </div>
-
-          <div className="absolute top-1/2 flex justify-between w-full  px-5 md:hidden">
-            <span
-              className="aspect-square w-8 flex items-center justify-center bg-white rounded-full"
-              onClick={scrollRight}
-            >
+            {product.productImages.map((image, index) => (
               <img
-                src="/images/icon-previous.svg"
-                alt="next button"
-                className="w-2"
+                key={index}
+                src={image.secure_url}
+                className={`aspect-square w-1/4 p-1 rounded-3xl ${
+                  focusedIndex === index ? focusedStyling : ""
+                } cursor-pointer hover:opacity-60`}
+                alt={`Product thumbnail ${index}`}
+                tabIndex={index}
+                onFocus={() => {
+                  shiftFocus(index);
+                }}
               />
-            </span>
-            <span
-              className="aspect-square w-8 flex items-center justify-center bg-white rounded-full"
-              onClick={scrollLeft}
-            >
-              <img
-                src="/images/icon-next.svg"
-                alt="previous button"
-                className="w-2"
-              />
-            </span>
+            ))}
           </div>
         </section>
 
