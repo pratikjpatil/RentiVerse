@@ -123,6 +123,7 @@ const verifyOtpAndRegisterUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "Development" ? false : true,
       expires: expirationDate,
+      domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
     });
     const userData = {
       firstName,
@@ -164,6 +165,7 @@ const userLogin = async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "Development" ? false : true,
         expires: expirationDate,
+        domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
       });
 
       const userData = {
