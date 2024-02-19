@@ -29,7 +29,7 @@ const sendRegistrationOtp = async (req, res) => {
     } else if (existingUserByEmail) {
       return res.status(400).json({ message: "Email already exists" });
     }
-    
+
     const isOtpSentToEmail = await sendOtpToEmail(email);
     if (!isOtpSentToEmail.success) {
       return res.status(400).json({ message: isOtpSentToEmail.message });
@@ -48,7 +48,6 @@ const sendRegistrationOtp = async (req, res) => {
 };
 
 const verifyOtpAndRegisterUser = async (req, res) => {
-
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     console.log(validationErrors);
@@ -56,14 +55,25 @@ const verifyOtpAndRegisterUser = async (req, res) => {
     return;
   }
 
-  const { phone, email, phoneOtp, emailOtp, firstName, lastName, address, pincode, password } = req.body;
+  const {
+    phone,
+    email,
+    phoneOtp,
+    emailOtp,
+    firstName,
+    lastName,
+    address,
+    pincode,
+    password,
+  } = req.body;
   try {
-
     const existingUserByPhone = await User.findOne({ phone: phone });
     const existingUserByEmail = await User.findOne({ email: email });
 
     if (existingUserByPhone) {
-      return res.status(400).json({ message: "Phone number already registered" });
+      return res
+        .status(400)
+        .json({ message: "Phone number already registered" });
     } else if (existingUserByEmail) {
       return res.status(400).json({ message: "Email already registered" });
     }
@@ -73,52 +83,62 @@ const verifyOtpAndRegisterUser = async (req, res) => {
 
     if (!isPhoneOtpValid.success) {
       return res.status(400).json({ message: isPhoneOtpValid.message });
-    } 
+    }
     if (!isEmailOtpValid.success) {
       return res.status(400).json({ message: isEmailOtpValid.message });
-    } 
-
-      await OTP.deleteOne({ email: email });
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const user = new User({
-        email,
-        phone: Number(phone),
-        firstName: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
-        lastName: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
-        address: {
-          area: address,
-          pincode: Number(pincode)
-        },
-        password: hashedPassword,
-        isVerified: true,
-      });
-
-      await user.save();
-
-      //`${process.env.JWT_TOKEN_EXPIRATION}d` need to pass string thats why using d at the end
-      const token = jwt.sign({ id: user._id },process.env.SECRET_KEY);
-  
-  
-      res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'Development' ? false : true,
-      });
-      const userData = {
-        firstName,
-        lastName,
-        isVerified: true,
-      };
-      return res.status(201).json({
-        message: "Registration successfull",
-        userData
-      });
-    } catch (error) {
-      console.error("Error during registration:", error);
-      return res.status(500).json({ message: "Registration failed" });
     }
-  };
 
+    await OTP.deleteOne({ email: email });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      email,
+      phone: Number(phone),
+      firstName:
+        firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
+      lastName:
+        lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
+      address: {
+        area: address,
+        pincode: Number(pincode),
+      },
+      password: hashedPassword,
+      isVerified: true,
+    });
+
+    await user.save();
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.SECRET_KEY,
+      { expiresIn: "30d" }
+    );
+
+    const expirationTime = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+
+    // Calculate the expiration date for the cookie
+    const expirationDate = new Date(Date.now() + expirationTime);
+    
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "Development" ? false : true,
+      expires: expirationDate,
+      domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
+    });
+    const userData = {
+      firstName,
+      lastName,
+      isVerified: true,
+    };
+    return res.status(201).json({
+      message: "Registration successfull",
+      userData,
+    });
+  } catch (error) {
+    console.error("Error during registration:", error);
+    return res.status(500).json({ message: "Registration failed" });
+  }
+};
 
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -129,23 +149,31 @@ const userLogin = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (match) {
+      
       const token = jwt.sign(
         { id: user._id },
-        process.env.SECRET_KEY
+        process.env.SECRET_KEY,
+        { expiresIn: "30d" }
       );
 
-      res.cookie('token', token, {
+      const expirationTime = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+
+      // Calculate the expiration date for the cookie
+      const expirationDate = new Date(Date.now() + expirationTime);
+
+      res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'Development' ? false : true,
+        secure: process.env.NODE_ENV === "Development" ? false : true,
+        expires: expirationDate,
+        domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
       });
+
       const userData = {
         firstName: user.firstName,
         lastName: user.lastName,
         isVerified: user.isVerified,
       };
-      return res
-        .status(200)
-        .json({ message: "Authenticated", userData });
+      return res.status(200).json({ message: "Authenticated", userData });
     } else {
       return res.status(400).json({ message: "Incorrect password" });
     }

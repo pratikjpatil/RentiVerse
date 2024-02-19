@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 
 const RequestPage = () => {
   const [orders, setOrders] = useState([]);
-  const [filter, setFilter] = useState("givenOnRent");
+  const [filter, setFilter] = useState("takenOnRent");
   const [isLoading, setIsLoading] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -130,15 +130,27 @@ const RequestPage = () => {
     <>
       <Header />
       <Sidebar />
-      <span className="z-10 p-2 bg-white overflow-hidden rounded-lg border border-gray-200 open:shadow-lg text-gray-700 fixed top-20 md:right-8 md:top-24">
-        <select name="filter" 
-        onChange={handleFilterChange}
-        value={filter}>
-          <option value="givenOnRent">Given on rent</option>
-          <option value="takenOnRent">Taken on rent</option>
-        </select>
-      </span>
-      <div className="mt-32 mx-auto md:ml-80 md:mr-10 md:mt-40 md:relative overflow-x-auto md:shadow-md sm:rounded-lg">
+      <div className="py-4 md:px-6 mt-14 md:ml-64 md:mt-20 relative">
+        <div className="max-w-full flex justify-between p-4">
+          <span>
+          <h3 className="text-lg md:text-xl font-semibold">Returns Page</h3>
+          <p className="text-xs md:text-sm text-gray-500">Manage returns of rented products</p>
+          </span>
+
+          <select
+            name="filter"
+            className="outline-none text-xs md:text-sm p-2 h-10 rounded-lg border border-gray-200 open:shadow-lg text-gray-700"
+            onChange={handleFilterChange}
+            value={filter}
+          >
+            <option value="takenOnRent">Taken on rent</option>
+            <option value="givenOnRent">Given on rent</option>
+          </select>
+        </div>
+      
+    
+      
+      <div className="md:relative overflow-x-auto md:shadow-md sm:rounded-lg">
         <table className="md:w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-green-100 dark:text-gray-400">
             <tr>
@@ -267,6 +279,7 @@ const RequestPage = () => {
           user2Id={selectedUserId}
           user2Name={selectedUserName}
         />
+      </div>
       </div>
     </>
   );

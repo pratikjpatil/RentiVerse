@@ -5,6 +5,7 @@ const Product = require("../models/product");
 const {createNotification} = require("../utils/notification");
 const User = require("../models/user");
 const fs = require("fs");
+const RentRequest = require("../models/rentRequest");
 // const sharp = require("sharp");
 // const path = require("path");
 
@@ -119,7 +120,7 @@ const productInfo = async (req, res) => {
   try {
     const productInfo = await Product.findOne({
       productId: req.params.productId,
-    }).populate("ownerId");
+    }).populate("ownerId receivedRequests");
 
     if (!productInfo) {
       return res.status(404).json({ message: "Product not found" });
@@ -147,13 +148,13 @@ const productInfo = async (req, res) => {
       });
 
       //check if the loggedin user has already sent request to this product
-      const user = await User.findById(req.user.id).populate('sentRequests');
       
-      const request = user.sentRequests.find(request => request.productId.toString() === productId.toString()); 
+      const request = productInfo.receivedRequests.find(request => request.userId.toString() === req.user.id); 
 
       if(request){
         requestStatus = request.requestStatus;
       }
+      
     }
 
     const {
@@ -188,4 +189,76 @@ const productInfo = async (req, res) => {
 };
 
 
-module.exports = { addProduct, productInfo };
+const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    const product = await Product.findOne({productId});
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Check if the product is under renting process
+    if (product.acceptedRequestId !== null || product.renterId !== null) {
+      return res.status(400).json({ message: "Cannot delete the product as it is under renting process" });
+    }
+    
+    // Delete the product
+    await Product.findOneAndDelete({productId});
+
+    // Update user's listed products and draftProducts, remove the deleted product from the lists
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { listed: product._id, draftProducts: product._id },
+    });
+
+    // Delete associated rent requests
+    await RentRequest.deleteMany({ productId: product._id });
+
+    return res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//update product in draft and move to listed
+const updateAndMoveToListed = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    // Find the product by ID
+    const product = await Product.findOne({productId});
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (!product.isDrafted) {
+      return res.status(400).json({ message: "Cannot update the product as it is not in drafts" });
+    }
+
+    // Update product details
+    product.productName = req.body.productName;
+    product.dueDate = req.body.dueDate;
+    product.productPrice = req.body.productPrice;
+    product.productDescription = req.body.productDescription;
+    product.isDrafted = false;
+    await product.save();
+
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { draftProducts: product._id },
+      $push: { listed: product._id }
+    });
+    
+
+    return res.status(200).json({ message: "Product updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+module.exports = { addProduct, productInfo, deleteProduct, updateAndMoveToListed };

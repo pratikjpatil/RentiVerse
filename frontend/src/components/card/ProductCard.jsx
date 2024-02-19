@@ -1,32 +1,54 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ data }) => {
+
+const ProductCard = ({ product, isEditable, isDeletable, handleEdit, handleDelete}) => {
   const navigate = useNavigate();
+
+
 
   return (
     <>
       <div className="col-xxl-3 xl:w-1/3 px-4 sm:w-1/2 w-full pb-4">
         <div
           className="w-full bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl"
-          onClick={() => navigate(`/product/${data.productId}`)}
+          onClick={() => navigate(`/product/${product.productId}`)}
         >
           <div>
             <img
-              src={data.productImages[0].secure_url}
+              src={product.productImages[0].secure_url}
               alt="Product"
               className="h-56 w-full object-cover rounded-t-xl"
             />
             <div className="px-4 w-full">
-              <span className="text-gray-400 uppercase text-xs">
-                {data.productCategory}
+              <div className="flex justify-between mt-2">
+                <span className="text-gray-400 uppercase text-xs">
+                {product.productCategory}
               </span>
+
+              <span>
+                {isDeletable && (
+                <button className="w-content px-2 py-1 rounded-lg mr-2 text-xs bg-red-500" type="button" onClick={(e)=>handleDelete(e,product.productId)}>
+                  Delete
+                </button>
+              )}
+              {isEditable && (
+                <button className="w-content px-2 py-1 rounded-lg text-xs bg-blue-500" onClick={(e)=>handleEdit(e, product.productId)}>
+                  Edit
+                </button>
+              )}
+              </span>
+              </div>
+              
+              
+
               <p className="text-lg font-bold text-black truncate block capitalize">
-                {data.productName}
+                {product.productName}
               </p>
+
               <div className="flex items-center">
                 <p className="text-lg font-semibold text-black cursor-auto my-2">
-                  ₹ {data.productPrice}
+                  ₹ {product.productPrice}
                 </p>
                 <span>
                   <p className="text-sm text-gray-600 cursor-auto ml-2">

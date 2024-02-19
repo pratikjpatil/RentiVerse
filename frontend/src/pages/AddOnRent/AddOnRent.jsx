@@ -184,7 +184,7 @@ const AddOnRent = () => {
             </div>
           ) : (
             <>
-              <h1 className="text-lg md:text-xl font-bold">Add on Rent</h1>
+              <h3 className="text-lg md:text-xl font-bold">Add on Rent</h3>
               <p className="text-xs md:text-sm text-gray-500">List your product for rent</p>
               <div className="mt-6 lg:-mt-8 flex flex-wrap justify-center content-center">
                 <div className="flex flex-col justify-center md:flex-nowrap lg:mr-28">
@@ -260,21 +260,6 @@ const AddOnRent = () => {
                         required
                       />
                     </div>
-
-                    {/* <div className="mt-3">
-                      <label htmlFor="productQuantity">Quantity</label>
-                      <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg"
-                        type="number"
-                        id="quantity"
-                        name="productQuantity"
-                        value={productQuantity}
-                        onChange={handleChange}
-                        min={1}
-                        placeholder="4"
-                        required
-                      />
-                    </div> */}
 
                     <div className="mt-3">
                       <label htmlFor="tags">Tags</label>

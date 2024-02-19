@@ -111,13 +111,15 @@ const RequestPage = () => {
       order_id: data.id,
       handler: async (response) => {
         response.requestId = requestId;
+        response.amountPaid = data.amount;
         try {
           const verifyUrl = `${process.env.REACT_APP_BACKEND_URL}/api/payment/verify`;
           await axios.post(verifyUrl, response, {
             withCredentials: true,
           });
           toast.success("Payment Successfull!");
-          navigate("/dashboard");
+          fetchRequests();
+          window.alert("PAID! Wait for owner to process and ship your rented product.\nHappy Renting!");
         } catch (error) {
           toast.error("Payment failed!");
           toast.error(error.response.data.message);
@@ -135,15 +137,15 @@ const RequestPage = () => {
   const handlePayment = async (requestId, productName) => {
     try {
       const orderUrl = `${process.env.REACT_APP_BACKEND_URL}/api/payment/orders`;
-      const { data } = await axios.post(
+      const {data} = await axios.post(
         orderUrl,
         { requestId },
         {
           withCredentials: true,
         }
       );
-
-      initPayment(data.data, productName, requestId);
+      initPayment(data.order, productName, requestId);
+      
     } catch (error) {
       console.log(error);
     }
@@ -413,7 +415,7 @@ const RequestPage = () => {
                                 rowData.requestId,
                                 rowData.toolName
                               );
-                              window.alert("Total amount will be total days from today to due date also 2 days for delivery excluded.")
+                              window.alert("The total cost covers all days from today until the due date, and excludes the 2-day delivery period if renting for 10 days or more.")
                             }}
                           >
                             Pay Now

@@ -2,11 +2,10 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const Product = require("../models/product");
 const RentRequest = require("../models/rentRequest");
-const {createNotification} = require("../utils/notification");
+const { createNotification } = require("../utils/notification");
 
 const sendRequest = async (req, res) => {
   const productId = req.params.productId;
-  const userId = req.user.id;
   let { dueDate, message } = req.body;
 
   try {
@@ -14,47 +13,40 @@ const sendRequest = async (req, res) => {
       "receivedRequests"
     );
 
-    const isAlreadyAccepted = product.receivedRequests.some((request) => {
-      return request.requestStatus === "accepted";
-    });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
-    if (isAlreadyAccepted) {
+    if (product.acceptedRequestId) {
       return res
         .status(400)
         .json({ message: "Another request is already accepted" });
     }
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    if (product.ownerId == userId) {
+    if (product.ownerId === req.user.id) {
       return res
         .status(400)
         .json({ message: "Cannot send request to own product" });
     }
 
-    const exists = await RentRequest.findOne({
-      productId: product._id,
-      userId: userId,
-    });
-
-    if (exists) {
+    const request = product.receivedRequests.some(
+      (request) => request.userId.toString() === req.user.id
+    );
+    if (request) {
       return res.status(400).json({ message: "Request already sent" });
-    }
-
-    if (!dueDate) {
-      dueDate = product.dueDate;
     }
 
     const result = await RentRequest.create({
       productId: product._id,
-      userId: userId,
+      userId: req.user.id,
       ownerId: product.ownerId,
       dueDate: dueDate,
       message: message,
       requestStatus: "pending",
     });
+    // Add rentRequest _id to the receivedRequests field of product
+    product.receivedRequests.push(result._id);
+    await product.save();
 
     // Add rentRequest _id to the sentRequests field of the user
     await User.findByIdAndUpdate(result.userId, {
@@ -65,10 +57,6 @@ const sendRequest = async (req, res) => {
     await User.findByIdAndUpdate(result.ownerId, {
       $push: { receivedRequests: result._id },
     });
-
-    // Add rentRequest _id to the receivedRequests field of product
-    product.receivedRequests.push(result._id);
-    await product.save();
 
     return res.status(201).json({ message: "Rent request sent successfully" });
   } catch (error) {
@@ -85,16 +73,12 @@ const acceptRequest = async (req, res) => {
       path: "productId",
     });
 
-    // console.log(JSON.stringify(request.productId.receivedRequests));
-
     if (!request) {
       return res.status(404).json({ message: "Request does not exist" });
     }
 
-    const ownerId = request.ownerId;
-
     // If the logged-in user is not the owner of the product
-    if (req.user.id != ownerId) {
+    if (req.user.id !== request.ownerId.toString()) {
       return res
         .status(403)
         .json({ message: "Only owner can accept the request" });
@@ -127,8 +111,11 @@ const acceptRequest = async (req, res) => {
       { _id: request.productId._id },
       { $set: { acceptedRequestId: request._id } }
     );
-    const result = await createNotification(request.userId, `Your sent product request for ${request.productId.productName} is accepted.`)
-    if(!result.success){
+    const result = await createNotification(
+      request.userId,
+      `Your request for ${request.productId.productName} is accepted.`
+    );
+    if (!result.success) {
       return res.status(400).json({ message: result.message });
     }
     res.status(200).json({ message: "Request accepted successfully" });
@@ -147,10 +134,8 @@ const rejectRequest = async (req, res) => {
       return res.status(404).json({ message: "Request does not exist" });
     }
 
-    const ownerId = request.ownerId;
-
     // If the logged-in user is not the owner of the product
-    if (req.user.id != ownerId) {
+    if (req.user.id !== request.ownerId.toString()) {
       return res
         .status(403)
         .json({ message: "Only owner can perform the action" });
@@ -171,9 +156,12 @@ const rejectRequest = async (req, res) => {
     request.requestStatus = "rejected";
     request.rejectedAt = new Date();
     await request.save();
-    
-    const result = await createNotification(request.userId, `Your sent product request for ${request.productId.productName} is rejected.`)
-    if(!result.success){
+
+    const result = await createNotification(
+      request.userId,
+      `Your request for ${request.productId.productName} is rejected.`
+    );
+    if (!result.success) {
       return res.status(400).json({ message: result.message });
     }
     res.status(200).json({ message: "Request rejected successfully" });
@@ -186,7 +174,9 @@ const rejectRequest = async (req, res) => {
 const changeOrderStatus = async (req, res) => {
   const { requestId, orderStatus } = req.body;
   try {
-    const request = await RentRequest.findOne({ requestId }).populate("productId");
+    const request = await RentRequest.findOne({ requestId }).populate(
+      "productId"
+    );
     if (!request) {
       return res.status(404).json({ message: "Request does not exist" });
     }
@@ -237,9 +227,11 @@ const changeOrderStatus = async (req, res) => {
     request.orderStatus.buy = orderStatus;
     await request.save();
 
-    
-    const result = await createNotification(request.userId, `Status of your order for product ${request.productId.productName} is changed to ${orderStatus}.`)
-    if(!result.success){
+    const result = await createNotification(
+      request.userId,
+      `Status of your order for product ${request.productId.productName} is changed to ${orderStatus}.`
+    );
+    if (!result.success) {
       return res.status(400).json({ message: result.message });
     }
     res.status(200).json({ message: "Order Status changed" });
@@ -283,7 +275,6 @@ async function getRequestsByStatusAndPopulate(
         },
       ],
     });
-
     if (requestType === "sentRequests") {
       user.requestType = user.sentRequests;
     } else {
