@@ -108,22 +108,21 @@ const verifyOtpAndRegisterUser = async (req, res) => {
 
     await user.save();
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.SECRET_KEY,
-      { expiresIn: "30d" }
-    );
+    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "30d",
+    });
 
     const expirationTime = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
 
     // Calculate the expiration date for the cookie
     const expirationDate = new Date(Date.now() + expirationTime);
-    
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "Development" ? false : true,
       expires: expirationDate,
       domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
+      sameSite: "none",
     });
     const userData = {
       firstName,
@@ -149,12 +148,9 @@ const userLogin = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (match) {
-      
-      const token = jwt.sign(
-        { id: user._id },
-        process.env.SECRET_KEY,
-        { expiresIn: "30d" }
-      );
+      const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
+        expiresIn: "30d",
+      });
 
       const expirationTime = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
 
@@ -165,7 +161,9 @@ const userLogin = async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "Development" ? false : true,
         expires: expirationDate,
-        domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
+        domain:
+          process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
+        sameSite: "none",
       });
 
       const userData = {
@@ -185,7 +183,11 @@ const userLogin = async (req, res) => {
 
 const userLogout = async (req, res) => {
   try {
-    res.clearCookie("token", { httpOnly: true });
+    res.clearCookie("token", {
+      httpOnly: true,
+      domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
+      sameSite: "none",
+    });
 
     return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
