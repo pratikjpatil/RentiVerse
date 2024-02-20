@@ -121,9 +121,9 @@ const verifyOtpAndRegisterUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "Development" ? false : true,
       expires: expirationDate,
+      domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
       sameSite: "none",
     });
-
     const userData = {
       firstName,
       lastName,
@@ -161,6 +161,8 @@ const userLogin = async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "Development" ? false : true,
         expires: expirationDate,
+        domain:
+          process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
         sameSite: "none",
       });
 
@@ -183,8 +185,8 @@ const userLogout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
+      domain: process.env.NODE_ENV !== "Development" ? ".gurudresses.shop" : "",
       sameSite: "none",
-      secure: process.env.NODE_ENV === "Development" ? false : true,
     });
 
     return res.status(200).json({ message: "Logged out successfully" });
