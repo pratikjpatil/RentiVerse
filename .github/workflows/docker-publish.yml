@@ -13,6 +13,7 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
     outputs:
       backend_image: ${{ steps.build_backend.outputs.image }}
       frontend_image: ${{ steps.build_frontend.outputs.image }}
@@ -28,18 +29,14 @@ jobs:
         run: |
           cd backend
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
-          echo "Pushed backend image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}"
-        outputs:
-          image: ${{ steps.build_backend.outputs.image }}
+          echo "::set-output name=image::${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}"
 
       - name: Build frontend image
         id: build_frontend
         run: |
           cd frontend
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
-          echo "Pushed frontend image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}"
-        outputs:
-          image: ${{ steps.build_frontend.outputs.image }}
+          echo "::set-output name=image::${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}"
 
   deploy:
     needs: build-and-push
