@@ -20,16 +20,16 @@ jobs:
         run: |
           echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Clear Docker cache and rebuild backend image
+      - name: Build backend image
         run: |
           cd backend
-          docker build --no-cache . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
+          docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
 
-      - name: Clear Docker cache and rebuild frontend image
+      - name: Build frontend image
         run: |
           cd frontend
-          docker build --no-cache . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }} --build-arg REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }} --build-arg REACT_APP_RAZORPAY_KEY_ID=${{ secrets.REACT_APP_RAZORPAY_KEY_ID }}
+          docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }} --build-arg REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }} --build-arg REACT_APP_RAZORPAY_KEY_ID=${{ secrets.REACT_APP_RAZORPAY_KEY_ID }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
 
   deploy:
@@ -38,13 +38,20 @@ jobs:
 
     steps:
       - name: Install ssh keys
+        # check this thread to understand why its needed:
+        # <https://stackoverflow.com/a/70447517>
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
 
-      - name: Connect and pull images
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && docker compose pull && docker compose up -d && exit"
+      - name: Connect and clear old containers and images, pull latest, and run container
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} &&
+          docker-compose down --rmi all &&
+          docker-compose pull &&
+          docker-compose up -d &&
+          exit"
 
       - name: Cleanup
         run: rm -rf ~/.ssh
