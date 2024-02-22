@@ -89,59 +89,73 @@ const AddOnRent = () => {
       );
     });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if(productCategory==="null"){
-      toast.error("Select Category");
-      return;
-    }
-    const backendUrl =
-      process.env.REACT_APP_BACKEND_URL + "/api/product/add-product";
-
-    setIsLoading(true);
-    try {
-      const formDataToSend = new FormData();
-
-      // Append images to the formData
-      images.forEach((image, index) => {
-        formDataToSend.append(`images`, image);
-      });
-
-      // Append other form data to the formData
-      for (const key in formData) {
-        formDataToSend.append(key, formData[key]);
-      }
-
-      const result = await axios.post(backendUrl, formDataToSend, {
-        headers: { "content-type": "multipart/form-data" },
-        withCredentials: true,
-      });
-
-      if (result.status === 201) {
-        toast.success("Product added successfully");
-        setFormData({
-          productName: "",
-          productTags: "",
-          productCategory: "",
-          productDescription: "",
-          dueDate: "",
-          productPrice: "",
-          // productQuantity: "",
-        });
-
-        setImages([]);
-      }
-    } catch (error) {
-      if (error.response.status === 400) {
-        toast.error(error.response.message);
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if(productCategory==="null"){
+        toast.error("Select Category");
         return;
       }
-      console.log(error);
-      toast.error("Product not added.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      const backendUrl =
+        process.env.REACT_APP_BACKEND_URL + "/api/product/add-product";
+    
+      setIsLoading(true);
+      try {
+        const formDataToSend = new FormData();
+    
+        // Append images to the formData
+        images.forEach((image, index) => {
+          formDataToSend.append(`images`, image);
+        });
+    
+        // Calculate total size of selected images in bytes
+        const totalSizeBytes = Array.from(formDataToSend.entries()).reduce((total, [name, value]) => {
+          if (value instanceof File) {
+            return total + value.size;
+          }
+          return total;
+        }, 0);
+    
+        // Convert total size to kilobytes
+        const totalSizeKB = totalSizeBytes / 1024;
+    
+        console.log("Total size of images to upload:", totalSizeKB.toFixed(2), "KB");
+    
+        // Append other form data to the formData
+        for (const key in formData) {
+          formDataToSend.append(key, formData[key]);
+        }
+    
+        const result = await axios.post(backendUrl, formDataToSend, {
+          headers: { "content-type": "multipart/form-data" },
+          withCredentials: true,
+        });
+    
+        if (result.status === 201) {
+          toast.success("Product added successfully");
+          setFormData({
+            productName: "",
+            productTags: "",
+            productCategory: "",
+            productDescription: "",
+            dueDate: "",
+            productPrice: "",
+            // productQuantity: "",
+          });
+    
+          setImages([]);
+        }
+      } catch (error) {
+        if (error.response.status === 400) {
+          toast.error(error.response.message);
+          return;
+        }
+        console.log(error);
+        toast.error("Product not added.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
 
   const handleImageChange = async (e) => {
     const selectedImages = Array.from(e.target.files);
