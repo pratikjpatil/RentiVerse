@@ -17,13 +17,19 @@ const sendRequest = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    if(product.isDrafted){
+      return res
+        .status(400)
+        .json({ message: "Product is in drafts" });
+    }
+
     if (product.acceptedRequestId) {
       return res
         .status(400)
         .json({ message: "Another request is already accepted" });
     }
 
-    if (product.ownerId === req.user.id) {
+    if (product.ownerId.toString() === req.user.id) {
       return res
         .status(400)
         .json({ message: "Cannot send request to own product" });
