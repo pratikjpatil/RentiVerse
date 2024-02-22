@@ -28,6 +28,9 @@ services:
     image: pratikjpatil/rentiverse-ui:LATEST
     ports:
       - "4501:80"
+    environment:
+      - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+      - REACT_APP_RAZORPAY_KEY_ID=${REACT_APP_RAZORPAY_KEY_ID}
 
 volumes: 
   rentiverse-backend-data:
