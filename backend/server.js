@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(cors(
   {
-    origin: ['http://localhost:3000', 'https://rentiverse.netlify.app'],
+    origin: ['http://localhost:3000', 'https://rentiverse.netlify.app', 'https://rentiverse.pratikjpatil.me'],
     credentials: true 
   }
 ));

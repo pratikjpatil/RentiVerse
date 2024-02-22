@@ -29,7 +29,7 @@ jobs:
           cd backend
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
           echo "Pushed backend image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}"
-        output:
+        outputs:
           image: ${{ steps.build_backend.outputs.image }}
 
       - name: Build frontend image
@@ -38,7 +38,7 @@ jobs:
           cd frontend
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
           echo "Pushed frontend image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}"
-        output:
+        outputs:
           image: ${{ steps.build_frontend.outputs.image }}
 
   deploy:
@@ -59,27 +59,29 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
 
       - name: Connect and pull images
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          cd ${{ secrets.WORK_DIR }}
-          docker pull ${{ needs.build-and-push.outputs.backend_image }}
-          docker pull ${{ needs.build-and-push.outputs.frontend_image }}
-          exit
-        "
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            cd ${{ secrets.WORK_DIR }}
+            docker pull ${{ needs.build-and-push.outputs.backend_image }}
+            docker pull ${{ needs.build-and-push.outputs.frontend_image }}
+            exit
+          "
 
       - name: Run docker-compose with updated images
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          cd ${{ secrets.WORK_DIR }}
-          docker-compose down
-          # Adjust this line to set environment variables in compose file
-          # using ${{ secrets.KEY }}=${{ secrets.VALUE }} syntax
-          docker-compose up -d backend=${{ needs.build-and-push.outputs.backend_image }} frontend=${{ needs.build-and-push.outputs.frontend_image }}
-          exit
-        "
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            cd ${{ secrets.WORK_DIR }}
+            docker-compose down
+            # Adjust this line to set environment variables in compose file
+            # using ${{ secrets.KEY }}=${{ secrets.VALUE }} syntax
+            docker-compose up -d backend=${{ needs.build-and-push.outputs.backend_image }} frontend=${{ needs.build-and-push.outputs.frontend_image }}
+            exit
+          "
 
       - name: Cleanup
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          cd ${{ secrets.WORK_DIR }}
-          rm -rf ~/.ssh
-          exit
-        "
-
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            cd ${{ secrets.WORK_DIR }}
+            rm -rf ~/.ssh
+            exit
+          "

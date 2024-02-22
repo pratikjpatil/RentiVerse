@@ -121,7 +121,6 @@ const verifyOtpAndRegisterUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "Development" ? false : true,
       expires: expirationDate,
-      sameSite: "none",
     });
     const userData = {
       firstName,
@@ -160,7 +159,6 @@ const userLogin = async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "Development" ? false : true,
         expires: expirationDate,
-        sameSite: "none",
       });
 
       const userData = {
