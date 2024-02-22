@@ -86,7 +86,7 @@ const ProfilePage = () => {
       <Sidebar />
 
       <div className="flex justify-center">
-        <div className="p-6 mt-20 sm:ml-64 md:w-1/2 lg:mt-28 flex flex-col justify-center">
+        <div className="p-6 mt-20 sm:ml-64 w-screen md:w-1/2 lg:mt-28 flex flex-col justify-center">
           <div className="w-full flex justify-between">
             <h3 className="text-2xl font-semibold">{userData.firstName + " " + userData.lastName}</h3>
 

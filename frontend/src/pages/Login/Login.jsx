@@ -27,6 +27,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log(process.env.REACT_APP_BACKEND_URL)
     const toastId = toast.loading('Loading...');
     try {
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/user/login', input); 
@@ -51,39 +52,6 @@ const Login = () => {
 
 
   return (
-    // <div className="fragment">
-    // <div className="container-login">
-    //   <img src={Image} alt="Logo" className="logo-login" onClick={()=>navigate('/')}/>
-    //   <div className="card-main-login" onSubmit={submissionHandler}>
-    //     <div className="card-content-login">
-    //       <h2>Login</h2>
-    //       <form method="POST" onSubmit={handleLogin}>
-    //         <div className="form-group-login-page">
-    //           <input type="text" className="form-control-login-page" placeholder="Email" required autoComplete="on" onChange={(e)=>setInput({ ...input, email: e.target.value })}/>
-    //         </div>
-    //         <div className="form-group-login-page">
-    //           <input
-    //             type="password"
-    //             className="form-control-login-page"
-    //             placeholder="Password"
-    //             autoComplete="current-password"
-    //             required
-    //             onChange={(e)=>setInput({ ...input, password: e.target.value })}
-    //           />
-    //         </div>
-    //         <button type="submit" className="btn btn-primary button-login">
-    //           Login
-    //         </button>
-    //         <div className="register-here-div">
-    //           <span className="register-here-span" onClick={handleRegisterRedirect}>or register here.</span>
-    //         </div>
-    //       </form>
-    //     </div>
-    //     </div>
-    //   </div>
-    // </div>
-
-
 
     <div style={{ backgroundImage: `url(${bgimg})`, backgroundAttachment: "fixed" }} className=" bg-center bg-no-repeat bg-cover">
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
