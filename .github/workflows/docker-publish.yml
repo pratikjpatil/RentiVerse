@@ -7,7 +7,7 @@ on:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  IMAGE_NAME_BACKEND: ${{ github.actor }}/rentiverse-backend:latest
+  IMAGE_NAME_BACKEND: ${{ github.actor }}/rentiverse-api:latest
   IMAGE_NAME_FRONTEND: ${{ github.actor }}/rentiverse-ui:latest
 
 jobs:

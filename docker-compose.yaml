@@ -1,15 +1,14 @@
 version: '3.8'
 
 services:
-  rentiverse-backend:
-    image: ghcr.io/pratikjpatil/rentiverse-backend:latest
+  rentiverse-api:
+    image: ghcr.io/pratikjpatil/rentiverse-api:latest
     ports:
       - "4500:4500"
     environment:
       # Load environment variables from .env file
       - MONGO_URI=${MONGO_URI}
       - SECRET_KEY=${SECRET_KEY}
-      - JWT_TOKEN_EXPIRATION=${JWT_TOKEN_EXPIRATION}
       - CLOUD_NAME=${CLOUD_NAME}
       - ClOUD_KEY=${ClOUD_KEY}
       - ClOUD_SECRET=${ClOUD_SECRET}
