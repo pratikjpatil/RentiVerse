@@ -29,7 +29,7 @@ jobs:
       - name: Build frontend image
         run: |
           cd frontend
-          docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
+          docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }} --build-arg REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }} --build-arg REACT_APP_RAZORPAY_KEY_ID=${{ secrets.REACT_APP_RAZORPAY_KEY_ID }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
 
   deploy:
@@ -38,8 +38,8 @@ jobs:
 
     steps:
       - name: Install ssh keys
-      # check this thread to understand why its needed:
-          # <https://stackoverflow.com/a/70447517>
+        # check this thread to understand why its needed:
+        # <https://stackoverflow.com/a/70447517>
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
