@@ -1,5 +1,5 @@
 FROM node:18-alpine
-WORKDIR ./app
+WORKDIR ./rentiverse-api
 COPY package*.json ./
 RUN npm install 
 COPY . .

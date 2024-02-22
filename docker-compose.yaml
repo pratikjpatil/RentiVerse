@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  rentiverse-backend:
+    image: "pratikjpatil/rentiverse-backend:LATEST"
+    ports:
+      - "4500:4500"
+    environment:
+      # Load environment variables from .env file
+      - MONGO_URI=${MONGO_URI}
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_TOKEN_EXPIRATION=${JWT_TOKEN_EXPIRATION}
+      - CLOUD_NAME=${CLOUD_NAME}
+      - ClOUD_KEY=${ClOUD_KEY}
+      - ClOUD_SECRET=${ClOUD_SECRET}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_SERVICE_ID=${TWILIO_SERVICE_ID}
+      - EMAIL_ADDRESS=${EMAIL_ADDRESS}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+      - NODE_ENV=${NODE_ENV}
+    volumes:
+      - rentiverse-backend-data:/rentiverse-api
+
+  rentiverse-ui:
+    image: pratikjpatil/rentiverse-ui:LATEST
+    ports:
+      - "4501:80"
+
+volumes: 
+  rentiverse-backend-data:
