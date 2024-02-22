@@ -14,10 +14,6 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
-    outputs:
-      backend_image: ${{ steps.build_backend.outputs.image }}
-      frontend_image: ${{ steps.build_frontend.outputs.image }}
-
     steps:
       - uses: actions/checkout@v3
       - name: Login to Docker registry
@@ -25,18 +21,16 @@ jobs:
           echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build backend image
-        id: build_backend
         run: |
           cd backend
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
-          echo "::set-output name=image::${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}"
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
 
       - name: Build frontend image
-        id: build_frontend
         run: |
           cd frontend
           docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
-          echo "::set-output name=image::${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}"
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
 
   deploy:
     needs: build-and-push
@@ -44,35 +38,15 @@ jobs:
 
     steps:
       - name: Install ssh keys
+      # check this thread to understand why its needed:
+          # <https://stackoverflow.com/a/70447517>
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
 
       - name: Connect and pull images
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-            cd ${{ secrets.WORK_DIR }}
-            docker pull ${{ needs.build-and-push.outputs.backend_image }}
-            docker pull ${{ needs.build-and-push.outputs.frontend_image }}
-            exit
-          "
-
-      - name: Run docker-compose with updated images
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-            cd ${{ secrets.WORK_DIR }}
-            docker-compose down
-            # Adjust this line to set environment variables in compose file
-            # using ${{ secrets.KEY }}=${{ secrets.VALUE }} syntax
-            docker-compose up -d backend=${{ needs.build-and-push.outputs.backend_image }} frontend=${{ needs.build-and-push.outputs.frontend_image }}
-            exit
-          "
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && docker compose pull && docker compose up -d && exit"
 
       - name: Cleanup
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-            cd ${{ secrets.WORK_DIR }}
-            rm -rf ~/.ssh
-            exit
-          "
+        run: rm -rf ~/.ssh

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   rentiverse-backend:
-    image: "pratikjpatil/rentiverse-backend:LATEST"
+    image: "pratikjpatil/rentiverse-backend:latest"
     ports:
       - "4500:4500"
     environment:
@@ -25,7 +25,7 @@ services:
       - rentiverse-backend-data:/rentiverse-api
 
   rentiverse-ui:
-    image: pratikjpatil/rentiverse-ui:LATEST
+    image: pratikjpatil/rentiverse-ui:latest
     ports:
       - "4501:80"
     environment:
