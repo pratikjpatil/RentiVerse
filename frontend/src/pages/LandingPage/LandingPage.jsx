@@ -161,7 +161,7 @@ const LandingPage = () => {
         <section className="padding-top">
           <div className="container mx-auto sm:px-4">
             <header className="mb-4">
-              <h3>Popular categories</h3>
+              <h3>Popular categories buddy</h3>
             </header>
             <nav className="flex flex-wrap gy-3">
               {categories.map((category, index) => (
