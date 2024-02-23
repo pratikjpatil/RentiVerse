@@ -48,7 +48,6 @@ jobs:
       - name: Connect and clear old containers and images, pull latest, and run container
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} &&
-          docker-compose down --rmi all &&
           docker-compose pull &&
           docker-compose up -d &&
           exit"
