@@ -49,7 +49,7 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} &&
           docker-compose pull &&
-          docker-compose up -d --build --force-recreate &&
+          docker-compose up -d &&
           exit"
 
       - name: Cleanup
