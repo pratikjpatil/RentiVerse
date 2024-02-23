@@ -60,14 +60,12 @@ app.use("/api/payment", paymentRoute);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/productreturn", productReturnRoutes);
 
-
+app.get("/health", (req, res) => {
+  return res.status(200).json({message: "Running fine"});
+});
 
 app.get("/*", (req, res) => {
   return res.send('<h1>Welcome to RentiVerse!</h1>');
-});
-
-app.get("/health", (req, res) => {
-  return res.status(200).json({message: "Running fine"});
 });
 
 
