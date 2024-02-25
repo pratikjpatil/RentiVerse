@@ -5,7 +5,7 @@ const userIsVerified = require("../middlewares/checkUserVerification");
 
 const { addProduct, productInfo, deleteProduct, updateAndMoveToListed } = require("../controllers/product.controller");
 
-router.post("/add-product", auth, userIsVerified, multerConfig.array("images", 4), addProduct);
+router.post("/add-product", auth, multerConfig.array("images", 4), addProduct);
 
 router.get("/product-info/:productId", productInfo);
 

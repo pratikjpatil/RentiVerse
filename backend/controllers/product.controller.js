@@ -19,7 +19,7 @@ const addProduct = async (req, res) => {
     productCategory,
     productDescription,
   } = req.body;
-
+  console.log(req);
   if (!req.files || req.files.length !== 4) {
     return res.status(400).json({ message: "Please upload 4 images." });
   }
@@ -42,7 +42,7 @@ const addProduct = async (req, res) => {
     });
 
     console.log(newProduct, req.files.length)
-    
+
     const images = req.files;
     const urls = await Promise.all(
       images.map(async (image) => {
