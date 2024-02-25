@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ProductCard from "../card/ProductCard";
+import ProductCard from "../ProductCard/ProductCard";
 import ProductUpdateModal from "../ProductUpdateModal/ProductUpdateModal";
 import toast from "react-hot-toast";
 import axios from "axios";

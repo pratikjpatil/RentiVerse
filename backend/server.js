@@ -24,14 +24,7 @@ app.use(cors(
     credentials: true 
   }
 ));
-const logRequestHeaders = (req, res, next) => {
-  console.log("Request Headers:");
-  console.log(req.headers);
-  next();
-};
 
-// Add the middleware to your Express app
-app.use(logRequestHeaders);
 app.use(function(req, res, next) {
   res.header('Content-Type', 'application/json;charset=UTF-8')
   res.header('Access-Control-Allow-Credentials', true)
@@ -71,8 +64,14 @@ app.get("/health", (req, res) => {
   return res.status(200).json({message: "Running fine"});
 });
 
-app.get("/*", (req, res) => {
+app.get("/", (req, res) => {
+  res.setHeader("Content-Type", "text/html"); // Set Content-Type header to indicate HTML response
   return res.send('<h1>Welcome to RentiVerse!</h1>');
+});
+
+
+app.get("/*", (req, res) => {
+  return res.send('This route is not defined!!\nBTW welcome to rentiverse!');
 });
 
 

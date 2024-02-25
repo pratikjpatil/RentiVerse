@@ -4,7 +4,7 @@ import axios from "axios";
 import Sidebar from "../../components/sidebar/sidebar";
 import { useSelector } from "react-redux";
 import Header from "../../components/header/Header";
-import Image from "../../assets/Upload.png";
+import Image from "../../assets/Upload.webp";
 import LoadingDots from "../../assets/loadingDots.gif";
 import Resizer from "react-image-file-resizer";
 import toast from "react-hot-toast";
@@ -23,7 +23,6 @@ const AddOnRent = () => {
     productPrice: "",
     // productQuantity: "",
   });
-
 
   const categories = [
     "Automobiles",
@@ -46,9 +45,8 @@ const AddOnRent = () => {
   const isLoggedIn = useSelector((state) => state.auth.status);
 
   const handleCategoryChange = (event) => {
-    setFormData({...formData, productCategory: event.target.value});
+    setFormData({ ...formData, productCategory: event.target.value });
   };
-
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -89,73 +87,59 @@ const AddOnRent = () => {
       );
     });
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      if(productCategory==="null"){
-        toast.error("Select Category");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (productCategory === "null") {
+      toast.error("Select Category");
+      return;
+    }
+    const backendUrl =
+      process.env.REACT_APP_BACKEND_URL + "/api/product/add-product";
+
+    setIsLoading(true);
+    try {
+      const formDataToSend = new FormData();
+
+      // Append images to the formData
+      images.forEach((image, index) => {
+        formDataToSend.append(`images`, image);
+      });
+
+      // Append other form data to the formData
+      for (const key in formData) {
+        formDataToSend.append(key, formData[key]);
+      }
+
+      const result = await axios.post(backendUrl, formDataToSend, {
+        headers: { "content-type": "multipart/form-data" },
+        withCredentials: true,
+      });
+
+      if (result.status === 201) {
+        toast.success("Product added successfully");
+        setFormData({
+          productName: "",
+          productTags: "",
+          productCategory: "",
+          productDescription: "",
+          dueDate: "",
+          productPrice: "",
+          // productQuantity: "",
+        });
+
+        setImages([]);
+      }
+    } catch (error) {
+      if (error.response.status === 400) {
+        toast.error(error.response.message);
         return;
       }
-      const backendUrl =
-        process.env.REACT_APP_BACKEND_URL + "/api/product/add-product";
-    
-      setIsLoading(true);
-      try {
-        const formDataToSend = new FormData();
-    
-        // Append images to the formData
-        images.forEach((image, index) => {
-          formDataToSend.append(`images`, image);
-        });
-    
-        // Calculate total size of selected images in bytes
-        const totalSizeBytes = Array.from(formDataToSend.entries()).reduce((total, [name, value]) => {
-          if (value instanceof File) {
-            return total + value.size;
-          }
-          return total;
-        }, 0);
-    
-        // Convert total size to kilobytes
-        const totalSizeKB = totalSizeBytes / 1024;
-    
-        console.log("Total size of images to upload:", totalSizeKB.toFixed(2), "KB");
-    
-        // Append other form data to the formData
-        for (const key in formData) {
-          formDataToSend.append(key, formData[key]);
-        }
-    
-        const result = await axios.post(backendUrl, formDataToSend, {
-          headers: { "content-type": "multipart/form-data" },
-          withCredentials: true,
-        });
-    
-        if (result.status === 201) {
-          toast.success("Product added successfully");
-          setFormData({
-            productName: "",
-            productTags: "",
-            productCategory: "",
-            productDescription: "",
-            dueDate: "",
-            productPrice: "",
-            // productQuantity: "",
-          });
-    
-          setImages([]);
-        }
-      } catch (error) {
-        if (error.response.status === 400) {
-          toast.error(error.response.message);
-          return;
-        }
-        console.log(error);
-        toast.error("Product not added.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
+      console.log(error);
+      toast.error("Product not added.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleImageChange = async (e) => {
     const selectedImages = Array.from(e.target.files);
@@ -174,7 +158,6 @@ const AddOnRent = () => {
       console.error("Error compressing images:", error);
     }
   };
-
 
   const imagePreview = images.map((image, index) => (
     <img
@@ -199,7 +182,9 @@ const AddOnRent = () => {
           ) : (
             <>
               <h3 className="text-lg md:text-xl font-bold">Add on Rent</h3>
-              <p className="text-xs md:text-sm text-gray-500">List your product for rent</p>
+              <p className="text-xs md:text-sm text-gray-500">
+                List your product for rent
+              </p>
               <div className="mt-6 lg:-mt-8 flex flex-wrap justify-center content-center">
                 <div className="flex flex-col justify-center md:flex-nowrap lg:mr-28">
                   <div className="w-1/2 md:-mt-24 md:w-48 mx-auto">
@@ -229,10 +214,10 @@ const AddOnRent = () => {
 
                 <div className="min-w-3 mt-6">
                   <form onSubmit={handleSubmit}>
-                    <div className="">
+                    <div className="relative">
                       <label htmlFor="productName">Product Name</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full pr-12"
                         type="text"
                         id="productName"
                         name="productName"
@@ -242,12 +227,15 @@ const AddOnRent = () => {
                         placeholder="Asset Name"
                         required
                       />
+                      <div className="absolute right-1 top-10 text-xs text-gray-500 pointer-events-none">
+                        {productName.length}/40
+                      </div>
                     </div>
 
                     <div className="mt-3">
                       <label htmlFor="dueDate">Due Date</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full"
                         type="date"
                         id="tillDate"
                         name="dueDate"
@@ -263,7 +251,7 @@ const AddOnRent = () => {
                     <div className="mt-3">
                       <label htmlFor="productPrice">Price</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full"
                         type="number"
                         id="price"
                         name="productPrice"
@@ -278,7 +266,7 @@ const AddOnRent = () => {
                     <div className="mt-3">
                       <label htmlFor="tags">Tags</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg"
+                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full"
                         type="text"
                         id="tags"
                         name="productTags"
@@ -290,30 +278,39 @@ const AddOnRent = () => {
                       />
                     </div>
 
-                    <div className="mt-3 max-h-96">
+                    <div className="mt-3 max-h-96 relative">
                       <label htmlFor="productDescription">Description</label>
                       <textarea
-                        className="h-15 w-full resize-y px-4 py-2 border border-gray-300 rounded-lg"
+                        className={`h-15 w-full resize-y px-4 py-2 border rounded-lg ${
+                          productDescription.length > 900
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
                         id="description"
                         name="productDescription"
-                        maxLength={180}
+                        maxLength={900}
                         value={productDescription}
                         onChange={handleChange}
-                        placeholder="Write product description in max 180 letters"
+                        placeholder="Write product description in max 900 characters"
                         required
                       />
+                      <div className="absolute text-right text-xs text-gray-500 bottom-4 right-2">
+                        {productDescription.length}/900
+                      </div>
                     </div>
 
-                    <div className="mt-3">
+                    <div className="mt-3 w-full">
                       <label htmlFor="categories">Select a category:</label>
                       <select
                         id="categories"
                         value={productCategory}
                         onChange={handleCategoryChange}
                         required
-                        className="h-10 p-2 block border border-gray-300 rounded-lg"
+                        className="h-10 p-2 block border border-gray-300 rounded-lg w-full"
                       >
-                        <option value="null" className="text-slate-500">Select Category</option>{" "}
+                        <option value="null" className="text-slate-500">
+                          Select Category
+                        </option>{" "}
                         {categories.map((category, index) => (
                           <option
                             key={index}

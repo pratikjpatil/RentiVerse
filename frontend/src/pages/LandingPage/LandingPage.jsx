@@ -6,10 +6,28 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import ProductsList from "../../components/ProductsList/ProductsList";
 
+import landingBanner from "../../assets/landing-banner.webp";
+import post1 from "../../assets/posts/1.jpg";
+import post2 from "../../assets/posts/2.jpg";
+import post3 from "../../assets/posts/3.jpg";
+import post4 from "../../assets/posts/4.jpg";
+import carIcon from "../../assets/categories/car.png";
+import motorbikeIcon from "../../assets/categories/motorbike.png";
+import cpuIcon from "../../assets/categories/cpu.png";
+import watchIcon from "../../assets/categories/watch.png";
+import bookIcon from "../../assets/categories/book.png";
+import sofaIcon from "../../assets/categories/sofa.png";
+import toyIcon from "../../assets/categories/toy.png";
+import shirtIcon from "../../assets/categories/shirt.png";
+import musicIcon from "../../assets/categories/music.png";
+import ballIcon from "../../assets/categories/ball.png";
+import diamondIcon from "../../assets/categories/diamond.png";
+import animalIcon from "../../assets/categories/animal.png";
+
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState([]);
-  const [loading, setLoading] = useState(false); // Track if data is being loaded
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -18,9 +36,7 @@ const LandingPage = () => {
       try {
         setLoading(true);
 
-        const response = await axios.get(
-          `${backendUrl}/api/products/?limit=9`
-        );
+        const response = await axios.get(`${backendUrl}/api/products/?limit=9`);
 
         const uniqueProducts = response.data.products.filter(
           (newProduct) =>
@@ -29,7 +45,7 @@ const LandingPage = () => {
                 existingProduct.productId === newProduct.productId
             )
         );
-        setProducts((prevProducts) =>[...prevProducts, ...uniqueProducts]);
+        setProducts((prevProducts) => [...prevProducts, ...uniqueProducts]);
       } catch (error) {
         console.error(error);
       } finally {
@@ -49,7 +65,6 @@ const LandingPage = () => {
           `${backendUrl}/api/products/recently-viewed?limit=9`
         );
 
-        // If only page changed, add newly fetched products to existing products
         const uniqueProducts = response.data.products.filter(
           (newProduct) =>
             !recentlyViewedProducts.some(
@@ -71,98 +86,81 @@ const LandingPage = () => {
     fetchProducts();
   }, []);
 
-
-
   const categories = [
     {
       name: "Automobiles",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/car.png",
+      imageSrc: carIcon,
     },
     {
       name: "Motorcycle",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/motorbike.png",
+      imageSrc: motorbikeIcon,
     },
     {
       name: "Technology",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/cpu.png",
+      imageSrc: cpuIcon,
     },
     {
       name: "Accessories",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/watch.png",
+      imageSrc: watchIcon,
     },
     {
       name: "Books, magazines",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/book.png",
+      imageSrc: bookIcon,
     },
     {
       name: "Home furniture",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/sofa.png",
+      imageSrc: sofaIcon,
     },
     {
       name: "Toys for kids",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/toy.png",
+      imageSrc: toyIcon,
     },
     {
       name: "Clothings",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/shirt.png",
+      imageSrc: shirtIcon,
     },
     {
       name: "Musical equipments",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/music.png",
+      imageSrc: musicIcon,
     },
     {
       name: "Sport, health",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/ball.png",
+      imageSrc: ballIcon,
     },
     {
       name: "Jewellery",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/diamond.png",
+      imageSrc: diamondIcon,
     },
     {
       name: "Animals, birds",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/animal.png",
+      imageSrc: animalIcon,
     },
     {
       name: "Other",
-      imageSrc:
-        "https://bootstrap-ecommerce-web.netlify.app/images/icons/category-png-gray/ball.png",
+      imageSrc: ballIcon, // You might want to change this
     },
   ];
 
   return (
     <>
-      <Header/>
+      <Header />
       <Sidebar />
 
       <section className="mt-20 md:ml-64 px-2">
         <section className="padding-top-sm">
           <div className="container mx-auto sm:px-4">
             <article className="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
-              <img
-                src="https://bootstrap-ecommerce-web.netlify.app/images/banners/interior-wide.jpg"
-                className="w-full"
-              />
+              <img src={landingBanner} className="w-full" />
             </article>
           </div>
         </section>
 
         <section className="padding-top">
           <div className="container mx-auto sm:px-4">
-            <header className="mb-4">
-              <h3>Popular categories buddy</h3>
-            </header>
+            <h3 className="my-4 font-semibold text-slate-700">
+              Popular categories
+            </h3>
+
             <nav className="flex flex-wrap gy-3">
               {categories.map((category, index) => (
                 <div
@@ -192,10 +190,19 @@ const LandingPage = () => {
 
         <section className="padding-top">
           <div className="container mx-auto sm:px-4">
-            <header className="mb-4 flex justify-between">
-              <h3 className="inline-block text-lg pl-2">Latest Deals</h3>
-              <button className="text-xs md:text-sm bg-gray-200 rounded-lg px-2" onClick={() => {navigate(`/category/latest`)}}>Show more</button>
-            </header>
+            <div className="my-4 flex justify-between">
+              <h3 className="inline-block text-lg pl-2 font-semibold text-slate-700">
+                Latest Deals
+              </h3>
+              <button
+                className="text-xs md:text-sm bg-gray-200 rounded-lg px-2"
+                onClick={() => {
+                  navigate(`/category/latest`);
+                }}
+              >
+                Show more
+              </button>
+            </div>
 
             <ProductsList products={products} />
           </div>
@@ -203,10 +210,17 @@ const LandingPage = () => {
 
         <section className="padding-top-sm">
           <div className="container mx-auto sm:px-4">
-            <header className="mb-4 flex justify-between">
-              <h3 className="inline-block text-lg pl-2">You recently looked</h3>
-              <button className="text-xs md:text-sm bg-gray-200 rounded-lg px-2" onClick={()=>navigate('/category/recentlyviewed')}>Show more</button>
-            </header>
+            <div className="my-4 flex justify-between">
+              <h3 className="inline-block text-lg pl-2 font-semibold text-slate-700">
+                You recently looked
+              </h3>
+              <button
+                className="text-xs md:text-sm bg-gray-200 rounded-lg px-2"
+                onClick={() => navigate("/category/recentlyviewed")}
+              >
+                Show more
+              </button>
+            </div>
 
             <ProductsList products={recentlyViewedProducts} />
           </div>
@@ -280,11 +294,7 @@ const LandingPage = () => {
               <div className="lg:w-1/4 pr-4 pl-4 md:w-1/2 pr-4 pl-4 sm:w-1/2 pr-4 pl-4">
                 <article>
                   <div className="img-wrap">
-                    <img
-                      className="rounded w-full"
-                      src="https://bootstrap-ecommerce-web.netlify.app/images/posts/1.jpg"
-                      height={160}
-                    />
+                    <img className="rounded w-full" src={post1} height={160} />
                   </div>
                   <div className="mt-3">
                     <div>
@@ -307,11 +317,7 @@ const LandingPage = () => {
               <div className="lg:w-1/4 pr-4 pl-4 md:w-1/2 pr-4 pl-4 sm:w-1/2 pr-4 pl-4">
                 <article>
                   <div className="img-wrap">
-                    <img
-                      className="rounded w-full"
-                      src="https://bootstrap-ecommerce-web.netlify.app/images/posts/2.jpg"
-                      height={160}
-                    />
+                    <img className="rounded w-full" src={post2} height={160} />
                   </div>
                   <div className="mt-3">
                     <div>
@@ -334,11 +340,7 @@ const LandingPage = () => {
               <div className="lg:w-1/4 pr-4 pl-4 md:w-1/2 pr-4 pl-4 sm:w-1/2 pr-4 pl-4">
                 <article>
                   <div className="img-wrap">
-                    <img
-                      className="rounded w-full"
-                      src="https://bootstrap-ecommerce-web.netlify.app/images/posts/3.jpg"
-                      height={160}
-                    />
+                    <img className="rounded w-full" src={post3} height={160} />
                   </div>
                   <div className="mt-3">
                     <div>
@@ -361,11 +363,7 @@ const LandingPage = () => {
               <div className="lg:w-1/4 pr-4 pl-4 md:w-1/2 pr-4 pl-4 sm:w-1/2 pr-4 pl-4">
                 <article>
                   <div className="img-wrap">
-                    <img
-                      className="rounded w-full"
-                      src="https://bootstrap-ecommerce-web.netlify.app/images/posts/4.jpg"
-                      height={160}
-                    />
+                    <img className="rounded w-full" src={post4} height={160} />
                   </div>
                   <div className="mt-3">
                     <div>

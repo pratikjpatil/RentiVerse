@@ -19,7 +19,7 @@ const addProduct = async (req, res) => {
     productCategory,
     productDescription,
   } = req.body;
-  console.log(req);
+
   if (!req.files || req.files.length !== 4) {
     return res.status(400).json({ message: "Please upload 4 images." });
   }
@@ -41,8 +41,6 @@ const addProduct = async (req, res) => {
       productDescription,
     });
 
-    console.log(newProduct, req.files.length)
-
     const images = req.files;
     const urls = await Promise.all(
       images.map(async (image) => {
@@ -53,7 +51,6 @@ const addProduct = async (req, res) => {
             width: 600,
           }
         );
-        console.log(`cloudinary uploaded ${image.path}`)
 
         // Delete the file from disk after successful upload
         fs.unlink(image.path, (err) => {
@@ -62,22 +59,17 @@ const addProduct = async (req, res) => {
           }
         });
 
-        console.log(`image deleted ${image.path}`)
-
 
         return { public_id, secure_url };
       })
     );
 
     newProduct.productImages = urls;
-    console.log("urls "+ urls)
     await newProduct.save();
 
     await User.findByIdAndUpdate(req.user.id, {
       $push: { listed: newProduct._id },
     });
-
-    console.log("user updated")
 
     return res.status(201).json({ message: "Product added successfully" });
   } catch (error) {
