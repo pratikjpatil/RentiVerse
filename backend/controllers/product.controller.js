@@ -41,6 +41,7 @@ const addProduct = async (req, res) => {
       productDescription,
     });
 
+    console.log(newProduct, req.files.length)
     //This code is to compress and store images in local-storage but for this the multer storage should be memoryStorage
 
     // const processedImages = [];
@@ -80,6 +81,7 @@ const addProduct = async (req, res) => {
             width: 600,
           }
         );
+        console.log(`cloudinary uploaded ${image.path}`)
 
         // Delete the file from disk after successful upload
         fs.unlink(image.path, (err) => {
@@ -88,17 +90,22 @@ const addProduct = async (req, res) => {
           }
         });
 
+        console.log(`image deleted ${image.path}`)
+
+
         return { public_id, secure_url };
       })
     );
 
     newProduct.productImages = urls;
-
+    console.log("urls "+ urls)
     await newProduct.save();
 
     await User.findByIdAndUpdate(req.user.id, {
       $push: { listed: newProduct._id },
     });
+
+    console.log("user updated")
 
     return res.status(201).json({ message: "Product added successfully" });
   } catch (error) {
