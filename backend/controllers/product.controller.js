@@ -42,35 +42,7 @@ const addProduct = async (req, res) => {
     });
 
     console.log(newProduct, req.files.length)
-    //This code is to compress and store images in local-storage but for this the multer storage should be memoryStorage
-
-    // const processedImages = [];
-    // let imgCnt = 1;
-    // // Process and save the images using streams in parallel
-    // await Promise.all(
-    //   req.files.map(async (image) => {
-    //     if (!image.buffer) {
-    //       throw new Error("Invalid image buffer.");
-    //     }
-
-    //     // Extract the file extension from the original image file
-    //     const ext = path.extname(image.originalname);
-
-    //     const imagePath = `../public/images/products/${Date.now()}-${productName}-${imgCnt++}-${req.user.id}${ext}`;
-    //     const imageStream = sharp(image.buffer).resize({ width: 600 }).jpeg({ quality: 80 });
-
-    //     // Save the processed image to disk
-    //     await new Promise((resolve, reject) => {
-    //       const writeStream = fs.createWriteStream(path.join(__dirname, imagePath));
-    //       imageStream.pipe(writeStream);
-    //       writeStream.on("finish", resolve);
-    //       writeStream.on("error", reject);
-    //     });
-
-    //     processedImages.push(`/public/images/products/${path.basename(imagePath)}`);
-    //   })
-    // );
-
+    
     const images = req.files;
     const urls = await Promise.all(
       images.map(async (image) => {

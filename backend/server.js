@@ -24,7 +24,14 @@ app.use(cors(
     credentials: true 
   }
 ));
+const logRequestHeaders = (req, res, next) => {
+  console.log("Request Headers:");
+  console.log(req.headers);
+  next();
+};
 
+// Add the middleware to your Express app
+app.use(logRequestHeaders);
 app.use(function(req, res, next) {
   res.header('Content-Type', 'application/json;charset=UTF-8')
   res.header('Access-Control-Allow-Credentials', true)
