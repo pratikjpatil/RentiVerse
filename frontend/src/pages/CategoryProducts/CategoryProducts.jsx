@@ -6,6 +6,7 @@ import { setPrevSearchText } from "../../store/searchSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function CategoryProducts() {
   const { category } = useParams();
@@ -15,105 +16,79 @@ function CategoryProducts() {
   const prevSearchText = useSelector((state) => state.search.prevSearchText);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true); // Flag to indicate more data availability
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
+  const fetchData = async () => {
+    setLoading(true);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-        const backendUrl = process.env.REACT_APP_BACKEND_URL;
-        let response;
-        if (category === "latest" || category === "search") {
-          if (prevSearchText !== searchText) {
-            setPage(1);
-          }
+    try {
+      let response;
 
-          dispatch(setPrevSearchText(searchText));
-
-          response = await axios.get(
-            `${backendUrl}/api/products/?searchText=${searchText}&page=${page}`
-          );
-          // If searchText changed, set entirely new products
-          // If only page changed, add newly fetched products to existing products
-          const uniqueProducts = response.data.products.filter(
-            (newProduct) =>
-              !products.some(
-                (existingProduct) =>
-                  existingProduct.productId === newProduct.productId
-              )
-          );
-          setProducts((prevProducts) =>
-            searchText
-              ? response.data.products
-              : [...prevProducts, ...uniqueProducts]
-          );
-        } else {
-          if (category === "recentlyviewed") {
-            response = await axios.get(
-              `${backendUrl}/api/products/recently-viewed?page=${page}`
-            );
-          } else {
-            response = await axios.get(
-              `${backendUrl}/api/products/category/${category}?page=${page}`
-            );
-          }
-
-          // If only page changed, add newly fetched products to existing products
-          const uniqueProducts = response.data.products.filter(
-            (newProduct) =>
-              !products.some(
-                (existingProduct) =>
-                  existingProduct.productId === newProduct.productId
-              )
-          );
-          setProducts((prevProducts) => [...prevProducts, ...uniqueProducts]);
+      if (category === "latest" || category === "search") {
+        if (prevSearchText !== searchText) {
+          setPage(1); // Reset page on search change
         }
-      } catch (error) {
-        console.error(error);
-        toast.error("Error fetching category products");
-      } finally {
-        setLoading(false);
+        dispatch(setPrevSearchText(searchText));
+        response = await axios.get(
+          `${backendUrl}/api/products/?searchText=${searchText}&page=${page}`
+        );
+      } else {
+        const endpoint =
+          category === "recentlyviewed"
+            ? "recently-viewed"
+            : `category/${category}`;
+        response = await axios.get(
+          `${backendUrl}/api/products/${endpoint}?page=${page}`
+        );
       }
-    };
 
-    fetchProducts();
-  }, [searchText, page]);
+      const newProducts = response.data.products;
+      // Use a set to track unique product IDs
+      // const uniqueProductIds = new Set(products.map((product) => product.productId));
+      // const filteredNewProducts = newProducts.filter((product) => !uniqueProductIds.has(product.productId));
 
-  const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      setProducts((prevProducts) => [...prevProducts, ...newProducts]);
 
-    // Check if the user is near the bottom of the page
-    if (scrollTop + clientHeight >= scrollHeight - 100 && !loading) {
-      setLoading(true);
-      setPage((prevPage) => prevPage + 1);
+      // Update hasMore flag based on total pages and current page
+      setHasMore(response.data.totalPages > page);
+      setPage((prev)=>prev+1)
+    } catch (error) {
+      console.error(error);
+      toast.error("Error fetching category products");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Attach the scroll event listener
-    window.addEventListener("scroll", handleScroll);
+    fetchData();
+    console.log(searchText, page, category);
+  }, [searchText, category]);
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [loading]); // Include loading in the dependencies to avoid unnecessary re-renders
   return (
     <>
       <Header />
       <Sidebar />
 
       <section className="p-4 px-6 mt-16 md:mt-20 md:ml-64">
-        <h2 className="text-xl font-semibold text-slate-600">
-          Category: {category}
-        </h2>
+        <h2 className="text-xl font-semibold text-slate-600">Category: {category}</h2>
         {!products.length ? (
           <h3 className="mt-12">No Products Found</h3>
         ) : (
           <div className="mt-8">
-            <ProductsList products={products} />
+            <InfiniteScroll
+              dataLength={products.length} // Number of items currently displayed
+              next={() => fetchData()} // Fetch more data on scroll
+              hasMore={hasMore} // Display loading indicator if more data available
+              loader={<p className="text-center mt-4">Loading...</p>}
+              endMessage={<p className="text-center mt-4">No more products to load.</p>}
+            >
+              <ProductsList products={products} />
+            </InfiniteScroll>
           </div>
         )}
+        {loading && <p className="text-center mt-4">Loading...</p>}
       </section>
     </>
   );

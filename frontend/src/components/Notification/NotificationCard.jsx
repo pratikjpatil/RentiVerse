@@ -22,7 +22,7 @@ const NotificationCard = () => {
   }, []);
 
   return (
-    <div className="absolute -right-6 mt-2 min-w-64 text-xs max-h-3/8 overflow-y-auto bg-white border border-gray-200 rounded-md shadow-lg z-10">
+    <div className="absolute -right-6 mt-2 min-w-64 text-xs max-h-96 overflow-y-auto bg-white border border-gray-200 rounded-md shadow-lg z-10">
       {!notifications ? (
         <p className="p-4">Loading...</p>
       ) : !notifications.length ? (

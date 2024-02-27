@@ -148,14 +148,19 @@ const AddOnRent = () => {
       toast.error("Please select 4 images.");
       return;
     }
-
+    const toastId = toast.loading("Processing");
     try {
+      
       const compressedImages = await Promise.all(
         selectedImages.map(async (image) => await resizeFile(image))
       );
       setImages(compressedImages);
+      
+      toast.success("",{id: toastId})
+      
     } catch (error) {
       console.error("Error compressing images:", error);
+      toast.error("Error processing images", {id: toastId});
     }
   };
 
