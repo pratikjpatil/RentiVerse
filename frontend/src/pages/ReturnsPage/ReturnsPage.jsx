@@ -59,7 +59,7 @@ const RequestPage = () => {
       }
 
       if (result.status === 200) {
-        setOrders(result.data);
+        setOrders(result.data.reverse());
       }
     } catch (error) {
       console.log(error);
@@ -261,8 +261,9 @@ const RequestPage = () => {
                   </td>
                   <td className="px-6 py-4">
                     <button
-                      onClick={() =>
+                      onClick={() =>{
                         openChatModal(order.user2Id, order.userName)
+                        console.log(order)}
                       }
                     >
                       Open Chat

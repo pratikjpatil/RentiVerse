@@ -8,7 +8,7 @@ const cookie = require("cookie");
 const setupSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: ['http://localhost:3000', 'https://rentiverse.netlify.app', 'https://rentiverse.pratikjpatil.me'],
       credentials: true,
     },
   });

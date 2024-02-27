@@ -52,7 +52,7 @@ const RequestPage = () => {
       const result = await axios.get(backendUrl, { withCredentials: true });
 
       if (result.status === 200) {
-        setTableData(result.data);
+        setTableData(result.data.reverse());
       }
     } catch (error) {
       console.log(error);
@@ -437,7 +437,7 @@ const RequestPage = () => {
                             className="h-10 p-2 block border border-gray-300 rounded-lg"
                           >
                             <option value="null" className="text-slate-500">
-                              Select Category
+                              Select status
                             </option>
                             <option value="processing">Processing</option>
                             <option value="shipped">Shipped</option>

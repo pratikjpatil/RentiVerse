@@ -16,7 +16,7 @@ function CategoryProducts() {
   const prevSearchText = useSelector((state) => state.search.prevSearchText);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true); // Flag to indicate more data availability
+  const [hasMore, setHasMore] = useState(true); 
 
   const fetchData = async () => {
     setLoading(true);

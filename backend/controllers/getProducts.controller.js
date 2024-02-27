@@ -180,7 +180,7 @@ const givenOnRent = async (req, res) => {
             product.acceptedRequestId.userId.lastName,
           returnDate: product.acceptedRequestId.dueDate,
           amountPaid: product.acceptedRequestId.amountPaid,
-          user2Id: product.userId,
+          user2Id: product.renterId,
           orderStatus: product.acceptedRequestId.orderStatus,
           returnConfirmation: product.acceptedRequestId.returnConfirmation,
         };
