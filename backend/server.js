@@ -40,6 +40,10 @@ app.use(function(req, res, next) {
 const { setupSocket } = require("./socket/socket");
 setupSocket(server);
 
+// cron jobs to notify about elapsed return date and moving expired products to draft
+const cronJobs = require("./crons/cronJobs");
+cronJobs();
+
 
 const getProductsRoutes = require("./routes/getProductsRoutes"); //landing page, dashboard page
 const userRoutes = require("./routes/userRoutes");  //user registration, login, check if logged in
