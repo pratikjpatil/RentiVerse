@@ -2,13 +2,11 @@ const User = require("../models/user");
 const OTP = require("../models/otpdb");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const axios = require("axios");
+
 const { validationResult } = require("express-validator");
-const {
-  sendOtpToPhone,
-  verifyOtpPhone,
-  sendOtpToEmail,
-  verifyOtpEmail,
-} = require("../utils/otp");
+const { sendOtpToPhone, verifyOtpPhone, sendOtpToEmail, verifyOtpEmail } = require("../utils/otp");
 const mongoose = require("mongoose");
 
 const sendRegistrationOtp = async (req, res) => {
@@ -29,6 +27,17 @@ const sendRegistrationOtp = async (req, res) => {
     } else if (existingUserByEmail) {
       return res.status(400).json({ message: "Email already exists" });
     }
+
+    axios
+      .get(
+        `https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.EMAIL_VALIDATE_ABSTRACT_API_KEY}&email=${email}`
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     const isOtpSentToEmail = await sendOtpToEmail(email);
     if (!isOtpSentToEmail.success) {
@@ -55,25 +64,13 @@ const verifyOtpAndRegisterUser = async (req, res) => {
     return;
   }
 
-  const {
-    phone,
-    email,
-    phoneOtp,
-    emailOtp,
-    firstName,
-    lastName,
-    address,
-    pincode,
-    password,
-  } = req.body;
+  const { phone, email, phoneOtp, emailOtp, firstName, lastName, address, pincode, password } = req.body;
   try {
     const existingUserByPhone = await User.findOne({ phone: phone });
     const existingUserByEmail = await User.findOne({ email: email });
 
     if (existingUserByPhone) {
-      return res
-        .status(400)
-        .json({ message: "Phone number already registered" });
+      return res.status(400).json({ message: "Phone number already registered" });
     } else if (existingUserByEmail) {
       return res.status(400).json({ message: "Email already registered" });
     }
@@ -94,10 +91,8 @@ const verifyOtpAndRegisterUser = async (req, res) => {
     const user = new User({
       email,
       phone: Number(phone),
-      firstName:
-        firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
-      lastName:
-        lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
+      firstName: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
+      lastName: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
       address: {
         area: address,
         pincode: Number(pincode),
@@ -193,9 +188,7 @@ const checkIfLoggedIn = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User does not exists", userData: null });
+      return res.status(404).json({ message: "User does not exists", userData: null });
     }
 
     const userData = {
