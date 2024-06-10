@@ -4,6 +4,7 @@ const User = require("../models/user");
 
 const getAllOrSearchProducts = async (req, res) => {
   const searchText = req.query.searchText || "";
+  // console.log("\n\n", searchText);
   let searchQuery = {
     renterId: null,
     acceptedRequestId: null,
@@ -13,12 +14,12 @@ const getAllOrSearchProducts = async (req, res) => {
     searchQuery = {
       $or: [
         { productName: { $regex: searchText, $options: "i" } },
-        { productCategory: { $regex: searchText, $options: "i" } },
+        // { productCategory: { $regex: searchText, $options: "i" } },
         { productTags: { $regex: searchText, $options: "i" } },
       ],
       renterId: null,
       acceptedRequestId: null,
-      isDrafted: false
+      isDrafted: false,
     };
   }
 
@@ -38,6 +39,8 @@ const getAllOrSearchProducts = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
+    // console.log(count);
+
     res.status(200).json({ totalPages, currentPage: page, products });
   } catch (error) {
     console.error(`Error searching products: ${error}`);
@@ -52,10 +55,10 @@ const getProductsByCategory = async (req, res) => {
 
     const skip = (page - 1) * limit;
     const products = await Product.find({
-      productCategory: req.params.category, 
+      productCategory: req.params.category,
       renterId: null,
       acceptedRequestId: null,
-      isDrafted: false
+      isDrafted: false,
     })
       .select(
         "productId productName productCategory productPrice productDescription productQuantity productTags productImages"
@@ -65,16 +68,14 @@ const getProductsByCategory = async (req, res) => {
     return res.status(200).json({ products });
   } catch (error) {
     console.error(`Error fetching products by category: ${error}`);
-    return res
-      .status(500)
-      .json({ message: "Error fetching products by category" });
+    return res.status(500).json({ message: "Error fetching products by category" });
   }
 };
 
 const getRecentlyViewed = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate("recentlyViewed");
-    const products = user.recentlyViewed.filter(product => !product.isDrafted);
+    const products = user.recentlyViewed.filter((product) => !product.isDrafted);
 
     return res.status(200).json({ products });
   } catch (error) {
@@ -105,18 +106,13 @@ const takenOnrent = async (req, res) => {
       },
     });
 
-    
-
     if (returnsPage) {
       //to view on returns page
       const returnProductsInfo = user.takenOnRent.map((product) => {
         return {
           requestId: product.acceptedRequestId.requestId,
           productName: product.productName,
-          userName:
-            product.acceptedRequestId.ownerId.firstName +
-            " " +
-            product.acceptedRequestId.ownerId.lastName,
+          userName: product.acceptedRequestId.ownerId.firstName + " " + product.acceptedRequestId.ownerId.lastName,
           returnDate: product.acceptedRequestId.dueDate,
           amountPaid: product.acceptedRequestId.amountPaid,
           user2Id: product.ownerId,
@@ -126,18 +122,18 @@ const takenOnrent = async (req, res) => {
       });
       return res.status(200).json(returnProductsInfo);
     } else {
-
       const takenOnRentProducts = user.takenOnRent.map((product) => {
-       
-        const {productId,
-        productName,
-        productCategory,
-        productPrice,
-        productDescription,
-        productQuantity,
-        productTags,
-        productImages } = product;
-        
+        const {
+          productId,
+          productName,
+          productCategory,
+          productPrice,
+          productDescription,
+          productQuantity,
+          productTags,
+          productImages,
+        } = product;
+
         return {
           productId,
           productName,
@@ -146,8 +142,8 @@ const takenOnrent = async (req, res) => {
           productDescription,
           productQuantity,
           productTags,
-          productImages
-      };
+          productImages,
+        };
       });
       return res.status(200).json(takenOnRentProducts);
     }
@@ -174,10 +170,7 @@ const givenOnRent = async (req, res) => {
         return {
           requestId: product.acceptedRequestId.requestId,
           productName: product.productName,
-          userName:
-            product.acceptedRequestId.userId.firstName +
-            " " +
-            product.acceptedRequestId.userId.lastName,
+          userName: product.acceptedRequestId.userId.firstName + " " + product.acceptedRequestId.userId.lastName,
           returnDate: product.acceptedRequestId.dueDate,
           amountPaid: product.acceptedRequestId.amountPaid,
           user2Id: product.renterId,
@@ -186,39 +179,37 @@ const givenOnRent = async (req, res) => {
         };
       });
       return res.status(200).json(returnProductsInfo);
-    } else{
+    } else {
       const givenOnRentProducts = user.givenOnRent.map((product) => {
-       
-      const {
-      productId,
-      productName,
-      productCategory,
-      productPrice,
-      productDescription,
-      productQuantity,
-      productTags,
-      productImages } = product;
-      
-      return {
-        productId,
-        productName,
-        productCategory,
-        productPrice,
-        productDescription,
-        productQuantity,
-        productTags,
-        productImages
-    };
-    });
-    return res.status(200).json(givenOnRentProducts);
+        const {
+          productId,
+          productName,
+          productCategory,
+          productPrice,
+          productDescription,
+          productQuantity,
+          productTags,
+          productImages,
+        } = product;
+
+        return {
+          productId,
+          productName,
+          productCategory,
+          productPrice,
+          productDescription,
+          productQuantity,
+          productTags,
+          productImages,
+        };
+      });
+      return res.status(200).json(givenOnRentProducts);
     }
-    
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 const draftProducts = async (req, res) => {
   try {
@@ -238,5 +229,5 @@ module.exports = {
   listed,
   takenOnrent,
   givenOnRent,
-  draftProducts
+  draftProducts,
 };
