@@ -16,7 +16,7 @@ function CategoryProducts() {
   const prevSearchText = useSelector((state) => state.search.prevSearchText);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true); 
+  const [hasMore, setHasMore] = useState(true);
 
   const fetchData = async () => {
     setLoading(true);
@@ -30,17 +30,11 @@ function CategoryProducts() {
           setPage(1); // Reset page on search change
         }
         dispatch(setPrevSearchText(searchText));
-        response = await axios.get(
-          `${backendUrl}/api/products/?searchText=${searchText}&page=${page}`
-        );
+        response = await axios.get(`${backendUrl}/api/products/?searchText=${searchText}&page=${page}`);
+        console.log(response);
       } else {
-        const endpoint =
-          category === "recentlyviewed"
-            ? "recently-viewed"
-            : `category/${category}`;
-        response = await axios.get(
-          `${backendUrl}/api/products/${endpoint}?page=${page}`
-        );
+        const endpoint = category === "recentlyviewed" ? "recently-viewed" : `category/${category}`;
+        response = await axios.get(`${backendUrl}/api/products/${endpoint}?page=${page}`);
       }
 
       const newProducts = response.data.products;
@@ -52,7 +46,7 @@ function CategoryProducts() {
 
       // Update hasMore flag based on total pages and current page
       setHasMore(response.data.totalPages > page);
-      setPage((prev)=>prev+1)
+      setPage((prev) => prev + 1);
     } catch (error) {
       console.error(error);
       toast.error("Error fetching category products");
@@ -71,24 +65,24 @@ function CategoryProducts() {
       <Header />
       <Sidebar />
 
-      <section className="p-4 px-6 mt-16 md:mt-20 md:ml-64">
-        <h2 className="text-xl font-semibold text-slate-600">Category: {category}</h2>
+      <section className='p-4 px-6 mt-16 md:mt-20 md:ml-64'>
+        <h2 className='text-xl font-semibold text-slate-600'>Category: {category}</h2>
         {!products.length ? (
-          <h3 className="mt-12">No Products Found</h3>
+          <h3 className='mt-12'>No Products Found</h3>
         ) : (
-          <div className="mt-8">
+          <div className='mt-8'>
             <InfiniteScroll
               dataLength={products.length} // Number of items currently displayed
               next={() => fetchData()} // Fetch more data on scroll
               hasMore={hasMore} // Display loading indicator if more data available
-              loader={<p className="text-center mt-4">Loading...</p>}
-              endMessage={<p className="text-center mt-4">No more products to load.</p>}
+              loader={<p className='text-center mt-4'>Loading...</p>}
+              endMessage={<p className='text-center mt-4'>No more products to load.</p>}
             >
               <ProductsList products={products} />
             </InfiniteScroll>
           </div>
         )}
-        {loading && <p className="text-center mt-4">Loading...</p>}
+        {loading && <p className='text-center mt-4'>Loading...</p>}
       </section>
     </>
   );

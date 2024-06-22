@@ -25,9 +25,7 @@ function ProductPage() {
     const getProductInfo = async () => {
       try {
         setIsLoading(true);
-        const result = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/product/product-info/${productId}`
-        );
+        const result = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/product/product-info/${productId}`);
 
         if (result.status === 200) {
           setProduct(result.data);
@@ -55,11 +53,9 @@ function ProductPage() {
       setIsLoading(true);
       const backendUrl = process.env.REACT_APP_BACKEND_URL;
       if (product.requestStatus === "notSent") {
-        const result = await axios.post(
-          `${backendUrl}/api/request/send/${productId}`,
-          formData,
-          { withCredentials: true }
-        );
+        const result = await axios.post(`${backendUrl}/api/request/send/${productId}`, formData, {
+          withCredentials: true,
+        });
 
         if (result.status === 201) {
           toast.success("Product request sent", { id: toastId });
@@ -69,7 +65,10 @@ function ProductPage() {
         return;
       }
     } catch (error) {
-      toast.error(error.response.data.message, { id: toastId });
+      if (error.response.status === 401) {
+        toast.error("You are not logged in!", { id: toastId });
+        navigate("/login");
+      } else toast.error(error.response.data.message, { id: toastId });
     } finally {
       setReload((prev) => !prev);
       setIsLoading(false);
@@ -113,43 +112,35 @@ function ProductPage() {
       <Sidebar />
 
       {/* <main className="lg:flex lg:mt-24 md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl mt-16 mx-auto lg:gap-10 md:gap-14"> */}
-      <main className="mt-16 lg:mt-20 mx-auto flex flex-col lg:flex-row md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl lg:gap-20 md:gap-14">
+      <main className='mt-16 lg:mt-20 mx-auto flex flex-col lg:flex-row md:ml-72 lg:ml-96 sm:max-w-4xl md:max-w-full lg:max-w-4xl lg:gap-20 md:gap-14'>
         {/* <section className="relative md:w-1/2 md:flex md:flex-col justify-center gap-6"> */}
 
-        <section className="flex flex-col gap-6 lg:w-9/12 justify-center items-center select-none">
-          <div className="whitespace-nowrap snap-x snap-mandatory overflow-y-hidden md:rounded-3xl shadow-2xl shadow-orange-300">
-            <div className="relative flex justify-center h-72 md:h-96 w-full snap-center md:border-t-2 md:rounded-3xl">
+        <section className='flex flex-col gap-6 lg:w-9/12 justify-center items-center select-none'>
+          <div className='whitespace-nowrap snap-x snap-mandatory overflow-y-hidden md:rounded-3xl shadow-2xl shadow-orange-300'>
+            <div className='relative flex justify-center h-72 md:h-96 w-full snap-center md:border-t-2 md:rounded-3xl'>
               <img
-                className="h-full w-full object-cover lg:object-contain md:rounded-3xl hover:object-scale-down lg:hover:object-cover"
+                className='h-full w-full object-cover lg:object-contain md:rounded-3xl hover:object-scale-down lg:hover:object-cover'
                 src={product.productImages[focusedIndex].secure_url}
-                alt="Product"
+                alt='Product'
               />
-              <div className="absolute top-1/2 flex justify-between w-full px-2 md:hidden">
+              <div className='absolute top-1/2 flex justify-between w-full px-2 md:hidden'>
                 <span
-                  className="aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full"
+                  className='aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full'
                   onClick={scrollRight}
                 >
-                  <img
-                    src="/images/icon-previous.svg"
-                    alt="next button"
-                    className="w-2"
-                  />
+                  <img src='/images/icon-previous.svg' alt='next button' className='w-2' />
                 </span>
                 <span
-                  className="aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full"
+                  className='aspect-square w-8 flex items-center justify-center bg-white opacity-50 rounded-full'
                   onClick={scrollLeft}
                 >
-                  <img
-                    src="/images/icon-next.svg"
-                    alt="previous button"
-                    className="w-2"
-                  />
+                  <img src='/images/icon-next.svg' alt='previous button' className='w-2' />
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="hidden md:flex justify-between max-w-full">
+          <div className='hidden md:flex justify-between max-w-full'>
             {product.productImages.map((image, index) => (
               <img
                 key={index}
@@ -167,60 +158,47 @@ function ProductPage() {
           </div>
         </section>
 
-        <section className="flex flex-col gap-4 p-5 md:w-full lg:gap-4 lg:justify-center">
-          <div className="flex justify-between items-center gap-3 flex-col lg:items-start">
-            <span className="text-sm text-slate-600">
+        <section className='flex flex-col gap-4 p-5 md:w-full lg:gap-4 lg:justify-center'>
+          <div className='flex justify-between items-center gap-3 flex-col lg:items-start'>
+            <span className='text-sm text-slate-600'>
               Product owner:
-              <span className="text-sm tracking-widest">
-                {" "}
-                {product.ownerName}
-              </span>
+              <span className='text-sm tracking-widest'> {product.ownerName}</span>
             </span>
-            <span className="text-2xl font-semibold lg:text-4xl">
-              {product.productName}
-            </span>
-            <p className="text-sm text-slate-600">Product description:</p>
-            <p className="text-base text-slate-700 text-center md:text-left">
-              {product.productDescription}
-            </p>
+            <span className='text-2xl font-semibold lg:text-4xl'>{product.productName}</span>
+            <p className='text-sm text-slate-600'>Product description:</p>
+            <p className='text-base text-slate-700 text-center md:text-left'>{product.productDescription}</p>
           </div>
 
-          <div className="flex flex-col gap-3 lg:gap-6">
-            <div className="flex justify-between items-center gap-3 flex-col lg:items-start">
-              <span className="flex items-center gap-3 text-slate-600 text-sm">
+          <div className='flex flex-col gap-3 lg:gap-6'>
+            <div className='flex justify-between items-center gap-3 flex-col lg:items-start'>
+              <span className='flex items-center gap-3 text-slate-600 text-sm'>
                 Price:
-                <span className="text-2xl text-orange-500 font-semibold">
-                  {product.productPrice} ₹
-                </span>
+                <span className='text-2xl text-orange-500 font-semibold'>{product.productPrice} ₹</span>
               </span>
 
-              <span className="text-xs text-slate-400 text-center md:text-left">
-                Price listed is per day. Charges will be adjusted based on the
-                number of days rented.
+              <span className='text-xs text-slate-400 text-center md:text-left'>
+                Price listed is per day. Charges will be adjusted based on the number of days rented.
               </span>
             </div>
 
             <form
               onSubmit={formSubmissionHandler}
-              className="flex justify-between items-center gap-3 flex-col lg:items-start"
+              className='flex justify-between items-center gap-3 flex-col lg:items-start'
             >
-              <div className="text-slate-600 text-sm" htmlFor="till-date">
+              <div className='text-slate-600 text-sm' htmlFor='till-date'>
                 Availability Till:
-                <span className="text-slate-700 text-base">
-                  {" "}
-                  {product.dueDate.split("T")[0]}
-                </span>
+                <span className='text-slate-700 text-base'> {product.dueDate.split("T")[0]}</span>
               </div>
 
-              <label className="text-sm text-slate-600" htmlFor="till-date">
+              <label className='text-sm text-slate-600' htmlFor='till-date'>
                 Your return Date:
               </label>
               <input
-                className="w-48 px-4 border-2 rounded-lg"
-                type="date"
-                id="till-date"
-                name="till-date"
-                placeholder="DD/MM/YY"
+                className='w-48 px-4 border-2 rounded-lg'
+                type='date'
+                id='till-date'
+                name='till-date'
+                placeholder='DD/MM/YY'
                 min={new Date().toISOString().split("T")[0]}
                 max={product.dueDate.split("T")[0]}
                 onChange={(e) => {
@@ -229,14 +207,14 @@ function ProductPage() {
                 required
               />
 
-              <label className="text-sm text-slate-600" htmlFor="message">
+              <label className='text-sm text-slate-600' htmlFor='message'>
                 Message:
               </label>
               <textarea
-                type="text"
-                className="px-4 w-72 border border-slate-300 text-slate-700 rounded-xl"
-                placeholder="Add message for owner here"
-                name="message"
+                type='text'
+                className='px-4 w-72 border border-slate-300 text-slate-700 rounded-xl'
+                placeholder='Add message for owner here'
+                name='message'
                 value={formData.message}
                 onChange={(e) => {
                   setFormData({ ...formData, message: e.target.value });
@@ -245,14 +223,10 @@ function ProductPage() {
               />
 
               <button
-                type="submit"
-                className="flex text-sm md:mt-5 justify-center gap-2 text-white bg-orange-400 hover:bg-orange-500 active:bg-orange-700 p-2 items-center rounded-2xl shadow-2xl shadow-orange-400 lg:w-content"
+                type='submit'
+                className='flex text-sm md:mt-5 justify-center gap-2 text-white bg-orange-400 hover:bg-orange-500 active:bg-orange-700 p-2 items-center rounded-2xl shadow-2xl shadow-orange-400 lg:w-content'
               >
-                <img
-                  src="/images/icon-cart.svg"
-                  alt="cart icon"
-                  className="grayscale invert brightness-0"
-                />
+                <img src='/images/icon-cart.svg' alt='cart icon' className='grayscale invert brightness-0' />
                 {product.requestStatus === "pending"
                   ? "Request already sent"
                   : product.requestStatus === "accepted"
