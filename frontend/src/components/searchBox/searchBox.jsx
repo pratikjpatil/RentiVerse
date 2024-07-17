@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchText, setDebouncedTerm } from "../../store/searchSlice";
+import { setSearchText, setDebouncedTerm, setPrevSearchText } from "../../store/searchSlice";
+import axios from "axios";
 
 function SearchBox() {
   const [term, setTerm] = useState("");
-  // const [debouncedTerm, setDebouncedTerm] = useState(term);
   const [initialNavigationDone, setInitialNavigationDone] = useState(false);
 
   const dispatch = useDispatch();
@@ -13,13 +13,16 @@ function SearchBox() {
   const debouncedTerm = useSelector((state) => state.search.debouncedTerm);
 
   const navigate = useNavigate();
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    if (term && !initialNavigationDone) {
-      navigate("/category/search");
-      setInitialNavigationDone(true);
+    if (debouncedTerm && window.location.pathname !== "/search") {
+      if (!initialNavigationDone) {
+        setInitialNavigationDone(true);
+        navigate("/search");
+      }
     }
-  }, [term, navigate, initialNavigationDone]);
+  }, [debouncedTerm, initialNavigationDone]);
 
   // update 'term' value after 1 second from the last update of 'debouncedTerm'
   useEffect(() => {
@@ -28,8 +31,10 @@ function SearchBox() {
   }, [debouncedTerm]);
 
   useEffect(() => {
-    dispatch(setSearchText(term));
-  }, [term]);
+    if (term) {
+      dispatch(setSearchText(term));
+    }
+  }, [term, dispatch]);
 
   return (
     <div className='w-full'>

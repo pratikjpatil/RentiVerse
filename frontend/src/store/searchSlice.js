@@ -14,7 +14,7 @@ const searchSlice = createSlice({
       state.searchText = action.payload;
     },
     setDebouncedTerm: (state, action) => {
-      state.searchText = action.payload;
+      state.debouncedTerm = action.payload;
     },
     setPrevSearchText: (state, action) => {
       state.prevSearchText = action.payload;

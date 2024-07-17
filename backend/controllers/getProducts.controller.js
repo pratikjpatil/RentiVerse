@@ -4,7 +4,7 @@ const User = require("../models/user");
 
 const getAllOrSearchProducts = async (req, res) => {
   const searchText = req.query.searchText || "";
-  // console.log("\n\n", searchText);
+  console.log("\n\n", searchText);
   let searchQuery = {
     renterId: null,
     acceptedRequestId: null,

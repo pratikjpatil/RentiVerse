@@ -131,7 +131,7 @@ const LandingPage = () => {
 
   return (
     <>
-      <Header />
+      <Header showSearchBar={true} />
       <Sidebar />
 
       <section className='mt-20 md:ml-64 px-2'>
@@ -390,7 +390,7 @@ const LandingPage = () => {
                     </li>
                   </ul>
                 </aside>
-                <aside className='w-1/2 sm:w-1/3 pr-4 pl-4 lg:w-1/5 pr-4 pl-4'>
+                <aside className='w-1/2 sm:w-1/3 pr-4 pl-4 lg:w-1/5'>
                   <h6 className='title'>Useful links</h6>
                   <ul className='list-menu mb-4'>
                     <li>
