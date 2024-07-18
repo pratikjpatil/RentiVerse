@@ -8,7 +8,7 @@ import SearchBox from "../searchBox/searchBox";
 import { setSidebarStatus } from "../../store/sidebarSlice";
 import NotificationCard from "../Notification/NotificationCard";
 
-function Header({ setSearchText, showSearchBar = false }) {
+function Header({ showSearchBar = false }) {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ function Header({ setSearchText, showSearchBar = false }) {
 
             {showSearchBar === true && window.innerWidth >= 768 ? (
               <div className='hidden md:inline-block mr-auto ml-40 relative max-w-xs'>
-                <SearchBox setSearchText={setSearchText} />
+                <SearchBox />
               </div>
             ) : (
               ""
@@ -123,7 +123,7 @@ function Header({ setSearchText, showSearchBar = false }) {
         {showSearchBar === true && window.innerWidth < 768 ? (
           <div className='bg-white md:hidden h-16 flex items-center mx-auto mt-16 -mb-20 px-4 w-full z-50 shadow-xl'>
             <div className='relative w-full'>
-              <SearchBox setSearchText={setSearchText} />
+              <SearchBox />
             </div>
           </div>
         ) : (

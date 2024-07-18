@@ -411,7 +411,7 @@ const LandingPage = () => {
             </section>
             <hr className='my-0' />
             <section className='footer-bottom flex justify-between'>
-              <div className='text-white-50'>Made by Pratik</div>
+              <div className='text-white-50 pl-8'>Made by Pratik</div>
             </section>
           </div>
         </footer>

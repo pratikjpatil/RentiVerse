@@ -1,40 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchText, setDebouncedTerm, setPrevSearchText } from "../../store/searchSlice";
-import axios from "axios";
+import { setSearchText, setDebouncedTerm } from "../../store/searchSlice";
 
 function SearchBox() {
-  const [term, setTerm] = useState("");
-  const [initialNavigationDone, setInitialNavigationDone] = useState(false);
+  const inputRef = useRef(null);
 
   const dispatch = useDispatch();
-  const searchText = useSelector((state) => state.search.searchText);
   const debouncedTerm = useSelector((state) => state.search.debouncedTerm);
 
   const navigate = useNavigate();
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const location = useLocation();
 
-  useEffect(() => {
-    if (debouncedTerm && window.location.pathname !== "/search") {
-      if (!initialNavigationDone) {
-        setInitialNavigationDone(true);
-        navigate("/search");
-      }
+  const navigateToSearchPage = () => {
+    if (location.pathname !== "/search") {
+      navigate("/search");
     }
-  }, [debouncedTerm, initialNavigationDone]);
+  };
 
-  // update 'term' value after 1 second from the last update of 'debouncedTerm'
   useEffect(() => {
-    const timer = setTimeout(() => setTerm(debouncedTerm), 1000);
+    const timer = setTimeout(() => dispatch(setSearchText(debouncedTerm)), 1000);
     return () => clearTimeout(timer);
   }, [debouncedTerm]);
 
+  // Focus input when on the search page and search was triggered
   useEffect(() => {
-    if (term) {
-      dispatch(setSearchText(term));
+    if (location.pathname === "/search") {
+      inputRef.current.focus();
     }
-  }, [term, dispatch]);
+  }, [location.pathname]);
 
   return (
     <div className='w-full'>
@@ -55,8 +49,12 @@ function SearchBox() {
         type='search'
         className='border border-gray-300 focus:ring-indigo-600
               focus:border-indigo-600 sm:text-sm w-full rounded-lg pt-2 pb-2 pl-10 px-3 py-2'
-        onChange={(e) => dispatch(setDebouncedTerm(e.target.value))}
+        onChange={(e) => {
+          dispatch(setDebouncedTerm(e.target.value));
+          navigateToSearchPage();
+        }}
         value={debouncedTerm}
+        ref={inputRef}
       />
     </div>
   );
