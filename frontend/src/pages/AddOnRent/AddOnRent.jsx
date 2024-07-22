@@ -36,7 +36,7 @@ const AddOnRent = () => {
     "Musical equipments",
     "Sport, health",
     "Jewellery",
-    "Animals, birds",
+    "Animals, Birds",
     "Other",
   ];
 
@@ -93,8 +93,7 @@ const AddOnRent = () => {
       toast.error("Select Category");
       return;
     }
-    const backendUrl =
-      process.env.REACT_APP_BACKEND_URL + "/api/product/add-product";
+    const backendUrl = process.env.REACT_APP_BACKEND_URL + "/api/product/add-product";
 
     setIsLoading(true);
     try {
@@ -150,27 +149,18 @@ const AddOnRent = () => {
     }
     const toastId = toast.loading("Processing");
     try {
-      
-      const compressedImages = await Promise.all(
-        selectedImages.map(async (image) => await resizeFile(image))
-      );
+      const compressedImages = await Promise.all(selectedImages.map(async (image) => await resizeFile(image)));
       setImages(compressedImages);
-      
-      toast.success("",{id: toastId})
-      
+
+      toast.success("", { id: toastId });
     } catch (error) {
       console.error("Error compressing images:", error);
-      toast.error("Error processing images", {id: toastId});
+      toast.error("Error processing images", { id: toastId });
     }
   };
 
   const imagePreview = images.map((image, index) => (
-    <img
-      className="p-4 w-28"
-      key={index}
-      src={URL.createObjectURL(image)}
-      alt={`Selected ${index + 1}`}
-    />
+    <img className='p-4 w-28' key={index} src={URL.createObjectURL(image)} alt={`Selected ${index + 1}`} />
   ));
 
   return (
@@ -178,37 +168,35 @@ const AddOnRent = () => {
       <Header />
 
       <Sidebar />
-      <div className="p-4 px-6 mt-16 md:ml-64 md:mt-20 flex justify-center">
-        <div className="">
+      <div className='p-4 px-6 mt-16 md:ml-64 md:mt-20 flex justify-center'>
+        <div className=''>
           {isLoading ? (
-            <div className="loading-gif">
-              <img src={LoadingDots} alt="Loading..." />
+            <div className='loading-gif'>
+              <img src={LoadingDots} alt='Loading...' />
             </div>
           ) : (
             <>
-              <h3 className="text-lg md:text-xl font-bold">Add on Rent</h3>
-              <p className="text-xs md:text-sm text-gray-500">
-                List your product for rent
-              </p>
-              <div className="mt-6 lg:-mt-8 flex flex-wrap justify-center content-center">
-                <div className="flex flex-col justify-center md:flex-nowrap lg:mr-28">
-                  <div className="w-1/2 md:-mt-24 md:w-48 mx-auto">
-                    <label htmlFor="image-input">
-                      <img src={Image} alt="Gallery" />
+              <h3 className='text-lg md:text-xl font-bold'>Add on Rent</h3>
+              <p className='text-xs md:text-sm text-gray-500'>List your product for rent</p>
+              <div className='mt-6 lg:-mt-8 flex flex-wrap justify-center content-center'>
+                <div className='flex flex-col justify-center md:flex-nowrap lg:mr-28'>
+                  <div className='w-1/2 md:-mt-24 md:w-48 mx-auto'>
+                    <label htmlFor='image-input'>
+                      <img src={Image} alt='Gallery' />
                     </label>
                     <input
-                      id="image-input"
-                      type="file"
-                      accept="image/*"
+                      id='image-input'
+                      type='file'
+                      accept='image/*'
                       multiple={true}
                       onChange={handleImageChange}
                       style={{ display: "none" }}
                       required
                     />
                   </div>
-                  <p className="mx-auto">Add 4 product images</p>
+                  <p className='mx-auto'>Add 4 product images</p>
                   {images && images.length > 1 ? (
-                    <div className="mt-3 max-w-lg flex flex-wrap justify-center border-2 border-slate-400">
+                    <div className='mt-3 max-w-lg flex flex-wrap justify-center border-2 border-slate-400'>
                       {imagePreview}
                       <p>selected images</p>
                     </div>
@@ -217,121 +205,113 @@ const AddOnRent = () => {
                   )}
                 </div>
 
-                <div className="min-w-3 mt-6">
+                <div className='min-w-3 mt-6'>
                   <form onSubmit={handleSubmit}>
-                    <div className="relative">
-                      <label htmlFor="productName">Product Name</label>
+                    <div className='relative'>
+                      <label htmlFor='productName'>Product Name</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full pr-12"
-                        type="text"
-                        id="productName"
-                        name="productName"
+                        className='h-10 p-4 block border border-gray-300 rounded-lg w-full pr-12'
+                        type='text'
+                        id='productName'
+                        name='productName'
                         maxLength={40}
                         value={productName}
                         onChange={handleChange}
-                        placeholder="Asset Name"
+                        placeholder='Asset Name'
                         required
                       />
-                      <div className="absolute right-1 top-10 text-xs text-gray-500 pointer-events-none">
+                      <div className='absolute right-1 top-10 text-xs text-gray-500 pointer-events-none'>
                         {productName.length}/40
                       </div>
                     </div>
 
-                    <div className="mt-3">
-                      <label htmlFor="dueDate">Due Date</label>
+                    <div className='mt-3'>
+                      <label htmlFor='dueDate'>Due Date</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full"
-                        type="date"
-                        id="tillDate"
-                        name="dueDate"
+                        className='h-10 p-4 block border border-gray-300 rounded-lg w-full'
+                        type='date'
+                        id='tillDate'
+                        name='dueDate'
                         value={dueDate}
                         onChange={handleChange}
                         required
-                        min={
-                          new Date().toISOString().split("T")[0]
-                        } /* Set min to today's date*/
+                        min={new Date().toISOString().split("T")[0]} /* Set min to today's date*/
                       />
                     </div>
 
-                    <div className="mt-3">
-                      <label htmlFor="productPrice">Price</label>
+                    <div className='mt-3'>
+                      <label htmlFor='productPrice'>Price</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full"
-                        type="number"
-                        id="price"
-                        name="productPrice"
+                        className='h-10 p-4 block border border-gray-300 rounded-lg w-full'
+                        type='number'
+                        id='price'
+                        name='productPrice'
                         value={productPrice}
                         onChange={handleChange}
                         min={1}
-                        placeholder="price per day"
+                        placeholder='price per day'
                         required
                       />
                     </div>
 
-                    <div className="mt-3">
-                      <label htmlFor="tags">Tags</label>
+                    <div className='mt-3'>
+                      <label htmlFor='tags'>Tags</label>
                       <input
-                        className="h-10 p-4 block border border-gray-300 rounded-lg w-full"
-                        type="text"
-                        id="tags"
-                        name="productTags"
+                        className='h-10 p-4 block border border-gray-300 rounded-lg w-full'
+                        type='text'
+                        id='tags'
+                        name='productTags'
                         maxLength={60}
                         value={productTags}
                         onChange={handleChange}
-                        placeholder="comma seperated tags"
+                        placeholder='comma seperated tags'
                         required
                       />
                     </div>
 
-                    <div className="mt-3 max-h-96 relative">
-                      <label htmlFor="productDescription">Description</label>
+                    <div className='mt-3 max-h-96 relative'>
+                      <label htmlFor='productDescription'>Description</label>
                       <textarea
                         className={`h-15 w-full resize-y px-4 py-2 border rounded-lg ${
-                          productDescription.length > 900
-                            ? "border-red-500"
-                            : "border-gray-300"
+                          productDescription.length > 900 ? "border-red-500" : "border-gray-300"
                         }`}
-                        id="description"
-                        name="productDescription"
+                        id='description'
+                        name='productDescription'
                         maxLength={900}
                         value={productDescription}
                         onChange={handleChange}
-                        placeholder="Write product description in max 900 characters"
+                        placeholder='Write product description in max 900 characters'
                         required
                       />
-                      <div className="absolute text-right text-xs text-gray-500 bottom-4 right-2">
+                      <div className='absolute text-right text-xs text-gray-500 bottom-4 right-2'>
                         {productDescription.length}/900
                       </div>
                     </div>
 
-                    <div className="mt-3 w-full">
-                      <label htmlFor="categories">Select a category:</label>
+                    <div className='mt-3 w-full'>
+                      <label htmlFor='categories'>Select a category:</label>
                       <select
-                        id="categories"
+                        id='categories'
                         value={productCategory}
                         onChange={handleCategoryChange}
                         required
-                        className="h-10 p-2 block border border-gray-300 rounded-lg w-full"
+                        className='h-10 p-2 block border border-gray-300 rounded-lg w-full'
                       >
-                        <option value="null" className="text-slate-500">
+                        <option value='null' className='text-slate-500'>
                           Select Category
                         </option>{" "}
                         {categories.map((category, index) => (
-                          <option
-                            key={index}
-                            value={category}
-                            className="text-gray-800"
-                          >
+                          <option key={index} value={category} className='text-gray-800'>
                             {category}
                           </option>
                         ))}
                       </select>
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className='flex justify-center'>
                       <button
-                        type="submit"
-                        className="mt-4 h-8 w-24 bg-blue-400 active:bg-blue-800 text-white rounded-lg"
+                        type='submit'
+                        className='mt-4 h-8 w-24 bg-blue-400 active:bg-blue-800 text-white rounded-lg'
                       >
                         Add
                       </button>

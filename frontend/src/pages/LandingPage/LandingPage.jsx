@@ -120,12 +120,12 @@ const LandingPage = () => {
       imageSrc: diamondIcon,
     },
     {
-      name: "Animals, birds",
+      name: "Animals, Birds",
       imageSrc: animalIcon,
     },
     {
       name: "Other",
-      imageSrc: ballIcon, // You might want to change this
+      imageSrc: ballIcon,
     },
   ];
 
@@ -153,7 +153,7 @@ const LandingPage = () => {
                   <div
                     className='relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300 hover:border-gray hover:cursor-pointer'
                     onClick={() => {
-                      navigate(`/category/${category.name}`);
+                      navigate(`/category/${encodeURIComponent(category.name)}`);
                     }}
                   >
                     <div className='p-6'>

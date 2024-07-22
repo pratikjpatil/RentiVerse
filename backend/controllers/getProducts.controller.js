@@ -55,7 +55,7 @@ const getProductsByCategory = async (req, res) => {
 
     const skip = (page - 1) * limit;
     const products = await Product.find({
-      productCategory: req.params.category,
+      productCategory: decodeURIComponent(req.params.category),
       renterId: null,
       acceptedRequestId: null,
       isDrafted: false,
