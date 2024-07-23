@@ -92,15 +92,15 @@ const LandingPage = () => {
       imageSrc: watchIcon,
     },
     {
-      name: "Books, magazines",
+      name: "Books, Magazines",
       imageSrc: bookIcon,
     },
     {
-      name: "Home furniture",
+      name: "Home Furniture",
       imageSrc: sofaIcon,
     },
     {
-      name: "Toys for kids",
+      name: "Toys for Kids",
       imageSrc: toyIcon,
     },
     {
@@ -108,11 +108,11 @@ const LandingPage = () => {
       imageSrc: shirtIcon,
     },
     {
-      name: "Musical equipments",
+      name: "Musical Equipments",
       imageSrc: musicIcon,
     },
     {
-      name: "Sport, health",
+      name: "Sport, Health",
       imageSrc: ballIcon,
     },
     {
