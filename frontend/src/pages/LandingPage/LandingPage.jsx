@@ -108,7 +108,7 @@ const LandingPage = () => {
       imageSrc: shirtIcon,
     },
     {
-      name: "Musical Equipments",
+      name: "Musical Equipment",
       imageSrc: musicIcon,
     },
     {

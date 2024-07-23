@@ -33,7 +33,7 @@ const AddOnRent = () => {
     "Home Furniture",
     "Toys for Kids",
     "Clothings",
-    "Musical Equipments",
+    "Musical Equipment",
     "Sport, Health",
     "Jewellery",
     "Animals, Birds",
